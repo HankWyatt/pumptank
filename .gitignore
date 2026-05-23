@@ -1,0 +1,9 @@
+# Source dataset (license-gated — do not redistribute)
+data/raw/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
