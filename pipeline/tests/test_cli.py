@@ -33,3 +33,5 @@ def test_run_annotates_selection(csv_factory, base_row, tmp_path):
     assert data["DoorBot"]["selection"]["rank"] == 1
     assert data["OldCo"]["selection"]["excluded_reason"] == "out_of_scope_season"
     assert data["GhostCo"]["selection"]["excluded_reason"] == "unfindable"
+    # spec invariant: include must mirror selection.selected on generated output
+    assert all(r["include"] == r["selection"]["selected"] for r in data.values())
