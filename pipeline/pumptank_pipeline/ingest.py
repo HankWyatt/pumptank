@@ -1,5 +1,6 @@
 import math
 import re
+import warnings
 
 import pandas as pd
 
@@ -43,7 +44,17 @@ def _opt_float(value):
     if s is None:
         return None
     try:
-        return float(s.replace("$", "").replace(",", ""))
+        return float(s.replace("$", "").replace(",", "").replace("%", "").strip())
+    except ValueError:
+        return None
+
+
+def _opt_int(value):
+    s = _opt_str(value)
+    if s is None:
+        return None
+    try:
+        return int(float(s))
     except ValueError:
         return None
 
@@ -64,7 +75,7 @@ def _parse_founders(value):
     s = _opt_str(value)
     if s is None:
         return []
-    parts = re.split(r"\s*(?:,|;|&| and )\s*", s)
+    parts = re.split(r"\s*(?:,|;|&)\s*", s)
     return [p for p in (x.strip() for x in parts) if p]
 
 
@@ -84,14 +95,18 @@ def load_pitches(csv_path, max_null_got_deal: int = 10) -> list[Pitch]:
 
     pitches: list[Pitch] = []
     skipped = 0
+    malformed = 0
     for _, row in df.iterrows():
         got = _parse_got_deal(row[COLUMN_MAP["got_deal"]])
         if got is None:
             skipped += 1
             continue
-        season = int(row[COLUMN_MAP["season"]])
-        episode = int(row[COLUMN_MAP["episode"]])
-        pitch_number = int(row[COLUMN_MAP["pitch_number"]])
+        season = _opt_int(row[COLUMN_MAP["season"]])
+        episode = _opt_int(row[COLUMN_MAP["episode"]])
+        pitch_number = _opt_int(row[COLUMN_MAP["pitch_number"]])
+        if season is None or episode is None or pitch_number is None:
+            malformed += 1
+            continue
         company = _opt_str(row[COLUMN_MAP["company_name"]]) or "unknown"
         pitches.append(Pitch(
             id=f"s{season}e{episode}p{pitch_number}-{_slug(company)}",
@@ -107,6 +122,11 @@ def load_pitches(csv_path, max_null_got_deal: int = 10) -> list[Pitch]:
             got_deal=got,
         ))
 
+    if malformed:
+        warnings.warn(
+            f"Skipped {malformed} rows with missing/unparseable "
+            f"season/episode/pitch_number."
+        )
     if skipped > max_null_got_deal:
         raise IngestError(
             f"{skipped} rows with null/unparseable Got Deal "

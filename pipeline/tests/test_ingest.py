@@ -28,7 +28,7 @@ def test_null_got_deal_skipped_below_threshold(csv_factory, base_row):
     good = dict(base_row)
     blank = dict(base_row, **{"Pitch Number": 2, "Got Deal": ""})
     pitches = load_pitches(csv_factory([good, blank]), max_null_got_deal=10)
-    assert len(pitches) == 1  # blank skipped, not included
+    assert len(pitches) == 1
 
 
 def test_too_many_null_got_deal_raises(csv_factory, base_row):
@@ -40,3 +40,16 @@ def test_too_many_null_got_deal_raises(csv_factory, base_row):
 def test_ids_unique_within_episode(sample_csv):
     ids = [p.id for p in load_pitches(sample_csv)]
     assert len(ids) == len(set(ids))
+
+
+def test_blank_key_field_skipped_not_crash(csv_factory, base_row):
+    good = dict(base_row)
+    broken = dict(base_row, **{"Pitch Number": 2, "Season Number": ""})
+    pitches = load_pitches(csv_factory([good, broken]))  # must NOT raise
+    assert len(pitches) == 1
+
+
+def test_strips_percent_in_equity(csv_factory, base_row):
+    row = dict(base_row, **{"Original Offered Equity": "10%"})
+    pitches = load_pitches(csv_factory([row]))
+    assert pitches[0].ask_equity == 10.0

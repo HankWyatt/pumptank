@@ -21,5 +21,14 @@ def write_products(
     if schema_path is not None:
         schema_path = Path(schema_path)
         schema_path.parent.mkdir(parents=True, exist_ok=True)
-        schema_path.write_text(json.dumps(Product.model_json_schema(), indent=2))
+        item_schema = Product.model_json_schema()
+        defs = item_schema.pop("$defs", {})
+        array_schema = {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "array",
+            "items": item_schema,
+        }
+        if defs:
+            array_schema["$defs"] = defs
+        schema_path.write_text(json.dumps(array_schema, indent=2))
     return products

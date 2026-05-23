@@ -10,7 +10,6 @@ class Pitch(BaseModel):
     pitch_number: int
     air_date: Optional[str] = None
     company_name: str
-    product_name: Optional[str] = None
     founders: list[str] = Field(default_factory=list)
     industry: Optional[str] = None
     ask_amount: Optional[float] = None
@@ -45,7 +44,6 @@ class Product(BaseModel):
     pitch_number: int
     air_date: Optional[str] = None
     company_name: str
-    product_name: Optional[str] = None
     founders: list[str] = Field(default_factory=list)
     industry: Optional[str] = None
     pitch: PitchDetail = Field(default_factory=PitchDetail)
@@ -60,7 +58,7 @@ def to_product_fields(pitch: Pitch) -> dict:
     return dict(
         id=pitch.id, season=pitch.season, episode=pitch.episode,
         pitch_number=pitch.pitch_number, air_date=pitch.air_date,
-        company_name=pitch.company_name, product_name=pitch.product_name,
+        company_name=pitch.company_name,
         founders=pitch.founders, industry=pitch.industry,
         pitch=PitchDetail(
             ask_amount=pitch.ask_amount, ask_equity=pitch.ask_equity,

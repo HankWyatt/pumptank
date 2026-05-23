@@ -24,4 +24,14 @@ def test_writes_products_and_schema(tmp_path):
     assert rec["outcome"]["got_deal"] is False
     assert rec["media"]["image_source"] == "none"
     assert rec["include"] is True
-    assert json.loads(schema.read_text())["type"] == "object"
+    assert json.loads(schema.read_text())["type"] == "array"
+
+
+def test_output_validates_against_schema(tmp_path):
+    import jsonschema
+    out = tmp_path / "products.json"
+    schema = tmp_path / "products.schema.json"
+    write_products([_pitch("s5e9p1-doorbot")], out, schema)
+    data = json.loads(out.read_text())
+    sch = json.loads(schema.read_text())
+    jsonschema.validate(data, sch)  # raises jsonschema.ValidationError if invalid
