@@ -21,3 +21,26 @@ def test_product_json_schema_generates():
     schema = Product.model_json_schema()
     assert schema["type"] == "object"
     assert "media" in schema["properties"]
+
+
+def test_selection_defaults():
+    from pumptank_pipeline.models import Selection
+    s = Selection()
+    assert s.selected is False
+    assert s.rank is None
+    assert s.score is None
+    assert s.excluded_reason is None
+
+
+def test_to_product_fields_wires_website_viewership_selection():
+    from pumptank_pipeline.models import Pitch, Product, to_product_fields, Selection
+    p = Pitch(id="x", season=5, episode=1, pitch_number=1, company_name="X",
+              founders=["A"], company_website="https://x", us_viewership=4.2,
+              selection=Selection(selected=True, rank=3, score=0.9),
+              include=True, got_deal=False)
+    prod = Product(**to_product_fields(p))
+    assert prod.media.former_website == "https://x"
+    assert prod.us_viewership == 4.2
+    assert prod.selection.rank == 3
+    assert prod.selection.selected is True
+    assert prod.include is True

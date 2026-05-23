@@ -2,6 +2,16 @@ from typing import Literal, Optional
 from pydantic import BaseModel, Field
 
 
+class Selection(BaseModel):
+    selected: bool = False
+    rank: Optional[int] = None
+    score: Optional[float] = None
+    reach: Optional[float] = None
+    ambition: Optional[float] = None
+    findability: Optional[float] = None
+    excluded_reason: Optional[str] = None  # "out_of_scope_season" | "unfindable" | None
+
+
 class Pitch(BaseModel):
     """Normalized internal representation of one pitch (one CSV row)."""
     id: str
@@ -17,6 +27,10 @@ class Pitch(BaseModel):
     valuation_requested: Optional[float] = None
     description: Optional[str] = None
     got_deal: bool
+    us_viewership: Optional[float] = None
+    company_website: Optional[str] = None
+    selection: Optional[Selection] = None
+    include: bool = True
 
 
 class PitchDetail(BaseModel):
@@ -49,6 +63,8 @@ class Product(BaseModel):
     pitch: PitchDetail = Field(default_factory=PitchDetail)
     outcome: Outcome = Field(default_factory=Outcome)
     media: Media = Field(default_factory=Media)
+    us_viewership: Optional[float] = None
+    selection: Optional[Selection] = None
     include: bool = True
     token: Optional[dict] = None
 
@@ -65,4 +81,8 @@ def to_product_fields(pitch: Pitch) -> dict:
             valuation_requested=pitch.valuation_requested,
             description=pitch.description,
         ),
+        media=Media(former_website=pitch.company_website),
+        us_viewership=pitch.us_viewership,
+        selection=pitch.selection,
+        include=pitch.include,
     )
