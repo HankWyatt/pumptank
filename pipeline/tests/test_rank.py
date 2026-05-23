@@ -94,3 +94,29 @@ def test_bad_weights_raise():
         rank_and_select([_p("a")],
                         weights={"reach": 1, "ambition": 1, "findability": 1},
                         n=1, max_season=16)
+
+
+def test_reach_is_season_relative():
+    # Guards the headline mechanic: reach is a WITHIN-season percentile.
+    # 'lonely' is the sole season-6 pitch (lowest absolute views) -> top of its
+    # season -> reach 1.0. Season 5 has two pitches that split the reach scale.
+    out = rank_and_select(
+        [_p("lonely", season=6, viewership=1.0),
+         _p("s5lo", season=5, viewership=4.0),
+         _p("s5hi", season=5, viewership=9.0)],
+        weights=W, n=3, max_season=16)
+    by_id = {p.id: p for p in out}
+    assert by_id["lonely"].selection.reach == 1.0   # top of season 6 (1 member)
+    assert by_id["s5hi"].selection.reach == 1.0     # top of season 5
+    assert by_id["s5lo"].selection.reach == 0.5     # bottom of season 5 (2 members)
+
+
+def test_output_orders_pool_before_excluded_by_id():
+    # Guards output ordering: ranked pool first, then excluded in id order.
+    pitches = [
+        _p("zpool", viewership=9.0),                # pool -> rank 1
+        _p("old", season=17),                       # excluded: out_of_scope_season
+        _p("ghost", founders=(), website=None),     # excluded: unfindable
+    ]
+    out = rank_and_select(pitches, weights=W, n=10, max_season=16)
+    assert [p.id for p in out] == ["zpool", "ghost", "old"]
