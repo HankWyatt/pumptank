@@ -8,6 +8,7 @@ _BASE_ROW = {
     "Valuation Requested": 7000000, "Business Description": "Video doorbell",
     "Entrepreneur Names": "Jamie Siminoff", "Original Air Date": "2013-11-15",
     "Got Deal": 0,
+    "US Viewership": 5.0, "Company Website": "https://doorbot.example",
 }
 
 

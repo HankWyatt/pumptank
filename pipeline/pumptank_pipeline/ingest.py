@@ -20,6 +20,8 @@ COLUMN_MAP = {
     "founders": "Entrepreneur Names",
     "air_date": "Original Air Date",
     "got_deal": "Got Deal",
+    "us_viewership": "US Viewership",
+    "company_website": "Company Website",
 }
 
 
@@ -120,6 +122,8 @@ def load_pitches(csv_path, max_null_got_deal: int = 10) -> list[Pitch]:
             valuation_requested=_opt_float(row[COLUMN_MAP["valuation_requested"]]),
             description=_opt_str(row[COLUMN_MAP["description"]]),
             got_deal=got,
+            us_viewership=_opt_float(row[COLUMN_MAP["us_viewership"]]),
+            company_website=_opt_str(row[COLUMN_MAP["company_website"]]),
         ))
 
     if malformed:

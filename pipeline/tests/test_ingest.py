@@ -53,3 +53,10 @@ def test_strips_percent_in_equity(csv_factory, base_row):
     row = dict(base_row, **{"Original Offered Equity": "10%"})
     pitches = load_pitches(csv_factory([row]))
     assert pitches[0].ask_equity == 10.0
+
+
+def test_captures_viewership_and_website(sample_csv):
+    pitches = load_pitches(sample_csv)
+    doorbot = next(p for p in pitches if p.company_name == "DoorBot")
+    assert doorbot.us_viewership == 5.0
+    assert doorbot.company_website == "https://doorbot.example"
