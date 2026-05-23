@@ -1,0 +1,320 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "season": {
+        "title": "Season",
+        "type": "integer"
+      },
+      "episode": {
+        "title": "Episode",
+        "type": "integer"
+      },
+      "pitch_number": {
+        "title": "Pitch Number",
+        "type": "integer"
+      },
+      "air_date": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Air Date"
+      },
+      "company_name": {
+        "title": "Company Name",
+        "type": "string"
+      },
+      "founders": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Founders",
+        "type": "array"
+      },
+      "industry": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Industry"
+      },
+      "pitch": {
+        "$ref": "#/$defs/PitchDetail"
+      },
+      "outcome": {
+        "$ref": "#/$defs/Outcome"
+      },
+      "media": {
+        "$ref": "#/$defs/Media"
+      },
+      "us_viewership": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Us Viewership"
+      },
+      "selection": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Selection"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "include": {
+        "default": true,
+        "title": "Include",
+        "type": "boolean"
+      },
+      "token": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Token"
+      }
+    },
+    "required": [
+      "id",
+      "season",
+      "episode",
+      "pitch_number",
+      "company_name"
+    ],
+    "title": "Product",
+    "type": "object"
+  },
+  "$defs": {
+    "Media": {
+      "properties": {
+        "image_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Image Url"
+        },
+        "image_source": {
+          "default": "none",
+          "enum": [
+            "dataset",
+            "wayback",
+            "none"
+          ],
+          "title": "Image Source",
+          "type": "string"
+        },
+        "former_website": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Former Website"
+        },
+        "youtube_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Youtube Url"
+        }
+      },
+      "title": "Media",
+      "type": "object"
+    },
+    "Outcome": {
+      "properties": {
+        "got_deal": {
+          "default": false,
+          "title": "Got Deal",
+          "type": "boolean"
+        }
+      },
+      "title": "Outcome",
+      "type": "object"
+    },
+    "PitchDetail": {
+      "properties": {
+        "ask_amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ask Amount"
+        },
+        "ask_equity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ask Equity"
+        },
+        "valuation_requested": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valuation Requested"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        }
+      },
+      "title": "PitchDetail",
+      "type": "object"
+    },
+    "Selection": {
+      "properties": {
+        "selected": {
+          "default": false,
+          "title": "Selected",
+          "type": "boolean"
+        },
+        "rank": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rank"
+        },
+        "score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Score"
+        },
+        "reach": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reach"
+        },
+        "ambition": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ambition"
+        },
+        "findability": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Findability"
+        },
+        "excluded_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Excluded Reason"
+        }
+      },
+      "title": "Selection",
+      "type": "object"
+    }
+  }
+}
