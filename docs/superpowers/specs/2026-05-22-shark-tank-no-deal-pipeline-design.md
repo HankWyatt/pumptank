@@ -122,9 +122,9 @@ The crux of this pipeline — getting "did they get a deal?" right is the whole 
 
 ```jsonc
 {
-  "id": "s5e09p1-doorbot",
+  "id": "s5e9p1-doorbot",
   "season": 5, "episode": 9, "pitch_number": 1, "air_date": "2013-11-15",
-  "company_name": "...", "product_name": "...",
+  "company_name": "...",
   "founders": ["..."],
   "industry": "...",
   "pitch": {
