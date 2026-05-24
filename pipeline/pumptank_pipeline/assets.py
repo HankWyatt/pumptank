@@ -17,3 +17,11 @@ def _clean_name(company_name: str, overrides: dict[str, str], pitch_id: str) -> 
     name = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", name)   # camelCase boundary
     name = re.sub(r"(?<=[A-Z])(?=[A-Z][a-z])", " ", name)  # acronym -> word
     return re.sub(r"\s+", " ", name).strip()
+
+
+def _derive_symbol(clean_name: str, max_len: int) -> str:
+    """Compact uppercase cashtag: drop leading 'The' + corp suffixes, alnum-only, cap len."""
+    base = re.sub(r"^The\s+", "", clean_name, flags=re.IGNORECASE)
+    base = _CORP_SUFFIX.sub("", base)
+    base = re.sub(r"[^A-Za-z0-9]", "", base).upper()
+    return base[:max_len]
