@@ -46,3 +46,40 @@ def _compose_description(pitch: Pitch, clean_name: str, *,
     if len(blurb) > budget:
         blurb = blurb[: max(0, budget - 1)].rstrip() + "…"
     return f"{blurb}{tail}"
+
+
+def _unique_symbol(base: str, taken: set, max_len: int) -> str:
+    if base not in taken:
+        return base
+    i = 2
+    while True:
+        suffix = str(i)
+        cand = base[: max_len - len(suffix)] + suffix
+        if cand not in taken:
+            return cand
+        i += 1
+
+
+def generate_assets(pitches: list[Pitch], *, max_ticker_len: int,
+                    max_description_len: int, disclaimer: str,
+                    name_overrides: dict) -> list[Pitch]:
+    """Set .token on every include==True pitch; return all pitches.
+
+    Tickers are deduped deterministically in selection.rank order.
+    """
+    def _rank(p):
+        return p.selection.rank if (p.selection and p.selection.rank is not None) else 1_000_000
+
+    selected = sorted((p for p in pitches if p.include), key=_rank)
+    taken: set = set()
+    for p in selected:
+        name = _clean_name(p.company_name, name_overrides, p.id)
+        base = _derive_symbol(name, max_ticker_len) or f"TKN{_rank(p)}"
+        symbol = _unique_symbol(base, taken, max_ticker_len)
+        taken.add(symbol)
+        p.token = TokenAssets(
+            name=name, symbol=symbol,
+            description=_compose_description(
+                p, name, disclaimer=disclaimer, max_len=max_description_len),
+        )
+    return pitches

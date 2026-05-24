@@ -69,3 +69,31 @@ def test_compose_description_truncates_blurb_only():
     assert len(d) <= 120
     assert d.endswith(DISC)  # disclaimer never trimmed
     assert "…" in d
+
+
+from pumptank_pipeline.models import Selection
+from pumptank_pipeline.assets import generate_assets
+
+
+def _sel(pid, name, rank, include=True, desc="A gadget"):
+    return Pitch(id=pid, season=5, episode=1, pitch_number=1, company_name=name,
+                 industry="Tech", description=desc, got_deal=False,
+                 include=include, selection=Selection(selected=include, rank=rank))
+
+
+def test_generate_assets_only_selected_get_tokens():
+    out = generate_assets(
+        [_sel("a", "Acme", 1, include=True), _sel("b", "Beta", None, include=False)],
+        max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
+    by_id = {p.id: p for p in out}
+    assert by_id["a"].token is not None
+    assert by_id["a"].token.symbol == "ACME"
+    assert by_id["b"].token is None
+
+
+def test_generate_assets_dedupes_tickers():
+    out = generate_assets(
+        [_sel("r1", "Acme", 1), _sel("r2", "Acme", 2)],
+        max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
+    syms = sorted(p.token.symbol for p in out)
+    assert syms == ["ACME", "ACME2"]
