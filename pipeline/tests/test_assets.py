@@ -28,3 +28,44 @@ def test_derive_symbol_strips_leading_the_and_truncates():
 
 def test_derive_symbol_strips_nonalnum_and_uppercases():
     assert _derive_symbol("Joye-bells!", 10) == "JOYEBELLS"
+
+
+from pumptank_pipeline.models import Pitch
+from pumptank_pipeline.assets import _is_junk_blurb, _compose_description
+
+DISC = "Not affiliated. Not financial advice."
+
+
+def _p(desc, name="Skyride", industry="Fitness/Sports/Outdoors", season=3, episode=13):
+    return Pitch(id="s3e13p1-x", season=season, episode=episode, pitch_number=1,
+                 company_name=name, industry=industry, description=desc, got_deal=False)
+
+
+def test_is_junk_blurb():
+    assert _is_junk_blurb("Skyride - Outdoor Recreation") is True
+    assert _is_junk_blurb("Invisible Xero Shoes - Men and Women's Shoes") is True
+    assert _is_junk_blurb("High-performance airless tires") is False
+    assert _is_junk_blurb("Premium refrigerated pie") is False
+    assert _is_junk_blurb(None) is False
+
+
+def test_compose_description_keeps_real_blurb():
+    d = _compose_description(_p("Premium refrigerated pie"), "Joyebells",
+                             disclaimer=DISC, max_len=480)
+    assert d.startswith("Premium refrigerated pie.")
+    assert "Pitched on Shark Tank S3E13 — no deal." in d
+    assert d.endswith(DISC)
+
+
+def test_compose_description_templates_junk():
+    d = _compose_description(_p("Skyride - Outdoor Recreation"), "Skyride",
+                             disclaimer=DISC, max_len=480)
+    assert d.startswith("Skyride, a Fitness/Sports/Outdoors product.")
+
+
+def test_compose_description_truncates_blurb_only():
+    long = "x" * 600
+    d = _compose_description(_p(long), "Name", disclaimer=DISC, max_len=120)
+    assert len(d) <= 120
+    assert d.endswith(DISC)  # disclaimer never trimmed
+    assert "…" in d
