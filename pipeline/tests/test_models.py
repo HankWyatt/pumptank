@@ -44,3 +44,19 @@ def test_to_product_fields_wires_website_viewership_selection():
     assert prod.selection.rank == 3
     assert prod.selection.selected is True
     assert prod.include is True
+
+
+def test_token_assets_defaults():
+    from pumptank_pipeline.models import TokenAssets
+    t = TokenAssets(name="Smart Tire Company", symbol="SMARTTIRE", description="x")
+    assert t.mint is None
+
+
+def test_to_product_fields_passes_token():
+    from pumptank_pipeline.models import Pitch, Product, to_product_fields, TokenAssets
+    p = Pitch(id="x", season=5, episode=1, pitch_number=1, company_name="X",
+              token=TokenAssets(name="X Co", symbol="XCO", description="d"),
+              got_deal=False)
+    prod = Product(**to_product_fields(p))
+    assert prod.token.symbol == "XCO"
+    assert prod.token.mint is None

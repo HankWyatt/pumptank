@@ -12,6 +12,13 @@ class Selection(BaseModel):
     excluded_reason: Optional[str] = None  # "out_of_scope_season" | "unfindable" | None
 
 
+class TokenAssets(BaseModel):
+    name: str
+    symbol: str
+    description: str
+    mint: Optional[str] = None  # filled by sub-project 3 at launch
+
+
 class Pitch(BaseModel):
     """Normalized internal representation of one pitch (one CSV row)."""
     id: str
@@ -31,6 +38,7 @@ class Pitch(BaseModel):
     company_website: Optional[str] = None
     selection: Optional[Selection] = None
     include: bool = True
+    token: Optional[TokenAssets] = None
 
 
 class PitchDetail(BaseModel):
@@ -66,7 +74,7 @@ class Product(BaseModel):
     us_viewership: Optional[float] = None
     selection: Optional[Selection] = None
     include: bool = True
-    token: Optional[dict] = None
+    token: Optional[TokenAssets] = None
 
 
 def to_product_fields(pitch: Pitch) -> dict:
@@ -85,4 +93,5 @@ def to_product_fields(pitch: Pitch) -> dict:
         us_viewership=pitch.us_viewership,
         selection=pitch.selection,
         include=pitch.include,
+        token=pitch.token,
     )
