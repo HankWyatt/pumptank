@@ -30,3 +30,12 @@ NAME_OVERRIDES: dict[str, str] = {
     "s5e18p333-buzzy4shots": "Buzzy 4 Shots",
     "s1e3p14-50statecapitalsin50minutes": "50 State Capitals in 50 Minutes",
 }
+
+# --- Token images (sub-project 2b) ---
+IMAGE_DIR = DATA_DIR / "token_images"
+IMAGE_SIZE = 1000
+FONT_DIR = Path(__file__).parent / "fonts"
+IMAGE_PALETTE = {
+    "bg": (11, 32, 39), "accent": (51, 214, 177), "fin": (16, 46, 54),
+    "text": (240, 245, 246), "muted": (140, 161, 166),
+}
