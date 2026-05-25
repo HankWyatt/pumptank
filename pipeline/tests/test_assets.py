@@ -97,3 +97,18 @@ def test_generate_assets_dedupes_tickers():
         max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
     syms = sorted(p.token.symbol for p in out)
     assert syms == ["ACME", "ACME2"]
+
+
+def test_compose_description_drops_blurb_when_only_tail_fits():
+    tail = " Pitched on Shark Tank S3E13 — no deal. " + DISC
+    d = _compose_description(_p("x" * 600), "Name", disclaimer=DISC, max_len=len(tail))
+    assert d == tail.strip()      # blurb dropped, mandatory content kept
+    assert "…" not in d
+    assert len(d) <= len(tail)
+
+
+def test_generate_assets_tkn_fallback_for_symbolless_name():
+    out = generate_assets([_sel("z", "@#$%", 1)],
+                          max_ticker_len=10, max_description_len=480,
+                          disclaimer="D.", name_overrides={})
+    assert out[0].token.symbol == "TKN1"

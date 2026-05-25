@@ -44,7 +44,10 @@ def _compose_description(pitch: Pitch, clean_name: str, *,
     tail = f" Pitched on Shark Tank S{pitch.season}E{pitch.episode} — no deal. {disclaimer}"
     budget = max_len - len(tail)
     if len(blurb) > budget:
-        blurb = blurb[: max(0, budget - 1)].rstrip() + "…"
+        if budget <= 1:
+            # mandatory hook + disclaimer already fill max_len; drop the blurb
+            return tail.strip()
+        blurb = blurb[: budget - 1].rstrip() + "…"
     return f"{blurb}{tail}"
 
 
