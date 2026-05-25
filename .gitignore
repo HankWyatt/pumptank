@@ -7,3 +7,10 @@ __pycache__/
 .pytest_cache/
 *.egg-info/
 .venv/
+
+# Launcher (TypeScript)
+launcher/node_modules/
+launcher/dist/
+data/.mint-keys/
+*.key
+.env
