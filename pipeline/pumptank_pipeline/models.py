@@ -39,6 +39,8 @@ class Pitch(BaseModel):
     selection: Optional[Selection] = None
     include: bool = True
     token: Optional[TokenAssets] = None
+    image_url: Optional[str] = None
+    image_source: str = "none"
 
 
 class PitchDetail(BaseModel):
@@ -54,7 +56,7 @@ class Outcome(BaseModel):
 
 class Media(BaseModel):
     image_url: Optional[str] = None
-    image_source: Literal["dataset", "wayback", "none"] = "none"
+    image_source: Literal["dataset", "wayback", "none", "generated"] = "none"
     former_website: Optional[str] = None
     youtube_url: Optional[str] = None
 
@@ -89,7 +91,10 @@ def to_product_fields(pitch: Pitch) -> dict:
             valuation_requested=pitch.valuation_requested,
             description=pitch.description,
         ),
-        media=Media(former_website=pitch.company_website),
+        media=Media(
+            former_website=pitch.company_website,
+            image_url=pitch.image_url, image_source=pitch.image_source,
+        ),
         us_viewership=pitch.us_viewership,
         selection=pitch.selection,
         include=pitch.include,

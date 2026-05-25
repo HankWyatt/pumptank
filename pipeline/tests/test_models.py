@@ -60,3 +60,19 @@ def test_to_product_fields_passes_token():
     prod = Product(**to_product_fields(p))
     assert prod.token.symbol == "XCO"
     assert prod.token.mint is None
+
+
+def test_media_allows_generated_source():
+    from pumptank_pipeline.models import Media
+    assert Media(image_source="generated").image_source == "generated"
+
+
+def test_to_product_fields_threads_image():
+    from pumptank_pipeline.models import Pitch, Product, to_product_fields
+    p = Pitch(id="x", season=5, episode=1, pitch_number=1, company_name="X",
+              company_website="https://x", image_url="token_images/x.png",
+              image_source="generated", got_deal=False)
+    prod = Product(**to_product_fields(p))
+    assert prod.media.image_url == "token_images/x.png"
+    assert prod.media.image_source == "generated"
+    assert prod.media.former_website == "https://x"
