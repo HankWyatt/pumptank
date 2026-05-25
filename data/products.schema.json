@@ -133,7 +133,8 @@
           "enum": [
             "dataset",
             "wayback",
-            "none"
+            "none",
+            "generated"
           ],
           "title": "Image Source",
           "type": "string"
