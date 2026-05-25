@@ -22,3 +22,4 @@ web/.next/
 web/out/
 web/public/token_images/
 web/next-env.d.ts
+web/*.tsbuildinfo
