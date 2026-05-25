@@ -3,6 +3,7 @@ from pathlib import Path
 
 from . import config
 from .assemble import write_products
+from .assets import generate_assets
 from .filter import filter_no_deal
 from .ingest import load_pitches
 from .rank import rank_and_select
@@ -14,6 +15,11 @@ def run(csv_path, out_path, schema_path) -> int:
     ranked = rank_and_select(
         no_deal, weights=config.SELECTION_WEIGHTS,
         n=config.SELECT_TOP_N, max_season=config.MAX_SEASON,
+    )
+    ranked = generate_assets(
+        ranked, max_ticker_len=config.MAX_TICKER_LEN,
+        max_description_len=config.MAX_DESCRIPTION_LEN,
+        disclaimer=config.TOKEN_DISCLAIMER, name_overrides=config.NAME_OVERRIDES,
     )
     write_products(ranked, out_path, schema_path)
     selected = sum(1 for p in ranked if p.include)

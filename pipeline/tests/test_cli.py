@@ -35,3 +35,20 @@ def test_run_annotates_selection(csv_factory, base_row, tmp_path):
     assert data["GhostCo"]["selection"]["excluded_reason"] == "unfindable"
     # spec invariant: include must mirror selection.selected on generated output
     assert all(r["include"] == r["selection"]["selected"] for r in data.values())
+
+
+def test_run_generates_token_assets(csv_factory, base_row, tmp_path):
+    rows = [
+        dict(base_row),  # DoorBot S5 no-deal, findable -> selected
+        dict(base_row, **{"Pitch Number": 2, "Startup Name": "Acme",
+                          "Got Deal": 1}),  # deal -> filtered
+    ]
+    out = tmp_path / "p.json"
+    schema = tmp_path / "s.json"
+    run(csv_path=csv_factory(rows), out_path=out, schema_path=schema)
+    data = {r["company_name"]: r for r in json.loads(out.read_text())}
+    tok = data["DoorBot"]["token"]
+    assert tok is not None
+    assert tok["symbol"] == "DOORBOT"
+    assert "no deal" in tok["description"].lower()
+    assert tok["mint"] is None
