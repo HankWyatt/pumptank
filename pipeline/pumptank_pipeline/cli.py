@@ -5,6 +5,7 @@ from . import config
 from .assemble import write_products
 from .assets import generate_assets
 from .filter import filter_no_deal
+from .images import render_images
 from .ingest import load_pitches
 from .rank import rank_and_select
 
@@ -20,6 +21,10 @@ def run(csv_path, out_path, schema_path) -> int:
         ranked, max_ticker_len=config.MAX_TICKER_LEN,
         max_description_len=config.MAX_DESCRIPTION_LEN,
         disclaimer=config.TOKEN_DISCLAIMER, name_overrides=config.NAME_OVERRIDES,
+    )
+    ranked = render_images(
+        ranked, out_dir=config.IMAGE_DIR, font_dir=config.FONT_DIR,
+        size=config.IMAGE_SIZE, palette=config.IMAGE_PALETTE,
     )
     write_products(ranked, out_path, schema_path)
     selected = sum(1 for p in ranked if p.include)

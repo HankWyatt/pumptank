@@ -1,6 +1,15 @@
 import json
 
+import pytest
+
+from pumptank_pipeline import config
 from pumptank_pipeline.cli import run
+
+
+@pytest.fixture(autouse=True)
+def _isolate_image_dir(tmp_path, monkeypatch):
+    """Keep every CLI test's rendered PNGs out of the real data/token_images/."""
+    monkeypatch.setattr(config, "IMAGE_DIR", tmp_path / "imgs")
 
 
 def test_run_end_to_end(sample_csv, tmp_path):
@@ -52,3 +61,15 @@ def test_run_generates_token_assets(csv_factory, base_row, tmp_path):
     assert tok["symbol"] == "DOORBOT"
     assert "no deal" in tok["description"].lower()
     assert tok["mint"] is None
+
+
+def test_run_generates_images(csv_factory, base_row, tmp_path, monkeypatch):
+    from pumptank_pipeline import config
+    monkeypatch.setattr(config, "IMAGE_DIR", tmp_path / "imgs")
+    out = tmp_path / "p.json"
+    schema = tmp_path / "s.json"
+    run(csv_path=csv_factory([dict(base_row)]), out_path=out, schema_path=schema)
+    rec = json.loads(out.read_text())[0]
+    assert rec["media"]["image_source"] == "generated"
+    assert rec["media"]["image_url"].endswith(".png")
+    assert (config.IMAGE_DIR / f'{rec["id"]}.png').exists()
