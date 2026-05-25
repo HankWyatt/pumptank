@@ -1,4 +1,191 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body { background: #0B2027; color: #F0F5F6; }
+
+/* ============================================================
+   PUMPTANK — "Rejected Pitch Archive" broadcast aesthetic
+   Deep-teal vault + aqua signal. Editorial serif display,
+   terminal mono for tickers/data, clean grotesque for body.
+   ============================================================ */
+
+:root {
+  --bg: #0b2027;
+  --bg-2: #081a20;
+  --fin: #102e36;
+  --fin-2: #0d262d;
+  --accent: #33d6b1;
+  --accent-dim: #1f9e84;
+  --muted: #8ca1a6;
+  --ink: #f0f5f6;
+  --line: rgba(140, 161, 166, 0.16);
+  --line-strong: rgba(51, 214, 177, 0.32);
+  --reject: #ff6b5e;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Atmospheric gradient mesh — pinned, behind everything */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(70% 55% at 8% -5%, rgba(51, 214, 177, 0.14), transparent 60%),
+    radial-gradient(55% 50% at 100% 0%, rgba(31, 158, 132, 0.1), transparent 55%),
+    radial-gradient(80% 60% at 50% 120%, rgba(13, 38, 45, 0.9), transparent 70%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  pointer-events: none;
+}
+
+/* Fine grain / film texture overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Typographic helpers */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+  font-optical-sizing: auto;
+}
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+/* Hairline grid utility — the "ledger" feel */
+.ledger-grid {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Eyebrow / kicker label */
+.kicker {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* The "NO DEAL" stamp */
+.stamp {
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--reject);
+  border: 2px solid var(--reject);
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(255, 107, 94, 0.15) inset;
+  background: rgba(255, 107, 94, 0.06);
+}
+
+/* Aqua glow used on focal CTAs */
+.glow {
+  box-shadow:
+    0 0 0 1px var(--line-strong),
+    0 18px 50px -20px rgba(51, 214, 177, 0.55);
+}
+
+/* Animated ticker tape */
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: ticker 38s linear infinite;
+  will-change: transform;
+}
+.ticker-mask:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+/* Staggered page-load reveal */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.reveal {
+  opacity: 0;
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Soft pulsing signal dot */
+@keyframes signal {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(51, 214, 177, 0.5);
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 6px rgba(51, 214, 177, 0);
+  }
+}
+.signal-dot {
+  animation: signal 2.4s ease-in-out infinite;
+}
+
+/* Accessible focus ring on brand */
+:where(a, button, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: rgba(51, 214, 177, 0.28);
+  color: #fff;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+  }
+}
