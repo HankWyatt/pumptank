@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
-    "launch": "tsx src/cli.ts"
+    "launch": "tsx src/cli.ts",
+    "fees": "tsx src/feescli.ts"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.30.1",
