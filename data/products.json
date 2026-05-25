@@ -36,7 +36,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Smart Tire Company",
+      "symbol": "SMARTTIRE",
+      "description": "High-performance airless tires. Pitched on Shark Tank S13E10 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s12e9p1025-all33",
@@ -75,7 +80,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "ALL33",
+      "symbol": "ALL33",
+      "description": "Desk chairs to promote back health. Pitched on Shark Tank S12E9 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s3e13p152-skyride",
@@ -114,7 +124,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Skyride",
+      "symbol": "SKYRIDE",
+      "description": "Skyride, a Fitness/Sports/Outdoors product. Pitched on Shark Tank S3E13 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s16e11p1405-joyebells",
@@ -153,7 +168,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Joyebells",
+      "symbol": "JOYEBELLS",
+      "description": "Premium refrigerated pie. Pitched on Shark Tank S16E11 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e15p438-belloverde",
@@ -192,7 +212,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Bello Verde",
+      "symbol": "BELLOVERDE",
+      "description": "Bello Verde, a Fashion/Beauty product. Pitched on Shark Tank S6E15 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s2e1p68-copadivino",
@@ -231,7 +256,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Copadi Vino",
+      "symbol": "COPADIVINO",
+      "description": "Copadi Vino, a Food and Beverage product. Pitched on Shark Tank S2E1 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s5e18p333-buzzy4shots",
@@ -270,7 +300,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Buzzy 4 Shots",
+      "symbol": "BUZZY4SHOT",
+      "description": "Buzzy 4 Shots, a Health/Wellness product. Pitched on Shark Tank S5E18 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s15e15p1333-coldest",
@@ -309,7 +344,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Coldest",
+      "symbol": "COLDEST",
+      "description": "Cooling products. Pitched on Shark Tank S15E15 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s13e10p1130-candi",
@@ -348,7 +388,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Candi",
+      "symbol": "CANDI",
+      "description": "Personal celebrity video chats. Pitched on Shark Tank S13E10 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e7p406-singtrix",
@@ -387,7 +432,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Sing Trix",
+      "symbol": "SINGTRIX",
+      "description": "Sing Trix, a Children/Education product. Pitched on Shark Tank S6E7 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s1e3p15-voyageairguitar",
@@ -426,7 +476,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Voyage Air Guitar",
+      "symbol": "VOYAGEAIRG",
+      "description": "Voyage Air Guitar, a Media/Entertainment product. Pitched on Shark Tank S1E3 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s16e10p1398-charcharms",
@@ -465,7 +520,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Char Charms",
+      "symbol": "CHARCHARMS",
+      "description": "Water bottle accessories. Pitched on Shark Tank S16E10 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s1e9p42-virtusphere",
@@ -504,7 +564,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Virtu Sphere",
+      "symbol": "VIRTUSPHER",
+      "description": "Virtu Sphere, a Electronics product. Pitched on Shark Tank S1E9 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e11p203-fatassfudge",
@@ -543,7 +608,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Fat Ass Fudge",
+      "symbol": "FATASSFUDG",
+      "description": "Fat Ass Fudge, a Food and Beverage product. Pitched on Shark Tank S4E11 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s5e16p326-nexersys",
@@ -582,7 +652,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Nexersys",
+      "symbol": "NEXERSYS",
+      "description": "Nexersys, a Fitness/Sports/Outdoors product. Pitched on Shark Tank S5E16 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s16e4p1375-terrashroom",
@@ -621,7 +696,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "terrashroom",
+      "symbol": "TERRASHROO",
+      "description": "Automated mushroom-growing device. Pitched on Shark Tank S16E4 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s7e17p563-mtailor",
@@ -658,7 +738,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "MTAILOR",
+      "symbol": "MTAILOR",
+      "description": "app that takes body measurements. Pitched on Shark Tank S7E17 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s3e1p104-businessghost",
@@ -697,7 +782,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Business Ghost",
+      "symbol": "BUSINESSGH",
+      "description": "Business Ghost, a Business Services product. Pitched on Shark Tank S3E1 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e6p183-freakerusa",
@@ -736,7 +826,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Freaker USA",
+      "symbol": "FREAKERUSA",
+      "description": "Freaker USA, a Food and Beverage product. Pitched on Shark Tank S4E6 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s15e10p1314-heather-schoice",
@@ -775,7 +870,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Heather's Choice",
+      "symbol": "HEATHERSCH",
+      "description": "Adventure food. Pitched on Shark Tank S15E10 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s5e21p344-packbackbooks",
@@ -814,7 +914,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Packback Books",
+      "symbol": "PACKBACKBO",
+      "description": "Packback Books, a Children/Education product. Pitched on Shark Tank S5E21 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e26p482-buckmason",
@@ -853,7 +958,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Buck Mason",
+      "symbol": "BUCKMASON",
+      "description": "Buck Mason, a Fashion/Beauty product. Pitched on Shark Tank S6E26 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e13p431-coffeemeetsbagel",
@@ -894,7 +1004,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Coffee Meets Bagel",
+      "symbol": "COFFEEMEET",
+      "description": "Coffee Meets Bagel, a Technology/Software product. Pitched on Shark Tank S6E13 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s15e2p1280-matador",
@@ -933,7 +1048,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Matador",
+      "symbol": "MATADOR",
+      "description": "Meggings. Pitched on Shark Tank S15E2 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s5e27p370-thebouqscompany",
@@ -970,7 +1090,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "The Bouqs Company",
+      "symbol": "BOUQS",
+      "description": "The Bouqs Company, a Lifestyle/Home product. Pitched on Shark Tank S5E27 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e18p451-himalayandogchew",
@@ -1010,7 +1135,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Himalayan Dog Chew",
+      "symbol": "HIMALAYAND",
+      "description": "Himalayan Dog Chew, a Pet Products product. Pitched on Shark Tank S6E18 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s8e14p667-getaway",
@@ -1047,7 +1177,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Getaway",
+      "symbol": "GETAWAY",
+      "description": "rental service of camping sites with tiny houses. Pitched on Shark Tank S8E14 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s13e1p1095-pashko",
@@ -1086,7 +1221,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Pashko",
+      "symbol": "PASHKO",
+      "description": "Community-made apparels. Pitched on Shark Tank S13E1 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s9e1p711-simplehabit",
@@ -1123,7 +1263,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Simple Habit",
+      "symbol": "SIMPLEHABI",
+      "description": "meditation app. Pitched on Shark Tank S9E1 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s3e13p151-airbedz",
@@ -1162,7 +1307,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Air Bedz",
+      "symbol": "AIRBEDZ",
+      "description": "Air Bedz, a Travel product. Pitched on Shark Tank S3E13 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s13e1p1093-uprisingbread",
@@ -1201,7 +1351,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Uprising Bread",
+      "symbol": "UPRISINGBR",
+      "description": "Low Carb gluten-free breads. Pitched on Shark Tank S13E1 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e6p184-econutssoap",
@@ -1240,7 +1395,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Eco Nuts Soap",
+      "symbol": "ECONUTSSOA",
+      "description": "Eco Nuts Soap, a Lifestyle/Home product. Pitched on Shark Tank S4E6 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s15e11p1318-thetabletyke",
@@ -1279,7 +1439,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "The Table Tyke",
+      "symbol": "TABLETYKE",
+      "description": "Silicone placemat for babies and kids. Pitched on Shark Tank S15E11 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e21p461-bedryder",
@@ -1318,7 +1483,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Bed Ryder",
+      "symbol": "BEDRYDER",
+      "description": "Bed Ryder, a Automotive product. Pitched on Shark Tank S6E21 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s5e22p351-kodiakcakes",
@@ -1357,7 +1527,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Kodiak Cakes",
+      "symbol": "KODIAKCAKE",
+      "description": "Kodiak Cakes, a Food and Beverage product. Pitched on Shark Tank S5E22 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e15p439-napwell",
@@ -1396,7 +1571,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Napwell",
+      "symbol": "NAPWELL",
+      "description": "Napwell, a Lifestyle/Home product. Pitched on Shark Tank S6E15 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s15e2p1281-returnhome",
@@ -1435,7 +1615,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Return Home",
+      "symbol": "RETURNHOME",
+      "description": "Funeral service. Pitched on Shark Tank S15E2 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s3e1p103-mywonderfullife",
@@ -1474,7 +1659,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "My Wonderful Life",
+      "symbol": "MYWONDERFU",
+      "description": "My Wonderful Life, a Business Services product. Pitched on Shark Tank S3E1 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s5e15p322-fitdeck",
@@ -1513,7 +1703,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Fit Deck",
+      "symbol": "FITDECK",
+      "description": "Fit Deck, a Fitness/Sports/Outdoors product. Pitched on Shark Tank S5E15 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s10e3p812-soupergirl",
@@ -1550,7 +1745,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Soupergirl",
+      "symbol": "SOUPERGIRL",
+      "description": "Soupergirl, a Food and Beverage product. Pitched on Shark Tank S10E3 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e13p211-subzeroicecream",
@@ -1589,7 +1789,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Sub Zero Ice Cream",
+      "symbol": "SUBZEROICE",
+      "description": "Sub Zero Ice Cream, a Food and Beverage product. Pitched on Shark Tank S4E13 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s16e12p1406-thehappybirdwatcher",
@@ -1628,7 +1833,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "The Happy Birdwatcher",
+      "symbol": "HAPPYBIRDW",
+      "description": "Direct-to-consumer (DTC) e-commerce. Pitched on Shark Tank S16E12 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s16e14p1415-blackdot",
@@ -1667,7 +1877,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Blackdot",
+      "symbol": "BLACKDOT",
+      "description": "Automated tattoo machine. Pitched on Shark Tank S16E14 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e19p455-lumi",
@@ -1706,7 +1921,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Lumi",
+      "symbol": "LUMI",
+      "description": "Lumi, a Fashion/Beauty product. Pitched on Shark Tank S6E19 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e7p407-beardbrand",
@@ -1745,7 +1965,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Beardbrand",
+      "symbol": "BEARDBRAND",
+      "description": "Beardbrand, a Fashion/Beauty product. Pitched on Shark Tank S6E7 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s8e19p686-mealenders",
@@ -1782,7 +2007,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Meal Enders",
+      "symbol": "MEALENDERS",
+      "description": "natural lozenges designed to help with weight management. Pitched on Shark Tank S8E19 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s13e13p1143-overezchickencoop",
@@ -1821,7 +2051,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Over EZ Chicken Coop",
+      "symbol": "OVEREZCHIC",
+      "description": "Custom, easy-assemble chicken coops. Pitched on Shark Tank S13E13 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s12e14p1044-pashionfootwear",
@@ -1860,7 +2095,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Pashion Footwear",
+      "symbol": "PASHIONFOO",
+      "description": "High heels that can be turned into flats. Pitched on Shark Tank S12E14 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e23p469-brandyourself",
@@ -1899,7 +2139,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Brand Yourself",
+      "symbol": "BRANDYOURS",
+      "description": "Brand Yourself, a Technology/Software product. Pitched on Shark Tank S6E23 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e14p215-xeroshoes",
@@ -1938,7 +2183,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Xero Shoes",
+      "symbol": "XEROSHOES",
+      "description": "Xero Shoes, a Fitness/Sports/Outdoors product. Pitched on Shark Tank S4E14 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s7e18p565-cleansleep",
@@ -1975,7 +2225,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Clean Sleep",
+      "symbol": "CLEANSLEEP",
+      "description": "service to clean mattresses and associated bedding. Pitched on Shark Tank S7E18 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e19p234-babylovesdisco",
@@ -2014,7 +2269,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Baby Loves Disco",
+      "symbol": "BABYLOVESD",
+      "description": "Baby Loves Disco, a Children/Education product. Pitched on Shark Tank S4E19 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s10e18p872-nuchas",
@@ -2053,7 +2313,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Nuchas",
+      "symbol": "NUCHAS",
+      "description": "Nuchas, a Food and Beverage product. Pitched on Shark Tank S10E18 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s15e13p1325-modernpicnic",
@@ -2092,7 +2357,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Modern Picnic",
+      "symbol": "MODERNPICN",
+      "description": "Fashionable lunchboxes. Pitched on Shark Tank S15E13 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s1e2p9-crookedjaw",
@@ -2131,7 +2401,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Crooked Jaw",
+      "symbol": "CROOKEDJAW",
+      "description": "Crooked Jaw, a Fashion/Beauty product. Pitched on Shark Tank S1E2 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s12e12p1038-rulebreaker",
@@ -2170,7 +2445,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Rule Breaker",
+      "symbol": "RULEBREAKE",
+      "description": "snack made from chickpeas. Pitched on Shark Tank S12E12 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s9e14p763-birddogs",
@@ -2207,7 +2487,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Birddogs",
+      "symbol": "BIRDDOGS",
+      "description": "Birddogs, a Fashion/Beauty product. Pitched on Shark Tank S9E14 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s1e3p14-50statecapitalsin50minutes",
@@ -2246,7 +2531,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "50 State Capitals in 50 Minutes",
+      "symbol": "50STATECAP",
+      "description": "50 State Capitals in 50 Minutes, a Children/Education product. Pitched on Shark Tank S1E3 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s8e18p681-oraorganics",
@@ -2283,7 +2573,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Ora Organics",
+      "symbol": "ORAORGANIC",
+      "description": "plant-based nutritional supplements. Pitched on Shark Tank S8E18 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s14e10p1226-vochill",
@@ -2322,7 +2617,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Vochill",
+      "symbol": "VOCHILL",
+      "description": "Portable wine glass cooler. Pitched on Shark Tank S14E10 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e19p454-ssekodesigns",
@@ -2361,7 +2661,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Sseko Designs",
+      "symbol": "SSEKODESIG",
+      "description": "Sseko Designs, a Fashion/Beauty product. Pitched on Shark Tank S6E19 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s1e2p8-lifebelt",
@@ -2400,7 +2705,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Lifebelt",
+      "symbol": "LIFEBELT",
+      "description": "Lifebelt, a Automotive product. Pitched on Shark Tank S1E2 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s5e11p307-virtuixomni",
@@ -2437,7 +2747,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Virtuix Omni",
+      "symbol": "VIRTUIXOMN",
+      "description": "Virtuix Omni, a Electronics product. Pitched on Shark Tank S5E11 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e20p459-taalumatotes",
@@ -2476,7 +2791,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Taaluma Totes",
+      "symbol": "TAALUMATOT",
+      "description": "Taaluma Totes, a Fashion/Beauty product. Pitched on Shark Tank S6E20 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s15e1p1278-piewine",
@@ -2515,7 +2835,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Pie Wine",
+      "symbol": "PIEWINE",
+      "description": "Wine for pizzas. Pitched on Shark Tank S15E1 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s13e12p1137-ta3swimwear",
@@ -2554,7 +2879,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "TA3 Swimwear",
+      "symbol": "TA3SWIMWEA",
+      "description": "Shaping swimwear for women. Pitched on Shark Tank S13E12 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s1e9p41-cornucopiaexpress",
@@ -2593,7 +2923,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Cornucopia Express",
+      "symbol": "CORNUCOPIA",
+      "description": "Cornucopia Express, a Pet Products product. Pitched on Shark Tank S1E9 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s9e14p762-inirv",
@@ -2630,7 +2965,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Inirv",
+      "symbol": "INIRV",
+      "description": "Inirv, a Lifestyle/Home product. Pitched on Shark Tank S9E14 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e21p243-echovalleymeats",
@@ -2669,7 +3009,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Echo Valley Meats",
+      "symbol": "ECHOVALLEY",
+      "description": "Echo Valley Meats, a Food and Beverage product. Pitched on Shark Tank S4E21 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s5e18p335-cheek-d",
@@ -2708,7 +3053,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Cheek'd",
+      "symbol": "CHEEKD",
+      "description": "Cheek'd, a Technology/Software product. Pitched on Shark Tank S5E18 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e16p442-victoria-skitchen",
@@ -2747,7 +3097,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Victoria's Kitchen",
+      "symbol": "VICTORIASK",
+      "description": "Victoria's Kitchen, a Food and Beverage product. Pitched on Shark Tank S6E16 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e16p443-tycoonrealestate",
@@ -2786,7 +3141,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Tycoon Real Estate",
+      "symbol": "TYCOONREAL",
+      "description": "Tycoon Real Estate, a Technology/Software product. Pitched on Shark Tank S6E16 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s12e5p1009-liftidneurostimulation",
@@ -2825,7 +3185,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Liftid Neurostimulation",
+      "symbol": "LIFTIDNEUR",
+      "description": "Transcranial neuro-stimulation device for improving focus. Pitched on Shark Tank S12E5 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s7e16p557-beartek",
@@ -2862,7 +3227,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Beartek",
+      "symbol": "BEARTEK",
+      "description": "gloves that are capable of remotely controlling smartphones. Pitched on Shark Tank S7E16 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s15e1p1277-worthybrands",
@@ -2901,7 +3271,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Worthy Brands",
+      "symbol": "WORTHYBRAN",
+      "description": "Medical patches for eyes. Pitched on Shark Tank S15E1 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s5e27p371-sustyparty",
@@ -2938,7 +3313,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Susty Party",
+      "symbol": "SUSTYPARTY",
+      "description": "Susty Party, a Lifestyle/Home product. Pitched on Shark Tank S5E27 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e22p247-tremontelectric",
@@ -2977,7 +3357,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Tremont Electric",
+      "symbol": "TREMONTELE",
+      "description": "Tremont Electric, a Green/CleanTech product. Pitched on Shark Tank S4E22 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s14e12p1231-nutr",
@@ -3016,7 +3401,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Nutr",
+      "symbol": "NUTR",
+      "description": "Nut milk. Pitched on Shark Tank S14E12 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e21p242-rootsuit",
@@ -3055,7 +3445,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Rootsuit",
+      "symbol": "ROOTSUIT",
+      "description": "Rootsuit, a Fashion/Beauty product. Pitched on Shark Tank S4E21 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s10e18p873-havenlock",
@@ -3094,7 +3489,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Haven Lock",
+      "symbol": "HAVENLOCK",
+      "description": "Haven Lock, a Lifestyle/Home product. Pitched on Shark Tank S10E18 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s15e9p1307-flywithwine",
@@ -3133,7 +3533,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Fly With Wine",
+      "symbol": "FLYWITHWIN",
+      "description": "Luggage for wine transport. Pitched on Shark Tank S15E9 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e23p471-thehomet",
@@ -3172,7 +3577,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "The Home T",
+      "symbol": "HOMET",
+      "description": "The Home T, a Fashion/Beauty product. Pitched on Shark Tank S6E23 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s1e3p13-kwyztachopstickart",
@@ -3211,7 +3621,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Kwyzta Chopstick Art",
+      "symbol": "KWYZTACHOP",
+      "description": "Kwyzta Chopstick Art, a Children/Education product. Pitched on Shark Tank S1E3 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s16e8p1390-hiccup",
@@ -3250,7 +3665,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Hiccup",
+      "symbol": "HICCUP",
+      "description": "Silicone Cups. Pitched on Shark Tank S16E8 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s15e12p1319-jay-spetbutter",
@@ -3289,7 +3709,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Jay's Pet Butter",
+      "symbol": "JAYSPETBUT",
+      "description": "Peanut butter for dogs. Pitched on Shark Tank S15E12 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s6e26p481-snagastool",
@@ -3328,7 +3753,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Snaga Stool",
+      "symbol": "SNAGASTOOL",
+      "description": "Snaga Stool, a Technology/Software product. Pitched on Shark Tank S6E26 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e19p235-cellhelmet",
@@ -3367,7 +3797,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Cell Helmet",
+      "symbol": "CELLHELMET",
+      "description": "Cell Helmet, a Electronics product. Pitched on Shark Tank S4E19 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s1e10p45-thebobbleplace",
@@ -3406,7 +3841,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "The Bobble Place",
+      "symbol": "BOBBLEPLAC",
+      "description": "The Bobble Place, a Children/Education product. Pitched on Shark Tank S1E10 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s12e16p1055-busybabymat",
@@ -3445,7 +3885,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Busy Baby Mat",
+      "symbol": "BUSYBABYMA",
+      "description": "Silicone placemat for babies. Pitched on Shark Tank S12E16 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s16e17p1426-frameyourfeline",
@@ -3484,7 +3929,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Frame Your Feline",
+      "symbol": "FRAMEYOURF",
+      "description": "Luxury pet furniture. Pitched on Shark Tank S16E17 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s13e5p1110-beulr",
@@ -3523,7 +3973,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Beulr",
+      "symbol": "BEULR",
+      "description": "Bot that attends and records Zoom meetings. Pitched on Shark Tank S13E5 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s16e20p1439-tickmitt",
@@ -3562,7 +4017,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Tick Mitt",
+      "symbol": "TICKMITT",
+      "description": "Reusable tick-removal mitt. Pitched on Shark Tank S16E20 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s5e26p367-crio",
@@ -3601,7 +4061,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Crio",
+      "symbol": "CRIO",
+      "description": "Crio, a Food and Beverage product. Pitched on Shark Tank S5E26 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s14e12p1234-nopalera",
@@ -3640,7 +4105,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Nopalera",
+      "symbol": "NOPALERA",
+      "description": "Mexican-inspired botanicals for bath and body. Pitched on Shark Tank S14E12 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s9e1p709-wypaviation",
@@ -3677,7 +4147,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Wyp Aviation",
+      "symbol": "WYPAVIATIO",
+      "description": "wakeboard style vehicle. Pitched on Shark Tank S9E1 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s14e12p1233-brassroots",
@@ -3716,7 +4191,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Brass Roots",
+      "symbol": "BRASSROOTS",
+      "description": "Snacks made from sacha inchi seeds. Pitched on Shark Tank S14E12 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s4e14p214-cuddletunes",
@@ -3755,7 +4235,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Cuddle Tunes",
+      "symbol": "CUDDLETUNE",
+      "description": "Cuddle Tunes, a Children/Education product. Pitched on Shark Tank S4E14 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s13e11p1133-mustlove",
@@ -3794,7 +4279,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Must Love",
+      "symbol": "MUSTLOVE",
+      "description": "Plant-based vegan ice cream alternative. Pitched on Shark Tank S13E11 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s14e11p1228-metricmate",
@@ -3835,7 +4325,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Metric Mate",
+      "symbol": "METRICMATE",
+      "description": "Smart fitness device. Pitched on Shark Tank S14E11 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s1e4p18-graffitiremovalservices",
@@ -3874,7 +4369,12 @@
       "excluded_reason": null
     },
     "include": true,
-    "token": null
+    "token": {
+      "name": "Graffiti Removal Services",
+      "symbol": "GRAFFITIRE",
+      "description": "Graffiti Removal Services, a Business Services product. Pitched on Shark Tank S1E4 — no deal. Unofficial fan tribute & parody token. Not affiliated with or endorsed by the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; no promise of value.",
+      "mint": null
+    }
   },
   {
     "id": "s3e7p127-scottevest",

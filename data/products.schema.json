@@ -94,15 +94,13 @@
       "token": {
         "anyOf": [
           {
-            "additionalProperties": true,
-            "type": "object"
+            "$ref": "#/$defs/TokenAssets"
           },
           {
             "type": "null"
           }
         ],
-        "default": null,
-        "title": "Token"
+        "default": null
       }
     },
     "required": [
@@ -314,6 +312,41 @@
         }
       },
       "title": "Selection",
+      "type": "object"
+    },
+    "TokenAssets": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "symbol": {
+          "title": "Symbol",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "mint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mint"
+        }
+      },
+      "required": [
+        "name",
+        "symbol",
+        "description"
+      ],
+      "title": "TokenAssets",
       "type": "object"
     }
   }

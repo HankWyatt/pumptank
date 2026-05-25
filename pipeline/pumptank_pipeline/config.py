@@ -24,6 +24,9 @@ TOKEN_DISCLAIMER = (
     "the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; "
     "no promise of value."
 )
-# product id -> hand-fixed display name, for names the de-smoosh regex mangles.
-# Populated in Task 8 after eyeballing the 100 rendered names.
-NAME_OVERRIDES: dict[str, str] = {}
+# product id -> hand-fixed display name, for names the de-smoosh regex mangles
+# (letter<->digit boundaries it doesn't split). Only these 2 of the 100 need it.
+NAME_OVERRIDES: dict[str, str] = {
+    "s5e18p333-buzzy4shots": "Buzzy 4 Shots",
+    "s1e3p14-50statecapitalsin50minutes": "50 State Capitals in 50 Minutes",
+}
