@@ -1,0 +1,22 @@
+import { expect, test } from "vitest";
+import { toProducts, type RawRecord } from "@/lib/products";
+
+const raw: RawRecord[] = [
+  { id: "s5e9p1-a", include: true, season: 5, episode: 9, industry: "Tech", company_name: "AcmeCo",
+    founders: ["A"], pitch: {}, selection: { rank: 1 },
+    token: { name: "Acme", symbol: "ACME", description: "d", mint: null },
+    media: { image_url: "token_images/s5e9p1-a.png", former_website: "https://x", youtube_url: null } },
+  { id: "s5e9p2-b", include: false, season: 5, episode: 9, industry: "Food", company_name: "B",
+    founders: [], pitch: {}, selection: { rank: null },
+    token: { name: "B", symbol: "B", description: "d", mint: null },
+    media: { image_url: "token_images/b.png", former_website: null, youtube_url: null } },
+];
+
+test("toProducts maps + filters to included records", () => {
+  const ps = toProducts(raw);
+  expect(ps).toHaveLength(1);
+  expect(ps[0]).toMatchObject({
+    id: "s5e9p1-a", name: "Acme", symbol: "ACME", season: 5, episode: 9,
+    mint: null, formerWebsite: "https://x", youtubeUrl: null, imagePath: "/token_images/s5e9p1-a.png",
+  });
+});
