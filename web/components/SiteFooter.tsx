@@ -32,7 +32,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="/onboard"
+                  href="/onboard/"
                   className="group inline-flex items-center gap-2 text-ink/80 transition-colors hover:text-accent"
                 >
                   <span className="text-accent/60 transition-transform group-hover:translate-x-0.5">→</span>

@@ -62,7 +62,7 @@ export default function HubPage() {
               <span className="transition-transform group-hover:translate-x-1">↓</span>
             </a>
             <a
-              href="/onboard"
+              href="/onboard/"
               className="group inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line-strong)] px-7 py-3.5 font-mono text-sm font-bold uppercase tracking-wider text-ink transition-colors hover:bg-fin"
             >
               Founders: claim your fees
@@ -186,7 +186,7 @@ export default function HubPage() {
               </p>
             </div>
             <a
-              href="/onboard"
+              href="/onboard/"
               className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-accent px-8 py-4 font-mono text-sm font-bold uppercase tracking-wider text-[#04181d] transition-transform hover:-translate-y-0.5"
             >
               Opt in now

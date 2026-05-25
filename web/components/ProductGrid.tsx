@@ -12,7 +12,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
     : products;
   return (
     <div>
-      <input type="search" placeholder="Search 100 tokens…" value={q}
+      <input type="search" aria-label="Search tokens" placeholder="Search 100 tokens…" value={q}
         onChange={(e) => setQ(e.target.value)}
         className="mb-4 w-full rounded-lg bg-fin px-4 py-2 text-white placeholder:text-muted" />
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">

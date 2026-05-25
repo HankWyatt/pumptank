@@ -143,7 +143,7 @@ export default function TokenPage({ params }: { params: { id: string } }) {
               </p>
             </div>
             <a
-              href="/onboard"
+              href="/onboard/"
               className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 font-mono text-sm font-bold uppercase tracking-wider text-[#04181d] transition-transform hover:-translate-y-0.5"
             >
               Opt in

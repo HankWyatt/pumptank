@@ -26,6 +26,8 @@ const body = Archivo({
 });
 
 export const metadata: Metadata = {
+  // TODO: real domain
+  metadataBase: new URL(process.env.SITE_URL ?? "https://pumptank.fun"),
   title: "PUMPTANK",
   description: "Tribute tokens for Shark Tank pitches that got no deal.",
 };
