@@ -13,6 +13,10 @@ export function previewCollect(claimableLamports: bigint): string {
   return `Claimable creator-fee vault: ${(Number(claimableLamports) / LAMPORTS_PER_SOL).toFixed(4)} SOL (pump distributes per each token's configured split)`;
 }
 
+export function shouldCollect(claimableLamports: bigint, minSol: number): boolean {
+  return Number(claimableLamports) >= minSol * LAMPORTS_PER_SOL;
+}
+
 export function assertCanBroadcast(confirm: boolean): void {
   if (!confirm) throw new Error("refusing to broadcast: pass --confirm to collect (default is dry-run)");
 }
@@ -53,9 +57,13 @@ export async function main(argv: string[], env: Record<string, string | undefine
     return;
   }
   if (cmd === "collect") {
+    const minSol = Number(env.MIN_COLLECT_SOL ?? "0.005");
     console.log(previewCollect(claimable));
+    if (!shouldCollect(claimable, minSol)) {
+      console.log(`below MIN_COLLECT_SOL (${minSol}) -- nothing to collect.`);
+      return;
+    }
     if (!confirm) { console.log("DRY RUN -- not collecting. Re-run with --confirm."); return; }
-    assertCanBroadcast(confirm);
     const sig = await collectCreatorFee(conn, wallet, { pumpportalUrl: env.PUMPPORTAL_URL ?? "https://pumpportal.fun" });
     console.log(`collected: https://solscan.io/tx/${sig}`);
     return;

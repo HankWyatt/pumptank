@@ -12,5 +12,6 @@ __pycache__/
 launcher/node_modules/
 launcher/dist/
 data/.mint-keys/
+data/fee-config.json
 *.key
 .env

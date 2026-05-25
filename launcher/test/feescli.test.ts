@@ -1,5 +1,6 @@
 import { expect, test } from "vitest";
 import { previewCollect, assertCanBroadcast } from "../src/feescli.js";
+import { shouldCollect } from "../src/feescli.js";
 
 test("previewCollect formats the claimable vault balance", () => {
   const line = previewCollect(2_500_000_000n);
@@ -13,4 +14,10 @@ test("assertCanBroadcast throws without --confirm", () => {
 
 test("assertCanBroadcast passes with --confirm", () => {
   expect(() => assertCanBroadcast(true)).not.toThrow();
+});
+
+test("shouldCollect respects the min threshold", () => {
+  expect(shouldCollect(5_000_000n, 0.005)).toBe(true);   // == threshold (0.005 SOL)
+  expect(shouldCollect(4_000_000n, 0.005)).toBe(false);  // below
+  expect(shouldCollect(1_000_000_000n, 0.005)).toBe(true);
 });
