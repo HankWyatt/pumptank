@@ -2,29 +2,76 @@ import { closeSync, existsSync, fsyncSync, openSync, readFileSync, writeSync } f
 import { PublicKey } from "@solana/web3.js";
 
 export type Split = "house_100" | "split_80_20";
+
 export interface FeeEntry {
   optedIn: boolean;
-  payoutWallet: string | null;
+  founderWallet: string | null;
+  mint: string | null;
+  pool: string | null;
   split: Split;
   changeUsed: boolean;
   changedAt: string | null;
+  sharingConfigSig?: string;
+  setSharesSig?: string;
+  distributeSig?: string;
 }
 export type FeeConfig = Record<string, FeeEntry>;
 
+/** The on-chain proof signatures recorded when a coin is moved to the 80/20 split. */
+export interface ShareSigs {
+  sharingConfigSig: string;
+  setSharesSig: string;
+}
+
 function entry(cfg: FeeConfig, id: string): FeeEntry {
-  return cfg[id] ?? { optedIn: false, payoutWallet: null, split: "house_100", changeUsed: false, changedAt: null };
+  return (
+    cfg[id] ?? {
+      optedIn: false,
+      founderWallet: null,
+      mint: null,
+      pool: null,
+      split: "house_100",
+      changeUsed: false,
+      changedAt: null,
+    }
+  );
 }
 
-export function markOptin(cfg: FeeConfig, id: string, payoutWallet: string): FeeConfig {
-  try { new PublicKey(payoutWallet); } catch { throw new Error(`invalid payout wallet: ${payoutWallet}`); }
-  return { ...cfg, [id]: { ...entry(cfg, id), optedIn: true, payoutWallet } };
+/** Record a founder opt-in: validate the founder wallet, store it + the coin's mint. Still 100% house. */
+export function markOptin(cfg: FeeConfig, id: string, founderWallet: string, mint: string): FeeConfig {
+  try {
+    new PublicKey(founderWallet);
+  } catch {
+    throw new Error(`invalid founder wallet: ${founderWallet}`);
+  }
+  return { ...cfg, [id]: { ...entry(cfg, id), optedIn: true, founderWallet, mint } };
 }
 
-export function markRedirected(cfg: FeeConfig, id: string): FeeConfig {
+/**
+ * Mark a coin moved to the on-chain 80/20 split and lock it (one-time guard).
+ * Records the proof sigs from `createFeeSharingConfig` + `updateFeeSharesV2`.
+ * Throws if the coin is not opted-in (no founder wallet) or already changed (locked).
+ */
+export function markShared(cfg: FeeConfig, id: string, sigs: ShareSigs): FeeConfig {
   const e = entry(cfg, id);
-  if (!e.optedIn || !e.payoutWallet) throw new Error(`cannot redirect ${id}: not opted in / no payout wallet`);
-  if (e.changeUsed) throw new Error(`cannot redirect ${id}: one-time change already used (locked)`);
-  return { ...cfg, [id]: { ...e, split: "split_80_20", changeUsed: true, changedAt: new Date().toISOString() } };
+  if (!e.optedIn || !e.founderWallet) throw new Error(`cannot set shares for ${id}: not opted in / no founder wallet`);
+  if (e.changeUsed) throw new Error(`cannot set shares for ${id}: one-time change already used (locked)`);
+  return {
+    ...cfg,
+    [id]: {
+      ...e,
+      split: "split_80_20",
+      changeUsed: true,
+      changedAt: new Date().toISOString(),
+      sharingConfigSig: sigs.sharingConfigSig,
+      setSharesSig: sigs.setSharesSig,
+    },
+  };
+}
+
+/** Record a successful distribute payout for a coin. */
+export function markDistributed(cfg: FeeConfig, id: string, distributeSig: string): FeeConfig {
+  return { ...cfg, [id]: { ...entry(cfg, id), distributeSig } };
 }
 
 export function loadFeeConfig(path: string): FeeConfig {
@@ -33,5 +80,10 @@ export function loadFeeConfig(path: string): FeeConfig {
 
 export function saveFeeConfig(path: string, cfg: FeeConfig): void {
   const fd = openSync(path, "w");
-  try { writeSync(fd, JSON.stringify(cfg, null, 2)); fsyncSync(fd); } finally { closeSync(fd); }
+  try {
+    writeSync(fd, JSON.stringify(cfg, null, 2));
+    fsyncSync(fd);
+  } finally {
+    closeSync(fd);
+  }
 }
