@@ -5,218 +5,227 @@ import { ProductGrid } from "@/components/ProductGrid";
 export default function HubPage() {
   const products = getAllProducts();
   const industries = new Set(products.map((p) => p.industry)).size;
-  const ticker = products.slice(0, 28);
+  const ticker = products.slice(0, 30);
+
+  const stats = [
+    { v: products.length.toString().padStart(3, "0"), l: "Tribute tokens" },
+    { v: industries.toString(), l: "Sectors covered" },
+    { v: "1.5%", l: "Dev buy · capped" },
+    { v: "ONE", l: "Wallet · disclosed" },
+  ];
 
   return (
     <main className="relative">
-      {/* ============ HERO ============ */}
-      <section className="relative overflow-hidden">
-        <div className="ledger-grid absolute inset-0 opacity-30" aria-hidden />
+      {/* ============ FRONT PAGE / LEDE ============ */}
+      <section className="relative mx-auto max-w-6xl px-6 pt-12 md:pt-16">
         <div
-          className="absolute -right-24 -top-24 h-[460px] w-[460px] rounded-full bg-accent/10 blur-[120px]"
+          className="halftone pointer-events-none absolute right-6 top-6 hidden h-24 w-40 opacity-[0.16] md:block"
           aria-hidden
         />
-        <div className="relative mx-auto max-w-6xl px-6 pb-16 pt-16 md:pt-24">
-          <div className="reveal flex items-center gap-3" style={{ animationDelay: "0ms" }}>
-            <span className="signal-dot inline-block h-2.5 w-2.5 rounded-full bg-accent" aria-hidden />
-            <span className="kicker">Live Tribute Index · Solana</span>
-          </div>
-
-          <h1
-            className="reveal mt-6 font-display text-[clamp(2.8rem,9vw,6.5rem)] font-black leading-[0.92] tracking-[-0.02em]"
-            style={{ animationDelay: "80ms" }}
-          >
-            They got
-            <br />
-            <span className="relative inline-block">
-              <span className="italic text-accent">no deal.</span>
-              <span
-                className="absolute -right-3 top-1 h-[3px] w-full -rotate-1 bg-[var(--reject)]/80 sm:-right-6"
-                aria-hidden
-              />
-            </span>
-            <br />
-            <span className="text-muted">We minted the legend.</span>
-          </h1>
-
-          <p
-            className="reveal mt-8 max-w-2xl font-body text-lg leading-relaxed text-ink/80 md:text-xl"
-            style={{ animationDelay: "160ms" }}
-          >
-            <span className="font-mono font-bold text-accent">$PUMPTANK</span> is a fan-built
-            archive of{" "}
-            <span className="font-semibold text-ink">100 Shark Tank pitches that walked away empty-handed</span>
-            {" "}— each immortalized as its own tribute token. No suits. No handshakes. Just the
-            ideas that deserved a second look.
-          </p>
-
-          <div
-            className="reveal mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
-            style={{ animationDelay: "240ms" }}
-          >
-            <a
-              href="#archive"
-              className="glow group inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 font-mono text-sm font-bold uppercase tracking-wider text-[#04181d] transition-transform hover:-translate-y-0.5"
-            >
-              Browse the Archive
-              <span className="transition-transform group-hover:translate-x-1">↓</span>
-            </a>
-            <a
-              href="/onboard/"
-              className="group inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line-strong)] px-7 py-3.5 font-mono text-sm font-bold uppercase tracking-wider text-ink transition-colors hover:bg-fin"
-            >
-              Founders: claim your fees
-              <span className="text-accent transition-transform group-hover:translate-x-1">→</span>
-            </a>
-          </div>
-
-          {/* Stats strip */}
-          <dl
-            className="reveal mt-14 grid max-w-2xl grid-cols-3 divide-x divide-[var(--line)] border-y border-[var(--line)]"
-            style={{ animationDelay: "320ms" }}
-          >
-            {[
-              { v: products.length.toString().padStart(3, "0"), l: "Tribute tokens" },
-              { v: industries.toString(), l: "Industries" },
-              { v: "1.5%", l: "Dev buy · capped" },
-            ].map((s) => (
-              <div key={s.l} className="px-5 py-5 first:pl-0">
-                <dt className="font-display text-3xl font-bold text-accent md:text-4xl">{s.v}</dt>
-                <dd className="mt-1 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-muted">
-                  {s.l}
-                </dd>
-              </div>
-            ))}
-          </dl>
+        <div className="reveal kicker flex items-center gap-3">
+          <span>Front Page</span>
+          <span className="h-px w-10 bg-[var(--line-strong)]" aria-hidden />
+          <span className="text-muted">Rejected on air, redeemed on-chain</span>
         </div>
 
-        {/* Ticker tape */}
-        <div className="ticker-mask relative border-y border-[var(--line)] bg-fin-2/60 py-3">
-          <div className="ticker-track gap-8 font-mono text-sm">
-            {[...ticker, ...ticker].map((p, i) => (
-              <span key={`${p.id}-${i}`} className="inline-flex items-center gap-2 text-muted">
-                <span className="font-bold text-accent">${p.symbol}</span>
-                <span className="text-ink/70">{p.name}</span>
-                <span className="text-[var(--reject)]/70">· no deal</span>
-                <span className="px-2 text-muted/40">/</span>
+        <div className="mt-6 grid gap-x-10 gap-y-10 md:grid-cols-12">
+          {/* Headline + lede */}
+          <div className="md:col-span-8">
+            <h1 className="reveal font-display text-[clamp(2.9rem,8.5vw,6.25rem)] uppercase leading-[0.9] tracking-[0.01em]">
+              They got{" "}
+              <span className="relative inline-block">
+                <span>no&nbsp;deal.</span>
+                <span
+                  className="absolute left-0 top-[0.52em] h-[5px] w-full -rotate-[1.2deg] bg-[var(--red)]"
+                  aria-hidden
+                />
               </span>
-            ))}
+              <br />
+              We minted the{" "}
+              <span className="text-[var(--teal)]">legend.</span>
+            </h1>
+
+            <p className="reveal dropcap mt-7 max-w-2xl font-body text-xl leading-[1.6] text-ink-soft">
+              <span className="font-mono text-base font-semibold tracking-tight text-[var(--teal-2)]">
+                $PUMPTANK
+              </span>{" "}
+              is a fan-built archive of one hundred Shark&nbsp;Tank pitches that walked away
+              empty-handed. Each one now lives on as its own tribute token. No suits. No handshakes.
+              Just the ideas that deserved a second look, filed for the record.
+            </p>
+
+            <p className="reveal mt-5 dateline">
+              By the PUMPTANK Desk · Filed from Solana · Est. MMXXVI
+            </p>
+
+            <div className="reveal mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+              <a
+                href="#archive"
+                className="btn-stamp inline-flex items-center gap-2.5 px-7 py-3.5 font-mono text-sm font-semibold uppercase tracking-[0.14em]"
+              >
+                Browse the Archive
+                <span aria-hidden>↓</span>
+              </a>
+              <a
+                href="/onboard/"
+                className="editorial-link font-mono text-sm font-medium uppercase tracking-[0.14em] text-ink"
+              >
+                Founders: claim your fees →
+              </a>
+            </div>
           </div>
+
+          {/* "By the numbers" ledger box */}
+          <aside className="reveal md:col-span-4 md:col-rule md:pl-8">
+            <div className="relative border border-[var(--line-strong)] bg-[var(--paper-2)] p-6">
+              <span className="stamp absolute -right-3 -top-3 rotate-[7deg] bg-[#07141f] px-2.5 py-1 text-[0.62rem]">
+                No Deal
+              </span>
+              <div className="kicker">By the Numbers</div>
+              <dl className="mt-4 divide-y divide-[var(--line)]">
+                {stats.map((s) => (
+                  <div key={s.l} className="flex items-baseline justify-between gap-3 py-3">
+                    <dt className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+                      {s.l}
+                    </dt>
+                    <dd className="tabular font-display text-3xl leading-none text-[var(--teal)]">
+                      {s.v}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </aside>
         </div>
       </section>
 
-      {/* ============ HOW IT WORKS ============ */}
-      <section className="mx-auto max-w-6xl px-6 py-20" aria-labelledby="how">
-        <div className="kicker mb-3">The mechanics</div>
-        <h2 id="how" className="font-display text-4xl font-bold tracking-tight md:text-5xl">
+      {/* ============ LIVE TAPE ============ */}
+      <div className="ticker-mask relative mt-12 flex items-center overflow-hidden border-y border-[rgba(140,196,224,0.18)] bg-[#050f1a] py-2.5">
+        <span className="z-10 shrink-0 self-stretch bg-[var(--red)] px-4 py-1 font-mono text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-white">
+          Live Tape
+        </span>
+        <div className="ticker-track gap-7 pl-7 font-mono text-sm">
+          {[...ticker, ...ticker].map((p, i) => (
+            <span key={`${p.id}-${i}`} className="inline-flex items-center gap-2.5">
+              <span className="font-semibold text-[var(--teal)]">${p.symbol}</span>
+              <span className="text-[var(--ink)]/60">{p.name}</span>
+              <span className="text-[#ff7064]">▼ no deal</span>
+              <span className="text-[var(--ink)]/25" aria-hidden>◆</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ============ THE MECHANICS ============ */}
+      <section id="mechanics" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-20" aria-labelledby="how">
+        <div className="kicker">The Mechanics</div>
+        <h2 id="how" className="mt-3 font-display text-4xl uppercase tracking-tight md:text-5xl">
           Transparent by design.
         </h2>
-        <p className="mt-4 max-w-2xl font-body text-lg text-ink/75">
-          No hidden allocations, no team bags, no rug. Here is exactly how every $PUMPTANK token works.
+        <p className="mt-4 max-w-2xl font-body text-lg leading-relaxed text-ink-soft">
+          No hidden allocations. No team bags. No rug. Here is exactly how every $PUMPTANK token is
+          struck. It's all printed in full, for anyone who cares to read the fine print.
         </p>
 
-        <ol className="mt-12 grid gap-6 md:grid-cols-3">
+        <ol className="mt-12 grid gap-x-10 gap-y-8 border-t-2 border-[var(--line-strong)] pt-8 md:grid-cols-3">
           {[
             {
               n: "01",
-              t: "A 1.5% dev buy",
-              d: "Each token launches with a single, transparent 1.5% dev buy — fully disclosed, capped, and on-chain. That's the only insider position, ever.",
+              t: "A single 1.5% dev buy",
+              d: "Each token launches with one transparent 1.5% dev buy, fully disclosed, capped, and on-chain. That is the only insider position, ever.",
             },
             {
               n: "02",
               t: "80% of fees → founders",
-              d: "Creator trading fees are split 80 / 20. The lion's share — 80% — is reserved for the original founders the moment they opt in. It's their story; it's their upside.",
+              d: "Creator trading fees split 80 / 20. The lion's share is reserved for the original founders the moment they opt in. It is their story; it is their upside.",
             },
             {
               n: "03",
               t: "20% keeps the lights on",
-              d: "The remaining 20% funds marketing and growth for the index, so more rejected pitches get the spotlight they were denied on air.",
+              d: "The remaining fifth funds marketing and growth for the index, so more rejected pitches get the spotlight they were denied on air.",
             },
-          ].map((step) => (
-            <li
-              key={step.n}
-              className="group relative overflow-hidden rounded-2xl border border-[var(--line)] bg-fin/50 p-6 transition-colors hover:border-[var(--line-strong)]"
-            >
-              <div
-                className="absolute -right-6 -top-8 font-display text-[6rem] font-black leading-none text-accent/5 transition-colors group-hover:text-accent/10"
-                aria-hidden
-              >
-                {step.n}
+          ].map((step, i) => (
+            <li key={step.n} className={i > 0 ? "md:col-rule md:pl-10" : ""}>
+              <div className="flex items-baseline gap-3">
+                <span className="font-display text-5xl leading-none text-[var(--red)]">
+                  {step.n}
+                </span>
+                <span className="h-px flex-1 translate-y-[-0.4em] bg-[var(--line)]" aria-hidden />
               </div>
-              <div className="relative">
-                <div className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-                  Step {step.n}
-                </div>
-                <h3 className="mt-3 font-display text-2xl font-semibold">{step.t}</h3>
-                <p className="mt-3 font-body text-sm leading-relaxed text-ink/70">{step.d}</p>
-              </div>
+              <h3 className="mt-4 font-body text-2xl font-bold">{step.t}</h3>
+              <p className="mt-3 font-body leading-relaxed text-ink-soft">{step.d}</p>
             </li>
           ))}
         </ol>
 
-        {/* Fee-split bar */}
-        <div className="mt-10 overflow-hidden rounded-xl border border-[var(--line)]">
-          <div className="flex h-12 w-full font-mono text-xs font-bold">
-            <div className="flex items-center justify-center bg-accent text-[#04181d]" style={{ width: "80%" }}>
-              80% · FOUNDERS
+        {/* Fee allocation, Fig. 1 */}
+        <figure className="mt-12">
+          <div className="flex h-14 w-full overflow-hidden border border-[var(--line-strong)] font-mono text-xs font-semibold uppercase tracking-[0.16em]">
+            <div
+              className="flex items-center justify-center bg-[var(--teal)] text-[var(--on-accent)]"
+              style={{ width: "80%" }}
+            >
+              80% · Founders
             </div>
-            <div className="flex items-center justify-center bg-accent-dim/40 text-ink" style={{ width: "20%" }}>
-              20% · GROWTH
+            <div
+              className="hatch-20 flex items-center justify-center border-l border-[var(--line-strong)] text-ink"
+              style={{ width: "20%" }}
+            >
+              20%
             </div>
           </div>
-        </div>
+          <figcaption className="mt-3 font-mono text-[0.72rem] italic tracking-wide text-muted">
+            Fig. 1 · Creator-fee allocation per token, upon founder opt-in.
+          </figcaption>
+        </figure>
       </section>
 
-      {/* ============ FOUNDER CTA ============ */}
+      {/* ============ NOTICE TO FOUNDERS ============ */}
       <section className="mx-auto max-w-6xl px-6 pb-20">
-        <div className="glow relative overflow-hidden rounded-3xl border border-[var(--line-strong)] bg-gradient-to-br from-fin to-fin-2 p-8 md:p-14">
-          <div
-            className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-accent/15 blur-[100px]"
-            aria-hidden
-          />
+        <div className="glow relative border border-[var(--line-strong)] bg-[var(--paper-2)] p-8 md:p-12">
+          <div className="halftone pointer-events-none absolute inset-y-0 right-0 w-40 opacity-[0.14]" aria-hidden />
           <div className="relative flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div className="max-w-xl">
-              <div className="kicker mb-3">Were you on the show?</div>
-              <h2 className="font-display text-3xl font-bold leading-tight tracking-tight md:text-4xl">
-                Your pitch. Your token. <span className="text-accent">80% of the fees.</span>
+              <div className="kicker">Notice to Founders</div>
+              <h2 className="mt-3 font-display text-3xl uppercase leading-tight tracking-tight md:text-[2.6rem]">
+                Your pitch. Your token. <span className="text-[var(--teal)]">80% of the fees.</span>
               </h2>
-              <p className="mt-4 font-body text-ink/75">
+              <p className="mt-4 font-body text-lg leading-relaxed text-ink-soft">
                 If you founded one of these companies, the door is open. Opt in and the 80%
-                creator-fee share is yours — no strings, fully transparent.
+                creator-fee share is yours. No strings, fully transparent, settled on-chain.
               </p>
             </div>
             <a
               href="/onboard/"
-              className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-accent px-8 py-4 font-mono text-sm font-bold uppercase tracking-wider text-[#04181d] transition-transform hover:-translate-y-0.5"
+              className="btn-stamp inline-flex shrink-0 items-center gap-2.5 px-8 py-4 font-mono text-sm font-semibold uppercase tracking-[0.14em]"
             >
-              Opt in now
-              <span className="transition-transform group-hover:translate-x-1">→</span>
+              Opt in now <span aria-hidden>→</span>
             </a>
           </div>
         </div>
       </section>
 
-      {/* ============ ARCHIVE GRID ============ */}
-      <section id="archive" className="mx-auto max-w-6xl scroll-mt-8 px-6 pb-20">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-[var(--line)] pb-5">
-          <div>
-            <div className="kicker mb-2">The full ledger</div>
-            <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-              100 rejected pitches.
+      {/* ============ THE ARCHIVE ============ */}
+      <section id="archive" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-20">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4 rule-double pb-1">
+          <div className="pb-4">
+            <div className="kicker">Section B · The Archive</div>
+            <h2 className="mt-2 font-display text-4xl uppercase tracking-tight md:text-5xl">
+              100 rejected pitches, indexed.
             </h2>
           </div>
-          <span className="font-mono text-sm text-muted">
+          <span className="pb-4 font-mono text-xs uppercase tracking-[0.18em] text-muted">
             Ranked by reach · {products.length} entries
           </span>
         </div>
         <ProductGrid products={products} />
       </section>
 
-      {/* ============ DISCLAIMER ============ */}
-      <section className="mx-auto max-w-6xl px-6 pb-8">
-        <div className="rounded-xl border border-[var(--line)] bg-fin/40 p-5">
-          <div className="kicker mb-2">Disclaimer</div>
-          <p className="font-mono text-[0.78rem] leading-relaxed text-muted">{DISCLAIMER}</p>
+      {/* ============ THE FINE PRINT ============ */}
+      <section id="fine-print" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-10">
+        <div className="border-t border-[var(--line)] pt-5">
+          <div className="kicker mb-2">The Fine Print</div>
+          <p className="max-w-3xl font-mono text-[0.76rem] leading-relaxed text-muted">{DISCLAIMER}</p>
         </div>
       </section>
     </main>
