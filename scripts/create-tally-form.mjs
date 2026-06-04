@@ -32,22 +32,29 @@ const heading = (html) => push("HEADING_2", { html });
 const text = (html) => push("TEXT", { html });
 const divider = () => push("DIVIDER", {});
 
-// --- question helpers (one block carries its own label via payload.html) ---
-const input = (type, html, opts = {}) =>
-  push(type, { html, isRequired: !!opts.required, placeholder: opts.placeholder, name: opts.name }, undefined, "QUESTION");
+// --- question helpers: a TITLE label block (its own group) followed by the input
+//     block. Tally rules: the input's groupType must equal its own type, its payload
+//     must NOT carry html, and the label must be a separate Title/Label block. ---
+const label = (html) => push("TITLE", { html }); // own uuid as group, groupType "TITLE"
+const input = (type, html, opts = {}) => {
+  label(html);
+  push(type, { isRequired: !!opts.required, placeholder: opts.placeholder, name: opts.name }); // groupType defaults to type
+};
 const short = (html, o) => input("INPUT_TEXT", html, o);
 const email = (html, o) => input("INPUT_EMAIL", html, o);
 const link = (html, o) => input("INPUT_LINK", html, o);
 const phone = (html, o) => input("INPUT_PHONE_NUMBER", html, o);
 const long = (html, o) => input("TEXTAREA", html, o);
 
-// multiple choice: a question-label block + option blocks sharing a groupUuid
+// multiple choice: a question-label block (its OWN group — Tally requires Title/Label
+// blocks to not share a groupUuid with inputs) + option blocks sharing one group.
 const choice = (html, options, opts = {}) => {
+  const titleUuid = randomUUID();
+  blocks.push({ uuid: titleUuid, type: "TITLE", groupUuid: titleUuid, groupType: "TITLE", payload: { html } });
   const g = randomUUID();
-  blocks.push({ uuid: g, type: "TITLE", groupUuid: g, groupType: "QUESTION", payload: { html } });
   options.forEach((text, i) =>
     blocks.push({
-      uuid: randomUUID(), type: "MULTIPLE_CHOICE_OPTION", groupUuid: g, groupType: "QUESTION",
+      uuid: randomUUID(), type: "MULTIPLE_CHOICE_OPTION", groupUuid: g, groupType: "MULTIPLE_CHOICE",
       payload: { index: i, isFirst: i === 0, isLast: i === options.length - 1, text,
         allowMultiple: false, isRequired: !!opts.required, name: opts.name },
     })
@@ -57,8 +64,8 @@ const choice = (html, options, opts = {}) => {
 // single required consent checkbox (CHECKBOXES container + one CHECKBOX child)
 const consent = (html) => {
   const g = randomUUID();
-  blocks.push({ uuid: g, type: "CHECKBOXES", groupUuid: g, groupType: "QUESTION", payload: { isRequired: true, hasMinChoices: true, minChoices: 1 } });
-  blocks.push({ uuid: randomUUID(), type: "CHECKBOX", groupUuid: g, groupType: "QUESTION", payload: { index: 0, isFirst: true, isLast: true, text: html, isRequired: true } });
+  blocks.push({ uuid: g, type: "CHECKBOX", groupUuid: g, groupType: "CHECKBOXES",
+    payload: { index: 0, isFirst: true, isLast: true, text: html, isRequired: true, hasMinChoices: true, minChoices: 1 } });
 };
 
 // ===================== THE FORM =====================

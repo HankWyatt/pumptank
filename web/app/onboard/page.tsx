@@ -2,9 +2,9 @@
 import type { Metadata } from "next";
 import { DISCLAIMER } from "@/lib/disclaimer";
 import { RunningHead } from "@/components/RunningHead";
+import { OnboardEmbed } from "@/components/OnboardEmbed";
 
-// TODO: replace with the real opt-in form URL
-const FORM_URL = "https://tally.so/r/REPLACE_ME";
+const FORM_URL = "https://tally.so/r/44OJvX";
 
 export const metadata: Metadata = {
   title: "Founder Opt-In · PUMPTANK",
@@ -139,12 +139,7 @@ export default function OnboardPage() {
               <span>Form 80-20 · Founder Verification</span>
               <span className="text-[var(--teal-2)]">● Secure</span>
             </div>
-            <iframe
-              src={FORM_URL}
-              title="PUMPTANK founder opt-in form"
-              className="h-[760px] w-full bg-white"
-              loading="lazy"
-            />
+            <OnboardEmbed formUrl={FORM_URL} />
           </div>
           <p className="mt-3 text-center font-mono text-xs text-muted">
             Trouble loading the form?{" "}

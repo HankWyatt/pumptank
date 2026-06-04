@@ -210,7 +210,10 @@ export default function TokenPage({ params }: { params: { id: string } }) {
                   yours: transparent and on-chain.
                 </p>
               </div>
-              <a href="/onboard/" className="btn-stamp inline-flex shrink-0 items-center gap-2.5 px-8 py-4 font-mono text-sm font-semibold uppercase tracking-[0.14em]">
+              <a
+                href={`/onboard/?company=${encodeURIComponent(p.companyName)}&ticker=${encodeURIComponent(p.symbol)}&token_id=${p.id}`}
+                className="btn-stamp inline-flex shrink-0 items-center gap-2.5 px-8 py-4 font-mono text-sm font-semibold uppercase tracking-[0.14em]"
+              >
                 Opt in <span aria-hidden>→</span>
               </a>
             </div>
