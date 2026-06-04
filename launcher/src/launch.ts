@@ -1,6 +1,6 @@
 import {
-  ComputeBudgetProgram, Keypair, PublicKey, TransactionInstruction,
-  TransactionMessage, VersionedTransaction,
+  AddressLookupTableAccount, ComputeBudgetProgram, Keypair, PublicKey,
+  TransactionInstruction, TransactionMessage, VersionedTransaction,
 } from "@solana/web3.js";
 import BN from "bn.js";
 import type { LaunchItem } from "./types.js";
@@ -38,6 +38,8 @@ export interface LaunchDeps {
       commitment: string,
     ): Promise<unknown>;
   };
+  /** Optional reusable ALT so the create_v2+buy tx fits the 1232-byte legacy limit. */
+  lookupTable?: AddressLookupTableAccount;
 }
 
 export async function launchOne(
@@ -65,7 +67,7 @@ export async function launchOne(
       ComputeBudgetProgram.setComputeUnitPrice({ microLamports: opts.priorityFeeMicroLamports }),
       ...ixs,
     ],
-  }).compileToV0Message();
+  }).compileToV0Message(deps.lookupTable ? [deps.lookupTable] : []);
   const tx = new VersionedTransaction(message);
   tx.sign([wallet, mint]);
   const signature = await deps.connection.sendRawTransaction(tx.serialize());

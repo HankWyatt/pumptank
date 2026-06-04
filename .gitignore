@@ -13,6 +13,7 @@ launcher/node_modules/
 launcher/dist/
 data/.mint-keys/
 data/fee-config.json
+data/launch-alt.json
 *.key
 .env
 

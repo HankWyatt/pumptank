@@ -1,5 +1,7 @@
 import { expect, test, vi } from "vitest";
-import { Keypair, SystemProgram, TransactionInstruction } from "@solana/web3.js";
+import {
+  AddressLookupTableAccount, Keypair, SystemProgram, TransactionInstruction,
+} from "@solana/web3.js";
 import { launchOne, type LaunchDeps } from "../src/launch.js";
 
 function mockDeps(over: Partial<LaunchDeps> = {}) {
@@ -44,6 +46,25 @@ test("uploads metadata, builds create_v2+buy with token amount + SOL cap (native
   expect(args.mayhemMode).toBe(false);
   expect("quoteMint" in args).toBe(false);
   expect(args.creator.equals(wallet.publicKey)).toBe(true);
+  expect(sent.length).toBe(1);
+});
+
+test("accepts and uses an optional lookup table, still sends one tx", async () => {
+  const lookupTable = new AddressLookupTableAccount({
+    key: Keypair.generate().publicKey,
+    state: {
+      deactivationSlot: 2n ** 64n - 1n,
+      lastExtendedSlot: 0,
+      lastExtendedSlotStartIndex: 0,
+      authority: undefined,
+      addresses: [],
+    },
+  });
+  const { deps, sent } = mockDeps({ lookupTable });
+  const wallet = Keypair.generate();
+  const mint = Keypair.generate();
+  const res = await launchOne(deps, wallet, mint, item, opts);
+  expect(res).toEqual({ mint: mint.publicKey.toBase58(), signature: "SIG" });
   expect(sent.length).toBe(1);
 });
 

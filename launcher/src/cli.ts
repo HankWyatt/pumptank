@@ -1,4 +1,5 @@
-import { Connection, PublicKey } from "@solana/web3.js";
+import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import BN from "bn.js";
 import { createRequire } from "node:module";
 import { join } from "node:path";
 import { argv as processArgv } from "node:process";
@@ -15,6 +16,7 @@ import type { LaunchDeps } from "./launch.js";
 import { uploadTokenMetadata } from "./metadata.js";
 import { mintExistsOnChain } from "./recover.js";
 import { runBatch } from "./orchestrate.js";
+import { computeStaticLutAddresses, loadOrCreateLookupTable } from "./alt.js";
 
 export function preview(items: LaunchItem[], cfg: Config): { totalSol: number; line: string } {
   const totalSol = items.length * cfg.devBuySol;
@@ -51,12 +53,22 @@ export async function main(argv: string[], env: Record<string, string | undefine
   const pumpSdk = new PumpSdk();
   const global = await onlineSdk.fetchGlobal();
   const solCapLamports = BigInt(Math.ceil(cfg.devBuySol * (1 + cfg.slippageBps / 10_000) * 1e9));
+  // Build/reuse ONE Address Lookup Table of the static accounts so each create+buy
+  // fits a single legacy tx (the official SDK's SOL create_v2+buy is ~1250B > 1232).
+  const staticAddrs = await computeStaticLutAddresses((m: Keypair) => pumpSdk.createV2AndBuyInstructions({
+    global, mint: m.publicKey, name: "sample", symbol: "smpl", uri: "https://pump.fun",
+    creator: wallet.publicKey, user: wallet.publicKey,
+    amount: new BN(cfg.devBuyTokens.toString()), solAmount: new BN(solCapLamports.toString()), mayhemMode: false,
+  } as any), wallet.publicKey);
+  console.log(`lookup table: ${staticAddrs.length} static accounts`);
+  const lookupTable = await loadOrCreateLookupTable(conn, wallet, staticAddrs, join(dataDir, "launch-alt.json"));
   const deps: LaunchDeps = {
     global,
     uploadMetadata: (item) => uploadTokenMetadata(item),
     buildCreateAndBuy: (args) =>
       pumpSdk.createV2AndBuyInstructions({ ...args, mint: args.mint.publicKey } as any),
     connection: conn as unknown as LaunchDeps["connection"],
+    lookupTable,
   };
   const ledger = new Ledger(join(dataDir, "launch-ledger.json"));
   const mintstore = new MintStore(join(dataDir, ".mint-keys"));
