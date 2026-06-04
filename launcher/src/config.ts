@@ -2,6 +2,7 @@ import type { Config } from "./types.js";
 
 export const SLIPPAGE_BPS_CAP = 300;        // hard upper bound (3%)
 export const DEFAULT_DEV_BUY_SOL = 0.4306;  // ~1.5% of total supply at opening curve
+export const DEV_BUY_TOKENS = 15_000_000_000_000n; // 1.5% of 1e15 total supply (Token-2022, 6 decimals)
 
 function flag(argv: string[], name: string): string | undefined {
   const i = argv.indexOf(name);
@@ -19,6 +20,7 @@ export function buildConfig(argv: string[], env: Record<string, string | undefin
   return {
     rpcUrl: env.RPC_URL,
     devBuySol: Number(env.DEV_BUY_SOL ?? DEFAULT_DEV_BUY_SOL),
+    devBuyTokens: DEV_BUY_TOKENS,
     slippageBps,
     priorityFeeMicroLamports: Number(env.PRIORITY_FEE ?? "200000"),
     pacingMs: Number(env.PACING_MS ?? "1500"),

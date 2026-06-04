@@ -27,3 +27,9 @@ test("parses --only and --limit", () => {
   expect(c.only).toBe("s5e9p1-x");
   expect(c.limit).toBe(3);
 });
+
+test("exposes the token-pinned dev-buy amount (1.5% of supply)", () => {
+  const c = buildConfig([], base);
+  expect(c.devBuyTokens).toBe(15_000_000_000_000n); // 1.5% of 1e15 (Token-2022, 6dp)
+  expect(c.devBuySol).toBeCloseTo(0.4306); // SOL budget/cap estimate per token
+});

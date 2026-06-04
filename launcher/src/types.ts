@@ -21,6 +21,7 @@ export interface LedgerEntry {
 export interface Config {
   rpcUrl: string;
   devBuySol: number;
+  devBuyTokens: bigint;   // token base units to buy per coin (1.5% of supply)
   slippageBps: number;
   priorityFeeMicroLamports: number;
   pacingMs: number;
