@@ -1,4 +1,10 @@
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
+
+// The pump SDK's ESM bundle re-exports a named `BN` from the CJS `@coral-xyz/anchor`,
+// which Vitest's loader can't resolve. cli.ts's pure helpers under test don't touch the
+// SDK, so stub the module to keep this suite offline and load-safe.
+vi.mock("@pump-fun/pump-sdk", () => ({ OnlinePumpSdk: class {}, PumpSdk: class {} }));
+
 import { preview, assertCanBroadcast } from "../src/cli.js";
 
 const items = Array.from({ length: 100 }, (_, i) => ({ id: `i${i}`, name: "N", symbol: `S${i}`, description: "d", imagePath: "/x.png" }));

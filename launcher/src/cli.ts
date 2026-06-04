@@ -1,6 +1,5 @@
 import { Connection, PublicKey } from "@solana/web3.js";
-import { AnchorProvider, Wallet } from "@coral-xyz/anchor";
-import { PumpFunSDK } from "pumpdotfun-repumped-sdk";
+import { OnlinePumpSdk, PumpSdk } from "@pump-fun/pump-sdk";
 import { join } from "node:path";
 import { argv as processArgv } from "node:process";
 import { fileURLToPath } from "node:url";
@@ -12,6 +11,8 @@ import { Ledger } from "./ledger.js";
 import { MintStore } from "./mintstore.js";
 import { loadWallet, hasSufficientBalance } from "./wallet.js";
 import { launchOne } from "./launch.js";
+import type { LaunchDeps } from "./launch.js";
+import { uploadTokenMetadata } from "./metadata.js";
 import { mintExistsOnChain } from "./recover.js";
 import { runBatch } from "./orchestrate.js";
 
@@ -38,16 +39,30 @@ export async function main(argv: string[], env: Record<string, string | undefine
 
   const wallet = loadWallet(env);
   const conn = new Connection(cfg.rpcUrl, "confirmed");
-  const required = items.length * cfg.devBuySol * 1.05; // headroom for fees
+  const required = items.length * cfg.devBuySol * 1.08 + items.length * 0.015; // dev-buys + ~rent/fee buffer
   if (!(await hasSufficientBalance(conn, wallet.publicKey, required))) {
     throw new Error(`wallet balance below required ~${required.toFixed(2)} SOL`);
   }
-  const sdk = new PumpFunSDK(new AnchorProvider(conn, new Wallet(wallet), { commitment: "confirmed" }));
+  const onlineSdk = new OnlinePumpSdk(conn);
+  const pumpSdk = new PumpSdk();
+  const global = await onlineSdk.fetchGlobal();
+  const solCapLamports = BigInt(Math.ceil(cfg.devBuySol * (1 + cfg.slippageBps / 10_000) * 1e9));
+  const deps: LaunchDeps = {
+    global,
+    uploadMetadata: (item) => uploadTokenMetadata(item),
+    buildCreateAndBuy: (args) =>
+      pumpSdk.createV2AndBuyInstructions({ ...args, mint: args.mint.publicKey } as any),
+    connection: conn as unknown as LaunchDeps["connection"],
+  };
   const ledger = new Ledger(join(dataDir, "launch-ledger.json"));
   const mintstore = new MintStore(join(dataDir, ".mint-keys"));
   const result = await runBatch(
     items, ledger, mintstore,
-    (mint, item) => launchOne(sdk, wallet, mint, item, cfg),
+    (mint, item) => launchOne(deps, wallet, mint, item, {
+      devBuyTokens: cfg.devBuyTokens,
+      solCapLamports,
+      priorityFeeMicroLamports: cfg.priorityFeeMicroLamports,
+    }),
     (mintB58) => mintExistsOnChain(conn, new PublicKey(mintB58)),
     cfg,
   );

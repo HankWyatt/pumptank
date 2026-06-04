@@ -9,12 +9,15 @@
     "fees": "tsx src/feescli.ts"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.30.1",
-    "@solana/web3.js": "^1.95.3",
-    "bs58": "^6.0.0",
-    "pumpdotfun-repumped-sdk": "^1.4.2"
+    "@coral-xyz/anchor": "^0.31.1",
+    "@pump-fun/pump-sdk": "^1.36.0",
+    "@solana/spl-token": "^0.4.13",
+    "@solana/web3.js": "^1.98.2",
+    "bn.js": "^5.2.1",
+    "bs58": "^6.0.0"
   },
   "devDependencies": {
+    "@types/bn.js": "^5.1.5",
     "@types/node": "^20.14.0",
     "tsx": "^4.16.0",
     "typescript": "^5.5.0",
