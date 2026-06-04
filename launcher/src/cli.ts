@@ -1,5 +1,5 @@
 import { Connection, PublicKey } from "@solana/web3.js";
-import { OnlinePumpSdk, PumpSdk } from "@pump-fun/pump-sdk";
+import { createRequire } from "node:module";
 import { join } from "node:path";
 import { argv as processArgv } from "node:process";
 import { fileURLToPath } from "node:url";
@@ -43,6 +43,10 @@ export async function main(argv: string[], env: Record<string, string | undefine
   if (!(await hasSufficientBalance(conn, wallet.publicKey, required))) {
     throw new Error(`wallet balance below required ~${required.toFixed(2)} SOL`);
   }
+  // The official SDK's ESM build does a named `import { BN } from "@coral-xyz/anchor"`,
+  // which Node ESM cannot resolve from the CJS anchor package. Load the working CJS
+  // build via createRequire instead. Lazy here so the dry-run path never loads the SDK.
+  const { OnlinePumpSdk, PumpSdk } = createRequire(import.meta.url)("@pump-fun/pump-sdk") as typeof import("@pump-fun/pump-sdk");
   const onlineSdk = new OnlinePumpSdk(conn);
   const pumpSdk = new PumpSdk();
   const global = await onlineSdk.fetchGlobal();
