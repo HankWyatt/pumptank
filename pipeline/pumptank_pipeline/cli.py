@@ -12,10 +12,14 @@ from .rank import rank_and_select
 
 def run(csv_path, out_path, schema_path) -> int:
     pitches = load_pitches(csv_path, config.MAX_NULL_GOT_DEAL)
+    for p in pitches:                       # correct verified bad CSV got_deal values
+        if p.id in config.GOT_DEAL_OVERRIDES:
+            p.got_deal = config.GOT_DEAL_OVERRIDES[p.id]
     no_deal = filter_no_deal(pitches)
     ranked = rank_and_select(
         no_deal, weights=config.SELECTION_WEIGHTS,
         n=config.SELECT_TOP_N, max_season=config.MAX_SEASON,
+        exclude_ids=config.EXCLUDE_IDS,
     )
     ranked = generate_assets(
         ranked, max_ticker_len=config.MAX_TICKER_LEN,

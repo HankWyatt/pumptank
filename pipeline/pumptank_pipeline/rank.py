@@ -29,20 +29,30 @@ def _pct_rank(values: list[Optional[float]]) -> list[float]:
 
 
 def rank_and_select(
-    pitches: list[Pitch], *, weights: dict, n: int, max_season: int
+    pitches: list[Pitch], *, weights: dict, n: int, max_season: int,
+    exclude_ids: dict | None = None,
 ) -> list[Pitch]:
     """Annotate every pitch with a Selection and set `include` for the top N.
 
     Returns all pitches: the ranked pool first (rank order), excluded pitches
     after (id order). Pure function aside from mutating the passed Pitches.
+
+    `exclude_ids` is an optional {id: reason} map of no-deal pitches to drop
+    editorially (e.g. too-big-to-engage); they never enter the ranked pool, so
+    the next-ranked candidate fills the freed slot.
     """
     if abs(sum(weights.values()) - 1.0) > 1e-9:
         raise ValueError(f"weights must sum to 1.0, got {weights}")
+    exclude_ids = exclude_ids or {}
 
     pool: list[Pitch] = []
     excluded: list[Pitch] = []
     for p in pitches:
-        if p.season > max_season:
+        if p.id in exclude_ids:
+            p.selection = Selection(excluded_reason=exclude_ids[p.id])
+            p.include = False
+            excluded.append(p)
+        elif p.season > max_season:
             p.selection = Selection(excluded_reason="out_of_scope_season")
             p.include = False
             excluded.append(p)
