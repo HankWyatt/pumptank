@@ -19,8 +19,15 @@ import { runBatch } from "./orchestrate.js";
 import { computeStaticLutAddresses, loadOrCreateLookupTable } from "./alt.js";
 
 export function preview(items: LaunchItem[], cfg: Config): { totalSol: number; line: string } {
-  const totalSol = items.length * cfg.devBuySol;
-  return { totalSol, line: `Would launch ${items.length} tokens; dev-buys ~= ${totalSol.toFixed(2)} SOL (+ ~1.25% trading fee, rent, priority fees)` };
+  const devBuyCount = items.filter((i) => i.devBuy).length;
+  const createOnly = items.length - devBuyCount;
+  const totalSol = devBuyCount * cfg.devBuySol; // dev-buy spend only; create-only coins cost ~rent
+  const rentSol = items.length * 0.02; // ~create_v2 rent (mint + bonding curve + ATAs) per coin
+  return {
+    totalSol,
+    line: `Would launch ${items.length} tokens (${devBuyCount} dev-buy, ${createOnly} create-only); ` +
+      `dev-buys ~= ${totalSol.toFixed(2)} SOL + ~${rentSol.toFixed(2)} SOL create rent (+ ~1.25% trading fee, priority fees)`,
+  };
 }
 
 export function assertCanBroadcast(cfg: Config): void {

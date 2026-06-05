@@ -15,6 +15,16 @@ test("preview totals dev-buys", () => {
   expect(line).toMatch(/100/);
 });
 
+test("preview counts ONLY dev-buys in a mixed set (create-only coins don't add to the spend)", () => {
+  const mixed = [
+    ...items, // 100 dev-buy
+    ...Array.from({ length: 50 }, (_, i) => ({ id: `c${i}`, name: "N", symbol: `C${i}`, description: "d", imagePath: "/x.png", devBuy: false })),
+  ];
+  const { totalSol, line } = preview(mixed, { devBuySol: 0.4306 } as any);
+  expect(totalSol).toBeCloseTo(43.06, 1); // 100 × 0.4306, NOT 150 ×
+  expect(line).toMatch(/150 tokens \(100 dev-buy, 50 create-only\)/);
+});
+
 test("assertCanBroadcast throws without --confirm", () => {
   expect(() => assertCanBroadcast({ confirm: false } as any)).toThrow(/confirm/i);
 });
