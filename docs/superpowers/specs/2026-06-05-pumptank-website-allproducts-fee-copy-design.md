@@ -12,13 +12,14 @@ _Date: 2026-06-05. Updates the `web/` site for three things: (1) remove the stal
 - **All-products accuracy = fix it, mirroring the card precedent.** The token-image pipeline already does: no-deal → vermilion "NO DEAL" badge; deal → neutral (no badge). The site mirrors this per product: no-deal keeps the full "No Deal" treatment; deal products render **neutral** (no "No Deal" stamp/outcome). The global count/framing stops claiming "100 no-deal."
 - **Founder still gets 80%.** The model is 80/10/10 (founder / index / onboarder) with a referrer, or 80/20 (founder / index) without. Founder-facing surfaces emphasize the 80%; the 10/10 breakdown is a general-page detail.
 
-## OPEN DECISION (for the user, at spec review)
+## Brand: broadened to "The Tribute Ledger" (resolved)
 
-The whole brand is **"The No-Deal Ledger"** (site `<title>`, masthead, footer, running head, OG plates, CSS header). With deal-getters now included it's no longer literally no-deal. Options:
-- **(A, proposed)** Keep "The No-Deal Ledger" as the brand *name/vibe* (it's the project's origin + it's catchy); make per-product treatment + the global count accurate underneath it. Lowest churn; deal products are framed as tribute additions.
-- **(B)** Broaden the brand (e.g. "The Shark Tank Ledger"), neutral throughout. Bigger copy sweep across masthead/footer/OG/meta.
-
-I'll proceed with (A) unless you pick (B).
+The user chose **(B) broaden the brand**. The PUMPTANK wordmark stays; the sub-brand line **"The No-Deal Ledger" → "The Tribute Ledger"** everywhere (own-brand, no trademark in the masthead, covers deal + no-deal). Full sweep:
+- `app/layout.tsx`: `<title>` "PUMPTANK · The No-Deal Ledger" → "… · The Tribute Ledger"; meta description "…pitches that got no deal." → broaden ("…Shark Tank pitches — deal or no deal.").
+- `components/RunningHead.tsx`, `components/SiteMasthead.tsx`, `components/SiteFooter.tsx`: "The No-Deal Ledger" → "The Tribute Ledger". Masthead "Vol. I · No. 100" → real count / neutral. Footer tagline "No deal. Still iconic." → broadened tribute line.
+- `components/OgPlate.tsx`: "The No-Deal Ledger · Pitch No." → "The Tribute Ledger · …"; its "No Deal" stamp → conditional on `gotDeal`.
+- `app/globals.css` header comment (cosmetic) → update the "No-Deal Ledger / rejected pitches" description.
+- `app/opengraph-image.alt.txt` + `app/twitter-image.alt.txt`: "…got no deal." → broadened copy.
 
 ## Data layer — `lib/products.ts`
 
@@ -47,7 +48,7 @@ Gate every "No Deal" element on `!p.gotDeal`; deal products render neutral.
 
 ## Out of scope
 
-- Regenerating OG/Twitter images + their alt text (image-level; "got no deal" baked into JPGs) — separate task; flag if (B) is chosen.
+- Regenerating the static OG/Twitter **images** (`opengraph-image.jpg`/`twitter-image.jpg` have "No-Deal Ledger" + "no deal" baked into the artwork) — follow-up image task. (Their `.alt.txt` text IS updated here, per the brand sweep.)
 - A full visual rebrand beyond copy/labels.
 - The index-token launch (its own spec: `2026-06-05-pumptank-index-token-launch-design.md`).
 - Functional referral tracking (explicitly declined — copy only).
