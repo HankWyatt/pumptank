@@ -146,7 +146,7 @@ function IndexList({ rows }: { rows: Product[] }) {
         <span className="max-[720px]:hidden">Reach</span>
       </div>
       {rows.map((p) => {
-        const no = p.rank != null ? p.rank.toString().padStart(3, "0") : "—";
+        const no = p.rank != null ? p.rank.toString().padStart(3, "0") : "·";
         const reach = p.reach != null ? Math.max(8, Math.round(p.reach * 100)) : null;
         return (
           <a

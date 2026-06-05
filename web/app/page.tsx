@@ -40,8 +40,8 @@ export default function HubPage() {
               <span className="font-mono text-base font-semibold tracking-tight text-[var(--teal-2)]">
                 $PUMPTANK
               </span>{" "}
-              is a fan-built archive of <strong>every</strong> Shark&nbsp;Tank pitch — deal or no
-              deal — each one reborn as its own tribute token. No suits. No handshakes required. Just
+              is a fan-built archive of <strong>every</strong> Shark&nbsp;Tank pitch, deal or no
+              deal. Each one reborn as its own tribute token. No suits. No handshakes required. Just
               the ideas, filed for the record.
             </p>
 
@@ -127,17 +127,17 @@ export default function HubPage() {
             {
               n: "01",
               t: "Create-only. Zero insider buys.",
-              d: "Every product launches create-only — no dev buy, no insider allocation. The builders of PumpTank take none of the supply; the coins exist for the creators to claim.",
+              d: "Every product launches create-only: no dev buy, no insider allocation, no supply held back by the builders. The coins are free to belong to the founders and the communities that grow around them. The goal is real exposure, a following, and for some of these ideas a genuine second chance, even a comeback.",
             },
             {
               n: "02",
               t: "80% of fees → founders",
-              d: "Creator trading fees route 80% to the original founder the moment they opt in. The lion's share is reserved for them — it is their story; it is their upside.",
+              d: "Creator trading fees route 80% to the original founder the moment they opt in. The lion's share is reserved for them. It is their story; it is their upside.",
             },
             {
               n: "03",
               t: "20% fuels the index",
-              d: "The remaining 20% funds marketing and growth for the index — and if someone helped onboard a founder, 10% of it is theirs as a thank-you. Onboarded a founder? Get in touch.",
+              d: "The remaining 20% funds marketing and growth for the index. If someone helped onboard a founder, 10% of it is theirs as a thank-you. Onboarded a founder? Get in touch.",
             },
           ].map((step, i) => (
             <li key={step.n} className={i > 0 ? "md:col-rule md:pl-10" : ""}>

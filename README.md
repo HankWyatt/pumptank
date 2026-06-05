@@ -2,7 +2,7 @@
 
 **Parody *Shark Tank* tribute tokens on [pump.fun](https://pump.fun) (Solana).**
 
-🌐 **Live site: [pumptank.fun](https://pumptank.fun)**
+🌐 **Live site: [thepumptank.fun](https://thepumptank.fun)**
 
 PUMPTANK mints an unofficial tribute meme token for **every** *Shark Tank US* product,
 ~1,481 in all. Each one launches as a **create-only** coin (no insider dev-buys). The ~566
