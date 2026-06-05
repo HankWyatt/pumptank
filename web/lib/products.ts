@@ -4,7 +4,7 @@ export interface RawRecord {
   id: string; include: boolean; season: number; episode: number; industry: string;
   company_name: string; founders: string[]; pitch: Record<string, unknown>;
   air_date?: string | null; us_viewership?: number | null;
-  selection: { rank: number | null; reach?: number | null };
+  selection: { rank: number | null; reach?: number | null } | null;
   token: { name: string; symbol: string; description: string; mint: string | null };
   media: { image_url: string; former_website: string | null; youtube_url: string | null };
 }
@@ -27,12 +27,12 @@ export function toProducts(raw: RawRecord[]): Product[] {
       id: r.id, name: r.token.name, symbol: r.token.symbol, description: r.token.description,
       mint: r.token.mint, season: r.season, episode: r.episode, industry: r.industry,
       companyName: r.company_name, founders: r.founders, formerWebsite: r.media.former_website,
-      youtubeUrl: r.media.youtube_url, imagePath: `/${r.media.image_url}`, rank: r.selection.rank,
+      youtubeUrl: r.media.youtube_url, imagePath: `/${r.media.image_url}`, rank: r.selection?.rank ?? null,
       airDate: r.air_date ?? null,
       ask: pitch.ask_amount ?? null,
       askEquity: pitch.ask_equity ?? null,
       valuation: pitch.valuation_requested ?? null,
-      reach: r.selection.reach ?? null,
+      reach: r.selection?.reach ?? null,
     };
   });
 }
