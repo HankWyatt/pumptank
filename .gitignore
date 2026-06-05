@@ -1,4 +1,4 @@
-# Source dataset (license-gated — do not redistribute)
+# Source dataset (CC0; kept out of git to avoid a redundant copy — see docs/dataset-license.md)
 data/raw/
 
 # Python
@@ -14,8 +14,14 @@ launcher/dist/
 data/.mint-keys/
 data/fee-config.json
 data/launch-alt.json
+
+# Secrets — never commit (belt-and-suspenders)
 *.key
+*.pem
+*.keypair.json
 .env
+.env.*
+!.env.example
 
 # Web (Next.js)
 web/node_modules/
@@ -24,3 +30,7 @@ web/out/
 web/public/token_images/
 web/next-env.d.ts
 web/*.tsbuildinfo
+
+# Local junk — not for the public repo
+/pumptank.zip
+/ChatGPT Image*.png
