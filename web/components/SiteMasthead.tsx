@@ -10,7 +10,7 @@ export function SiteMasthead() {
     <header className="relative border-b border-[var(--line)] bg-[rgba(6,18,30,0.72)] backdrop-blur-md">
       {/* Dateline strip */}
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-2">
-        <span className="dateline hidden sm:inline">Vol. I · No. 100</span>
+        <span className="dateline hidden sm:inline">Vol. I</span>
         <span className="dateline">Solana Edition</span>
         <span className="dateline inline-flex items-center gap-2">
           <span className="signal-dot inline-block h-1.5 w-1.5 rounded-full bg-[var(--red)]" aria-hidden />
@@ -21,7 +21,7 @@ export function SiteMasthead() {
       {/* Nameplate */}
       <div className="rule-double mx-auto max-w-6xl px-6">
         <a href="/" className="group block py-4 text-center">
-          <span className="dateline block text-[0.6rem] text-muted">The No-Deal Ledger</span>
+          <span className="dateline block text-[0.6rem] text-muted">The Tribute Ledger</span>
           <span className="font-display text-[clamp(2.1rem,7.5vw,4.6rem)] uppercase leading-[0.9] tracking-[0.04em] text-ink">
             Pump<span className="text-[var(--teal)]">tank</span>
           </span>

@@ -36,8 +36,8 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   // TODO: real domain
   metadataBase: new URL(process.env.SITE_URL ?? "https://pumptank.fun"),
-  title: "PUMPTANK · The No-Deal Ledger",
-  description: "Tribute tokens for Shark Tank pitches that got no deal.",
+  title: "PUMPTANK · The Tribute Ledger",
+  description: "Tribute tokens for Shark Tank pitches — deal or no deal.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

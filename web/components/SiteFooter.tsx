@@ -19,7 +19,7 @@ export function SiteFooter() {
                 Pump<span className="text-[var(--teal)]">tank</span>
               </span>
             </div>
-            <p className="mt-2 dateline">The No-Deal Ledger · A Tribute Archive</p>
+            <p className="mt-2 dateline">The Tribute Ledger · A Tribute Archive</p>
             <p className="mt-5 font-mono text-[0.76rem] leading-relaxed text-muted">{DISCLAIMER}</p>
           </div>
 
@@ -40,7 +40,7 @@ export function SiteFooter() {
         <div className="mt-10 flex flex-col gap-2 border-t border-[var(--line)] pt-6 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-muted sm:flex-row sm:items-center sm:justify-between">
           <span>© MMXXVI PUMPTANK · A Tribute Index</span>
           <span>Set in Anton &amp; Archivo</span>
-          <span className="text-[var(--red)]">No deal. Still iconic.</span>
+          <span className="text-[var(--red)]">Pitched. Tributed. On-chain.</span>
         </div>
       </div>
     </footer>

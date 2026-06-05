@@ -9,7 +9,7 @@ export function OgPlate({ p, folio }: { p: Product; folio: string }) {
       <div className="og">
         <div className="og-rule" aria-hidden />
         <div className="og-left">
-          <div className="og-over">The No-Deal Ledger · Pitch No. {folio}</div>
+          <div className="og-over">The Tribute Ledger · Pitch No. {folio}</div>
           <div className="og-name">{p.name}</div>
           <div className="og-sym">${p.symbol}</div>
           <div className="og-foot">
@@ -17,7 +17,7 @@ export function OgPlate({ p, folio }: { p: Product; folio: string }) {
           </div>
         </div>
         <div className="og-right">
-          <span className="og-stamp">No Deal</span>
+          {!p.gotDeal && <span className="og-stamp">No Deal</span>}
           <span className="og-tk">
             Pump<i>tank</i>
           </span>
