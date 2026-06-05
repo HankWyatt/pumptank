@@ -75,11 +75,20 @@ export default function TokenPage({ params }: { params: { id: string } }) {
             </h1>
             <div className="mt-3 font-mono text-2xl font-semibold text-[var(--teal)]">${p.symbol}</div>
             <p className="mt-6 max-w-md font-body text-xl leading-snug text-ink-soft">
-              Pitched on Shark Tank S{p.season}E{p.episode}, and walked away with{" "}
-              <span className="relative inline-block font-bold">
-                no&nbsp;deal.
-                <span className="absolute left-0 top-[0.56em] h-[0.08em] w-full -rotate-[1.4deg] bg-[var(--red)]" aria-hidden />
-              </span>
+              {p.gotDeal ? (
+                <>
+                  Pitched on Shark Tank S{p.season}E{p.episode}, and{" "}
+                  <span className="font-bold">closed a deal on air.</span>
+                </>
+              ) : (
+                <>
+                  Pitched on Shark Tank S{p.season}E{p.episode}, and walked away with{" "}
+                  <span className="relative inline-block font-bold">
+                    no&nbsp;deal.
+                    <span className="absolute left-0 top-[0.56em] h-[0.08em] w-full -rotate-[1.4deg] bg-[var(--red)]" aria-hidden />
+                  </span>
+                </>
+              )}
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-4 font-mono text-sm">
               <MintLink mint={p.mint} />
@@ -97,7 +106,9 @@ export default function TokenPage({ params }: { params: { id: string } }) {
               alt={`${p.name} tribute-token plate`}
               className="glow w-full border border-[var(--line-strong)]"
             />
-            <span className="stamp stamp-lg absolute -bottom-3 -right-3 -rotate-6 bg-[#07141f]">No Deal</span>
+            {!p.gotDeal && (
+              <span className="stamp stamp-lg absolute -bottom-3 -right-3 -rotate-6 bg-[#07141f]">No Deal</span>
+            )}
             <figcaption className="mt-4 font-mono text-[0.66rem] italic tracking-wide text-muted">
               Fig. 1 · The minted plate. 1000 × 1000, filed on-chain as ${p.symbol}.
             </figcaption>
@@ -134,12 +145,18 @@ export default function TokenPage({ params }: { params: { id: string } }) {
                 {money(p.valuation) && <Row k="Implied valuation" v={money(p.valuation)!} teal />}
                 <div className="ledger-row">
                   <dt className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-muted">On-air verdict</dt>
-                  <dd className="m-0 font-mono text-[0.92rem] font-bold tracking-[0.08em] text-[#ff6a5e]">No deal</dd>
+                  <dd
+                    className="m-0 font-mono text-[0.92rem] font-bold tracking-[0.08em]"
+                    style={{ color: p.gotDeal ? "var(--teal)" : "#ff6a5e" }}
+                  >
+                    {p.gotDeal ? "Deal" : "No deal"}
+                  </dd>
                 </div>
               </dl>
               <p className="bg-[rgba(18,47,73,0.4)] px-4 py-3 font-mono text-[0.62rem] leading-relaxed text-muted">
-                As presented on air. The sharks passed; the internet did not. Terms shown for the
-                record, not a valuation of any token.
+                {p.gotDeal
+                  ? "As presented on air. They shook hands on the show. Terms shown for the record, not a valuation of any token."
+                  : "As presented on air. The sharks passed; the internet did not. Terms shown for the record, not a valuation of any token."}
               </p>
             </div>
 
@@ -153,7 +170,7 @@ export default function TokenPage({ params }: { params: { id: string } }) {
                 {p.founders.length > 0 && (
                   <Fact k={p.founders.length > 1 ? "Founders" : "Founder"} v={p.founders.join(", ")} />
                 )}
-                <Fact k="Outcome" v="No deal on air" verdict />
+                <Fact k="Outcome" v={p.gotDeal ? "Made a deal on air" : "No deal on air"} verdict={!p.gotDeal} />
                 {p.formerWebsite && (
                   <div className="grid grid-cols-[9rem_1fr] gap-x-4 gap-y-2 border-b border-[var(--line)] py-3">
                     <dt className="font-mono text-[0.64rem] uppercase tracking-[0.14em] text-muted">Former site</dt>
@@ -190,7 +207,7 @@ export default function TokenPage({ params }: { params: { id: string } }) {
               </div>
             </div>
             <figcaption className="mt-3 font-mono text-[0.72rem] italic tracking-wide text-muted">
-              Fig. 2 · Creator-fee allocation for ${p.symbol} upon verified founder opt-in. The 20% funds the index.
+              Fig. 2 · Creator-fee allocation for ${p.symbol} upon verified founder opt-in. The 20% funds the index &amp; ecosystem.
             </figcaption>
           </figure>
         </section>
