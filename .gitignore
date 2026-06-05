@@ -31,8 +31,9 @@ web/public/token_images/
 web/next-env.d.ts
 web/*.tsbuildinfo
 
-# YouTube-link discovery working dir (transient agent I/O)
+# YouTube-link + logo discovery working dirs (transient agent I/O)
 data/yt-work/
+data/logo-work/
 
 # Local — not for the public repo
 /CLAUDE.md

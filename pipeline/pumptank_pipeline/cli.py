@@ -44,7 +44,7 @@ def run(csv_path, out_path, schema_path) -> int:
     )
     ordered = render_images(
         ordered, out_dir=config.IMAGE_DIR, font_dir=config.FONT_DIR,
-        size=config.IMAGE_SIZE, palette=config.IMAGE_PALETTE,
+        size=config.IMAGE_SIZE, palette=config.IMAGE_PALETTE, logo_dir=config.LOGO_DIR,
     )
     write_products(ordered, out_path, schema_path)
 

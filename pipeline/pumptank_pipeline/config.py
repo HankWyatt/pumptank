@@ -77,6 +77,7 @@ NAME_OVERRIDES: dict[str, str] = {
 
 # --- Token images (sub-project 2b) ---
 IMAGE_DIR = DATA_DIR / "token_images"
+LOGO_DIR = DATA_DIR / "logos"   # per-product company logo PNGs (optional; drives the logo card variant)
 IMAGE_SIZE = 1000
 FONT_DIR = Path(__file__).parent / "fonts"
 IMAGE_PALETTE = {
