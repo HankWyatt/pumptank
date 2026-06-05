@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { toProducts, type RawRecord } from "@/lib/products";
+import { toProducts, byTributeOrder, type RawRecord } from "@/lib/products";
 
 const raw: RawRecord[] = [
   { id: "s5e9p1-a", include: true, season: 5, episode: 9, industry: "Tech", company_name: "AcmeCo",
@@ -32,4 +32,27 @@ test("toProducts handles null selection (got-deal create-only coins)", () => {
   expect(gotDeal).toBeDefined();
   expect(gotDeal!.rank).toBeNull();
   expect(gotDeal!.reach).toBeNull();
+});
+
+test("toProducts maps gotDeal from raw got_deal (default false)", () => {
+  const withDeal: RawRecord[] = [
+    { ...raw[0], got_deal: true },
+    { ...raw[2] }, // no got_deal field -> false
+  ];
+  const ps = toProducts(withDeal);
+  expect(ps.find((p) => p.id === "s5e9p1-a")!.gotDeal).toBe(true);
+  expect(ps.find((p) => p.id === "s10e10p840-gotdeal")!.gotDeal).toBe(false);
+});
+
+test("byTributeOrder: no-deal (by rank, nulls last) before deals (by name)", () => {
+  const mk = (id: string, gotDeal: boolean, rank: number | null, name = id) =>
+    ({ id, gotDeal, rank, name } as any);
+  const sorted = [
+    mk("deal-z", true, null, "Zeta"),
+    mk("nd-null", false, null, "Beta"),
+    mk("nd-2", false, 2, "Delta"),
+    mk("deal-a", true, null, "Alpha"),
+    mk("nd-1", false, 1, "Gamma"),
+  ].sort(byTributeOrder).map((p) => p.id);
+  expect(sorted).toEqual(["nd-1", "nd-2", "nd-null", "deal-a", "deal-z"]);
 });
