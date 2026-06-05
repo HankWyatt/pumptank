@@ -16,8 +16,8 @@ export function loadLaunchItems(dataDir: string): LaunchItem[] {
   const ids = new Set<string>();
   const symbols = new Set<string>();
   // Load ALL launched records (include === true): the full ~1,481-product set.
-  // Each carries devBuy (from dev_buy): true => create_v2 + 1.5% dev-buy (top-100),
-  // false => create_v2 only. The launcher branches on devBuy.
+  // Products are all create-only (dev_buy is absent/false in products.json); the
+  // devBuy flag stays in the model so the index-token dev-buy path can reuse it.
   for (const r of records) {
     if (r.include !== true) continue;
     if (!r.token) throw new Error(`included record ${r.id} has no token`);

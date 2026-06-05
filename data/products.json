@@ -37,7 +37,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Smart Tire Company",
       "symbol": "SMARTTIRE",
@@ -83,7 +83,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "ALL33",
       "symbol": "ALL33",
@@ -129,7 +129,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Skyride",
       "symbol": "SKYRIDE",
@@ -175,7 +175,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Joyebells",
       "symbol": "JOYEBELLS",
@@ -221,7 +221,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Bello Verde",
       "symbol": "BELLOVERDE",
@@ -267,7 +267,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Buzzy 4 Shots",
       "symbol": "BUZZY4SHOT",
@@ -313,7 +313,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Candi",
       "symbol": "CANDI",
@@ -359,7 +359,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Coldest",
       "symbol": "COLDEST",
@@ -405,7 +405,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Nexersys",
       "symbol": "NEXERSYS",
@@ -451,7 +451,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Voyage Air Guitar",
       "symbol": "VOYAGEAIRG",
@@ -497,7 +497,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Char Charms",
       "symbol": "CHARCHARMS",
@@ -543,7 +543,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Virtu Sphere",
       "symbol": "VIRTUSPHER",
@@ -589,7 +589,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Fat Ass Fudge",
       "symbol": "FATASSFUDG",
@@ -635,7 +635,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "terrashroom",
       "symbol": "TERRASHROO",
@@ -679,7 +679,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "MTAILOR",
       "symbol": "MTAILOR",
@@ -725,7 +725,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Freaker USA",
       "symbol": "FREAKERUSA",
@@ -771,7 +771,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Heather's Choice",
       "symbol": "HEATHERSCH",
@@ -817,7 +817,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Air Bedz",
       "symbol": "AIRBEDZ",
@@ -863,7 +863,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Matador",
       "symbol": "MATADOR",
@@ -909,7 +909,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Eco Nuts Soap",
       "symbol": "ECONUTSSOA",
@@ -955,7 +955,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Pashko",
       "symbol": "PASHKO",
@@ -1001,7 +1001,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "The Table Tyke",
       "symbol": "TABLETYKE",
@@ -1047,7 +1047,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "My Wonderful Life",
       "symbol": "MYWONDERFU",
@@ -1093,7 +1093,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Uprising Bread",
       "symbol": "UPRISINGBR",
@@ -1139,7 +1139,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Napwell",
       "symbol": "NAPWELL",
@@ -1185,7 +1185,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Return Home",
       "symbol": "RETURNHOME",
@@ -1231,7 +1231,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Bed Ryder",
       "symbol": "BEDRYDER",
@@ -1275,7 +1275,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Soupergirl",
       "symbol": "SOUPERGIRL",
@@ -1321,7 +1321,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "The Happy Birdwatcher",
       "symbol": "HAPPYBIRDW",
@@ -1367,7 +1367,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Sub Zero Ice Cream",
       "symbol": "SUBZEROICE",
@@ -1413,7 +1413,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Beardbrand",
       "symbol": "BEARDBRAND",
@@ -1457,7 +1457,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Meal Enders",
       "symbol": "MEALENDERS",
@@ -1503,7 +1503,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Blackdot",
       "symbol": "BLACKDOT",
@@ -1549,7 +1549,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Pashion Footwear",
       "symbol": "PASHIONFOO",
@@ -1595,7 +1595,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Over EZ Chicken Coop",
       "symbol": "OVEREZCHIC",
@@ -1639,7 +1639,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Birddogs",
       "symbol": "BIRDDOGS",
@@ -1685,7 +1685,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Baby Loves Disco",
       "symbol": "BABYLOVESD",
@@ -1729,7 +1729,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Clean Sleep",
       "symbol": "CLEANSLEEP",
@@ -1773,7 +1773,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Ora Organics",
       "symbol": "ORAORGANIC",
@@ -1819,7 +1819,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Modern Picnic",
       "symbol": "MODERNPICN",
@@ -1865,7 +1865,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Nuchas",
       "symbol": "NUCHAS",
@@ -1911,7 +1911,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "The Home T",
       "symbol": "HOMET",
@@ -1957,7 +1957,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Rule Breaker",
       "symbol": "RULEBREAKE",
@@ -2003,7 +2003,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Crooked Jaw",
       "symbol": "CROOKEDJAW",
@@ -2049,7 +2049,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Cheek'd",
       "symbol": "CHEEKD",
@@ -2095,7 +2095,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "50 State Capitals in 50 Minutes",
       "symbol": "50STATECAP",
@@ -2139,7 +2139,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Inirv",
       "symbol": "INIRV",
@@ -2185,7 +2185,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Vochill",
       "symbol": "VOCHILL",
@@ -2231,7 +2231,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Lifebelt",
       "symbol": "LIFEBELT",
@@ -2277,7 +2277,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Pie Wine",
       "symbol": "PIEWINE",
@@ -2323,7 +2323,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "TA3 Swimwear",
       "symbol": "TA3SWIMWEA",
@@ -2369,7 +2369,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Taaluma Totes",
       "symbol": "TAALUMATOT",
@@ -2415,7 +2415,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Cornucopia Express",
       "symbol": "CORNUCOPIA",
@@ -2459,7 +2459,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Susty Party",
       "symbol": "SUSTYPARTY",
@@ -2505,7 +2505,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Victoria's Kitchen",
       "symbol": "VICTORIASK",
@@ -2551,7 +2551,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Tycoon Real Estate",
       "symbol": "TYCOONREAL",
@@ -2597,7 +2597,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Tremont Electric",
       "symbol": "TREMONTELE",
@@ -2643,7 +2643,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Liftid Neurostimulation",
       "symbol": "LIFTIDNEUR",
@@ -2689,7 +2689,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Echo Valley Meats",
       "symbol": "ECHOVALLEY",
@@ -2735,7 +2735,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Worthy Brands",
       "symbol": "WORTHYBRAN",
@@ -2779,7 +2779,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Beartek",
       "symbol": "BEARTEK",
@@ -2825,7 +2825,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Nutr",
       "symbol": "NUTR",
@@ -2871,7 +2871,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Crio",
       "symbol": "CRIO",
@@ -2917,7 +2917,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Rootsuit",
       "symbol": "ROOTSUIT",
@@ -2963,7 +2963,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Haven Lock",
       "symbol": "HAVENLOCK",
@@ -3009,7 +3009,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Fly With Wine",
       "symbol": "FLYWITHWIN",
@@ -3055,7 +3055,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Hiccup",
       "symbol": "HICCUP",
@@ -3101,7 +3101,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Kwyzta Chopstick Art",
       "symbol": "KWYZTACHOP",
@@ -3147,7 +3147,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Jay's Pet Butter",
       "symbol": "JAYSPETBUT",
@@ -3193,7 +3193,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Busy Baby Mat",
       "symbol": "BUSYBABYMA",
@@ -3239,7 +3239,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Snaga Stool",
       "symbol": "SNAGASTOOL",
@@ -3285,7 +3285,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Cell Helmet",
       "symbol": "CELLHELMET",
@@ -3331,7 +3331,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "The Bobble Place",
       "symbol": "BOBBLEPLAC",
@@ -3377,7 +3377,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Frame Your Feline",
       "symbol": "FRAMEYOURF",
@@ -3421,7 +3421,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Wyp Aviation",
       "symbol": "WYPAVIATIO",
@@ -3467,7 +3467,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Beulr",
       "symbol": "BEULR",
@@ -3513,7 +3513,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Tick Mitt",
       "symbol": "TICKMITT",
@@ -3559,7 +3559,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Nopalera",
       "symbol": "NOPALERA",
@@ -3605,7 +3605,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Cuddle Tunes",
       "symbol": "CUDDLETUNE",
@@ -3651,7 +3651,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Brass Roots",
       "symbol": "BRASSROOTS",
@@ -3699,7 +3699,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Metric Mate",
       "symbol": "METRICMATE",
@@ -3745,7 +3745,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "ScotteVest",
       "symbol": "SCOTTEVEST",
@@ -3791,7 +3791,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Must Love",
       "symbol": "MUSTLOVE",
@@ -3837,7 +3837,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "PureAyre",
       "symbol": "PUREAYRE",
@@ -3883,7 +3883,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "PSI Bands",
       "symbol": "PSIBANDS",
@@ -3929,7 +3929,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "ReVestor",
       "symbol": "REVESTOR",
@@ -3975,7 +3975,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Graffiti Removal Services",
       "symbol": "GRAFFITIRE",
@@ -4021,7 +4021,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "BusyBox",
       "symbol": "BUSYBOX",
@@ -4067,7 +4067,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "No Fly Cone",
       "symbol": "NOFLYCONE",
@@ -4113,7 +4113,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Off The Cob",
       "symbol": "OFFTHECOB",
@@ -4157,7 +4157,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "SpiritHoods",
       "symbol": "SPIRITHOOD",
@@ -4203,7 +4203,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "AirTulip",
       "symbol": "AIRTULIP",
@@ -4249,7 +4249,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Burlap & Barrel",
       "symbol": "BURLAPBARR",
@@ -4295,7 +4295,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Love & Pebble",
       "symbol": "LOVEPEBBLE",
@@ -4341,7 +4341,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "MorningHead",
       "symbol": "MORNINGHEA",
@@ -4387,7 +4387,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Da Vinci Eye App",
       "symbol": "DAVINCIEYE",
@@ -4433,7 +4433,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "BAM Buckwheat",
       "symbol": "BAMBUCKWHE",
@@ -4479,7 +4479,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Romperjack",
       "symbol": "ROMPERJACK",
@@ -4525,7 +4525,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Wellingtons",
       "symbol": "WELLINGTON",
@@ -4571,7 +4571,7 @@
       "excluded_reason": null
     },
     "include": true,
-    "dev_buy": true,
+    "dev_buy": false,
     "token": {
       "name": "Man-Pack",
       "symbol": "MANPACK",

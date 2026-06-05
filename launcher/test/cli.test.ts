@@ -25,6 +25,13 @@ test("preview counts ONLY dev-buys in a mixed set (create-only coins don't add t
   expect(line).toMatch(/150 tokens \(100 dev-buy, 50 create-only\)/);
 });
 
+test("preview with zero dev-buys (all create-only): totalSol is 0, rent only", () => {
+  const createOnly = Array.from({ length: 1481 }, (_, i) => ({ id: `c${i}`, name: "N", symbol: `C${i}`, description: "d", imagePath: "/x.png", devBuy: false }));
+  const { totalSol, line } = preview(createOnly, { devBuySol: 0.4306 } as any);
+  expect(totalSol).toBe(0);
+  expect(line).toMatch(/1481 tokens \(0 dev-buy, 1481 create-only\)/);
+});
+
 test("assertCanBroadcast throws without --confirm", () => {
   expect(() => assertCanBroadcast({ confirm: false } as any)).toThrow(/confirm/i);
 });

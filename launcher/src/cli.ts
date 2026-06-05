@@ -65,15 +65,22 @@ export async function main(argv: string[], env: Record<string, string | undefine
   const pumpSdk = new PumpSdk();
   const global = await onlineSdk.fetchGlobal();
   const solCapLamports = BigInt(Math.ceil(cfg.devBuySol * (1 + cfg.slippageBps / 10_000) * 1e9));
-  // Build/reuse ONE Address Lookup Table of the static accounts so each create+buy
-  // fits a single legacy tx (the official SDK's SOL create_v2+buy is ~1250B > 1232).
-  const staticAddrs = await computeStaticLutAddresses((m: Keypair) => pumpSdk.createV2AndBuyInstructions({
-    global, mint: m.publicKey, name: "sample", symbol: "smpl", uri: "https://pump.fun",
-    creator: wallet.publicKey, user: wallet.publicKey,
-    amount: new BN(cfg.devBuyTokens.toString()), solAmount: new BN(solCapLamports.toString()), mayhemMode: false,
-  } as any), wallet.publicKey);
-  console.log(`lookup table: ${staticAddrs.length} static accounts`);
-  const lookupTable = await loadOrCreateLookupTable(conn, wallet, staticAddrs, join(dataDir, "launch-alt.json"));
+  // Build/reuse ONE Address Lookup Table so each create_v2+buy fits a single
+  // legacy tx (the SDK's SOL create_v2+buy is ~1250B > 1232) — ONLY when this
+  // batch has dev-buys. The product set is all create-only and needs no ALT; the
+  // index-token dev-buy (TBD) does. Skip the on-chain ALT when nothing dev-buys.
+  let lookupTable: LaunchDeps["lookupTable"];
+  if (devBuyCount > 0) {
+    const staticAddrs = await computeStaticLutAddresses((m: Keypair) => pumpSdk.createV2AndBuyInstructions({
+      global, mint: m.publicKey, name: "sample", symbol: "smpl", uri: "https://pump.fun",
+      creator: wallet.publicKey, user: wallet.publicKey,
+      amount: new BN(cfg.devBuyTokens.toString()), solAmount: new BN(solCapLamports.toString()), mayhemMode: false,
+    } as any), wallet.publicKey);
+    console.log(`lookup table: ${staticAddrs.length} static accounts`);
+    lookupTable = await loadOrCreateLookupTable(conn, wallet, staticAddrs, join(dataDir, "launch-alt.json"));
+  } else {
+    console.log("no dev-buys in this batch -> skipping Address Lookup Table (all create-only)");
+  }
   const deps: LaunchDeps = {
     global,
     uploadMetadata: (item) => uploadTokenMetadata(item),

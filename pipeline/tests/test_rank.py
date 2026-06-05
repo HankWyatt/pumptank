@@ -55,13 +55,14 @@ def test_founder_only_and_site_only_survive_floor():
     assert all(p.selection.findability == 0.5 for p in out)
 
 
-def test_top_n_dev_buy_and_ranked():
+def test_top_n_editorial_selected_and_ranked():
     pitches = [_p(f"p{i}", viewership=float(i)) for i in range(5)]
     out = rank_and_select(pitches, weights=W, n=2, max_season=16)
-    assert sum(1 for p in out if p.dev_buy) == 2
+    # ranking no longer sets dev_buy (no product dev-buys); selected is editorial
+    assert sum(1 for p in out if p.selection.selected) == 2
     assert [out[0].selection.rank, out[1].selection.rank] == [1, 2]
     assert out[0].selection.selected is True
-    assert out[0].dev_buy is True
+    assert out[0].dev_buy is False
 
 
 def test_higher_viewership_ranks_higher():
@@ -75,7 +76,7 @@ def test_higher_viewership_ranks_higher():
 def test_pool_smaller_than_n_warns_and_selects_all():
     with pytest.warns(UserWarning, match="< N"):
         out = rank_and_select([_p("a")], weights=W, n=100, max_season=16)
-    assert out[0].dev_buy is True
+    assert out[0].selection.selected is True
 
 
 def test_deterministic_id_tiebreak():
@@ -83,15 +84,18 @@ def test_deterministic_id_tiebreak():
     assert [p.id for p in out] == ["aaa", "bbb"]
 
 
-def test_dev_buy_equals_selected_and_include_untouched():
+def test_rank_never_sets_dev_buy_and_leaves_include():
     pitches = [_p(f"p{i}", viewership=float(i)) for i in range(5)]
     pitches.append(_p("old", season=17))
     pitches.append(_p("ghost", founders=(), website=None))
     out = rank_and_select(pitches, weights=W, n=2, max_season=16)
     for p in out:
-        # rank governs dev_buy (mirrors selection.selected) and never touches include
-        assert p.dev_buy == p.selection.selected
+        # ranking annotates selection only: no product dev-buys; include untouched
+        assert p.dev_buy is False
         assert p.include is True
+    # editorial selected still mirrors rank<=n for the ranked pool
+    ranked = [p for p in out if p.selection.rank is not None]
+    assert all(p.selection.selected == (p.selection.rank <= 2) for p in ranked)
 
 
 def test_bad_weights_raise():

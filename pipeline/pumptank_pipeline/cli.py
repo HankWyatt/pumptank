@@ -16,13 +16,15 @@ def run(csv_path, out_path, schema_path) -> int:
         if p.id in config.GOT_DEAL_OVERRIDES:
             p.got_deal = config.GOT_DEAL_OVERRIDES[p.id]
 
-    # All-products: every product launches; only the top-100 no-deal get a dev-buy.
+    # All-products: every product launches as CREATE-ONLY (no dev-buy). The
+    # ranking below only annotates an editorial selection for the website's sort;
+    # the dev-buy is reserved for the index token (set elsewhere), not products.
     for p in pitches:
         p.include = True
         p.dev_buy = False
 
     no_deal = filter_no_deal(pitches)
-    ranked = rank_and_select(           # marks the top-100 no-deal dev_buy=True
+    ranked = rank_and_select(           # editorial rank/selection only — no dev_buy
         no_deal, weights=config.SELECTION_WEIGHTS,
         n=config.SELECT_TOP_N, max_season=config.MAX_SEASON,
         exclude_ids=config.EXCLUDE_IDS,
@@ -34,9 +36,7 @@ def run(csv_path, out_path, schema_path) -> int:
     rest = sorted((p for p in pitches if p.id not in ranked_ids), key=lambda p: p.id)
     ordered = ranked + rest
 
-    # NOTE: assets/images still only fill the dev_buy/ranked set for now; a later
-    # task makes them all-products. The data-flow + write_products(all) is what
-    # matters here, so the full `ordered` list is what we generate over + write.
+    # Generate token text + card images for the full launched set, then write all.
     ordered = generate_assets(
         ordered, max_ticker_len=config.MAX_TICKER_LEN,
         max_description_len=config.MAX_DESCRIPTION_LEN,
@@ -50,11 +50,9 @@ def run(csv_path, out_path, schema_path) -> int:
 
     launched = sum(1 for p in ordered if p.include)
     got_deal = sum(1 for p in ordered if p.got_deal)
-    dev_buy = sum(1 for p in ordered if p.dev_buy)
-    print(f"{len(pitches)} pitches launched ({launched} include); "
-          f"{got_deal} got-deal / {len(no_deal)} no-deal; "
-          f"{dev_buy} dev-buy (top {config.SELECT_TOP_N}); wrote {out_path}")
-    return dev_buy
+    print(f"{len(pitches)} pitches; {launched} launched (create-only); "
+          f"{got_deal} got-deal / {len(no_deal)} no-deal; wrote {out_path}")
+    return launched
 
 
 def main():

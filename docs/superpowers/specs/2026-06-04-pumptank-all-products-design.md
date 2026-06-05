@@ -2,6 +2,29 @@
 
 _Date: 2026-06-04. Expands the launch from 100 no-deal coins to a token for EVERY Shark Tank product (~1,485), dev-buying only the top-100 no-deal. Status: design, pending review._
 
+## Update — 2026-06-05: products are create-only; the dev-buy moves to the index token
+
+The top-100 no-deal **1.5% dev-buy was dropped**. Every product now launches
+**create-only** (no buy), flagged solely by `got_deal` (got a deal / no deal) —
+the two categories each stand as their own tribute, and the trading-fee share is
+the founder-onboarding incentive (a founder can buy their own token if they want).
+This removes ~43 SOL of dev-buy spend; budget is now rent-only (~30 SOL for ~1,481
+creates + priority fees).
+
+What changed in code (everything stays reusable):
+- `rank.py` no longer sets `dev_buy`; it only annotates `selection` (editorial
+  rank/score) for the website's sort. No product gets `dev_buy=True`.
+- `cli.py` reports got-deal/no-deal counts; `run()` returns the launched count.
+- Launcher keeps its **dual path** (`create_v2+buy` + the reusable ALT) and just
+  **skips ALT-building when a batch has zero dev-buys**. The dev-buy machinery is
+  intact and reserved for the **index ($PUMPTANK) token**, whose launch/deployment
+  is still **TBD — to be designed separately**.
+- Cards stay neutral for deal products (no "GOT A DEAL" badge); no-deal keep the
+  vermilion "NO DEAL" badge. Symbols/PNGs were byte-identical after regen (no churn).
+
+The sections below describe the superseded top-100 dev-buy design; they are kept
+for history. Where they say "dev-buy the top-100," read "create-only for all."
+
 ## Vision / decisions (locked with the user)
 
 - **Launch a token for ALL ~1,485 products** (914 got-deal + 571 no-deal), so every product feeds the $PUMPTANK main token.
