@@ -1,5 +1,5 @@
 /* web/components/ProductGrid.tsx · classifieds index: search + sector filter
-   + Plates (gallery) / Index (ruled list) views. */
+   + Tiles (gallery) / List (ruled list) views. */
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "@/lib/products";
@@ -74,7 +74,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
           )}
         </div>
         <div className="inline-flex border border-[var(--line-strong)]" role="group" aria-label="View mode">
-          {(["plates", "index"] as const).map((v, i) => (
+          {([["plates", "Tiles"], ["index", "List"]] as const).map(([v, label], i) => (
             <button
               key={v}
               aria-pressed={view === v}
@@ -83,7 +83,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
                 i > 0 ? "border-l border-[var(--line-strong)]" : ""
               } ${view === v ? "bg-[var(--blue)] text-[var(--on-accent)]" : "bg-[var(--paper-2)] text-muted hover:text-ink"}`}
             >
-              {v}
+              {label}
             </button>
           ))}
         </div>
