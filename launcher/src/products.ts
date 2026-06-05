@@ -5,6 +5,7 @@ import type { LaunchItem } from "./types.js";
 interface Record_ {
   id: string;
   include: boolean;
+  dev_buy?: boolean;
   token: { name: string; symbol: string; description: string } | null;
   media: { image_url: string | null };
 }
@@ -14,8 +15,11 @@ export function loadLaunchItems(dataDir: string): LaunchItem[] {
   const items: LaunchItem[] = [];
   const ids = new Set<string>();
   const symbols = new Set<string>();
+  // Load ALL launched records (include === true): the full ~1,481-product set.
+  // Each carries devBuy (from dev_buy): true => create_v2 + 1.5% dev-buy (top-100),
+  // false => create_v2 only. The launcher branches on devBuy.
   for (const r of records) {
-    if (!r.include) continue;
+    if (r.include !== true) continue;
     if (!r.token) throw new Error(`included record ${r.id} has no token`);
     if (ids.has(r.id)) throw new Error(`duplicate id: ${r.id}`);
     if (symbols.has(r.token.symbol)) throw new Error(`duplicate symbol: ${r.token.symbol}`);
@@ -24,7 +28,10 @@ export function loadLaunchItems(dataDir: string): LaunchItem[] {
     if (!existsSync(imagePath)) throw new Error(`missing image file: ${imagePath}`);
     ids.add(r.id);
     symbols.add(r.token.symbol);
-    items.push({ id: r.id, name: r.token.name, symbol: r.token.symbol, description: r.token.description, imagePath });
+    items.push({
+      id: r.id, name: r.token.name, symbol: r.token.symbol,
+      description: r.token.description, imagePath, devBuy: r.dev_buy === true,
+    });
   }
   return items;
 }

@@ -41,7 +41,12 @@ export async function main(argv: string[], env: Record<string, string | undefine
 
   const wallet = loadWallet(env);
   const conn = new Connection(cfg.rpcUrl, "confirmed");
-  const required = items.length * cfg.devBuySol * 1.08 + items.length * 0.015; // dev-buys + ~rent/fee buffer
+  // Funding precheck: dev-buys cost ~devBuySol each (×1.08 slippage/fee buffer); EVERY
+  // coin (dev-buy and create-only) locks ~0.02 SOL rent + priority fees.
+  const devBuyCount = items.filter((i) => i.devBuy).length;
+  const totalCount = items.length;
+  console.log(`launching ${totalCount} coins (${devBuyCount} dev-buy, ${totalCount - devBuyCount} create-only)`);
+  const required = devBuyCount * cfg.devBuySol * 1.08 + totalCount * 0.02; // dev-buys + per-coin rent/fee buffer
   if (!(await hasSufficientBalance(conn, wallet.publicKey, required))) {
     throw new Error(`wallet balance below required ~${required.toFixed(2)} SOL`);
   }
@@ -67,6 +72,9 @@ export async function main(argv: string[], env: Record<string, string | undefine
     uploadMetadata: (item) => uploadTokenMetadata(item),
     buildCreateAndBuy: (args) =>
       pumpSdk.createV2AndBuyInstructions({ ...args, mint: args.mint.publicKey } as any),
+    // create_v2-only (no dev-buy). The SDK returns a single ix; wrap it in an array.
+    buildCreate: async (args) =>
+      [await pumpSdk.createV2Instruction({ ...args, mint: args.mint.publicKey, mayhemMode: false } as any)],
     connection: conn as unknown as LaunchDeps["connection"],
     lookupTable,
   };

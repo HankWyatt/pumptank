@@ -1,7 +1,7 @@
 import { expect, test, vi } from "vitest";
 import { uploadTokenMetadata } from "../src/metadata.js";
 
-const item = { id: "a", name: "Acme", symbol: "ACME", description: "no deal", imagePath: __filename };
+const item = { id: "a", name: "Acme", symbol: "ACME", description: "no deal", imagePath: __filename, devBuy: true };
 
 test("posts multipart to the pump.fun IPFS endpoint and returns metadataUri", async () => {
   const fetchImpl = vi.fn().mockResolvedValue({

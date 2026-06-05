@@ -4,6 +4,7 @@ export interface LaunchItem {
   symbol: string;
   description: string;
   imagePath: string; // absolute path to the card PNG
+  devBuy: boolean;   // true => create_v2 + 1.5% dev-buy; false => create_v2 only
 }
 
 export type LaunchStatus = "attempting" | "success" | "failed";

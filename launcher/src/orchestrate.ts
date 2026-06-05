@@ -33,7 +33,9 @@ export async function runBatch(
         succeeded++; continue;
       }
     }
-    if (spent + opts.devBuySol > opts.maxTotalSpendSol) {
+    // Only dev-buy coins draw down the SOL spend cap. Create-only coins cost ~rent
+    // (covered by the funding buffer), so they don't count against it.
+    if (item.devBuy && spent + opts.devBuySol > opts.maxTotalSpendSol) {
       throw new Error(`spend cap reached: ${spent}+${opts.devBuySol} > ${opts.maxTotalSpendSol} SOL`);
     }
 
@@ -44,7 +46,8 @@ export async function runBatch(
       try {
         const { signature } = await launchFn(mint, item);
         ledger.record({ id: item.id, mint: mintB58, signature, status: "success", attempts: attempt, ts: now() });
-        spent += opts.devBuySol; succeeded++; launched = true;
+        if (item.devBuy) spent += opts.devBuySol; // only dev-buys consume the cap
+        succeeded++; launched = true;
         break;
       } catch (e) {
         lastErr = e instanceof Error ? e.message : String(e);

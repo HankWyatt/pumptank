@@ -7,7 +7,7 @@ vi.mock("@pump-fun/pump-sdk", () => ({ OnlinePumpSdk: class {}, PumpSdk: class {
 
 import { preview, assertCanBroadcast } from "../src/cli.js";
 
-const items = Array.from({ length: 100 }, (_, i) => ({ id: `i${i}`, name: "N", symbol: `S${i}`, description: "d", imagePath: "/x.png" }));
+const items = Array.from({ length: 100 }, (_, i) => ({ id: `i${i}`, name: "N", symbol: `S${i}`, description: "d", imagePath: "/x.png", devBuy: true }));
 
 test("preview totals dev-buys", () => {
   const { totalSol, line } = preview(items, { devBuySol: 0.4306 } as any);

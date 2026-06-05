@@ -2,8 +2,8 @@ import { expect, test, vi } from "vitest";
 import { runBatch } from "../src/orchestrate.js";
 import type { LaunchItem } from "../src/types.js";
 
-const item = (id: string, symbol: string): LaunchItem =>
-  ({ id, name: id, symbol, description: "d", imagePath: "/x.png" });
+const item = (id: string, symbol: string, devBuy = true): LaunchItem =>
+  ({ id, name: id, symbol, description: "d", imagePath: "/x.png", devBuy });
 
 function fakeLedger() {
   const data: Record<string, any> = {};
@@ -61,4 +61,34 @@ test("aborts when cumulative spend would exceed the cap", async () => {
   await expect(runBatch([item("a", "A"), item("b", "B")], led as any, mintstore, launchFn, async () => false,
     { ...opts, maxTotalSpendSol: 1 })).rejects.toThrow(/spend cap/i);
   expect(launchFn).toHaveBeenCalledTimes(1);
+});
+
+test("spend cap only counts dev-buy items; create-only items don't consume it", async () => {
+  const led = fakeLedger();
+  const launchFn = vi.fn(async (_m: any, it: LaunchItem) => ({ mint: `MINT_${it.id}`, signature: "S" }));
+  // cap=1, devBuySol=1: two create-only coins surround one dev-buy -> all three launch
+  // (only the single dev-buy counts toward the cap, exactly hitting it).
+  await runBatch(
+    [item("a", "A", false), item("b", "B", true), item("c", "C", false)],
+    led as any, mintstore, launchFn, async () => false,
+    { ...opts, maxTotalSpendSol: 1 },
+  );
+  expect(led.statusOf("a")).toBe("success");
+  expect(led.statusOf("b")).toBe("success");
+  expect(led.statusOf("c")).toBe("success");
+  expect(launchFn).toHaveBeenCalledTimes(3);
+});
+
+test("trips the cap on the second dev-buy, create-only items between are free", async () => {
+  const led = fakeLedger();
+  const launchFn = vi.fn(async (_m: any, it: LaunchItem) => ({ mint: `MINT_${it.id}`, signature: "S" }));
+  // cap=1: first dev-buy launches (spent=1), create-only is free, second dev-buy trips the cap.
+  await expect(runBatch(
+    [item("a", "A", true), item("b", "B", false), item("c", "C", true)],
+    led as any, mintstore, launchFn, async () => false,
+    { ...opts, maxTotalSpendSol: 1 },
+  )).rejects.toThrow(/spend cap/i);
+  expect(led.statusOf("a")).toBe("success");
+  expect(led.statusOf("b")).toBe("success");
+  expect(launchFn).toHaveBeenCalledTimes(2);
 });
