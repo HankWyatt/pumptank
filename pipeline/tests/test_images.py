@@ -38,18 +38,19 @@ def test_fit_name_clips_pathological_single_word():
 
 from pumptank_pipeline.models import TokenAssets, Selection
 from pumptank_pipeline.images import (
-    _draw_card, render_images, _fin_left_x, FOOTER, FOOTER_Y, MICRO_SIZE,
-    TICKER_SIZE, TAG_SIZE, USABLE_W,
+    _draw_card, render_images, _fin_left_x, _should_draw_no_deal_badge,
+    FOOTER, FOOTER_Y, MICRO_SIZE, TICKER_SIZE, TAG_SIZE, USABLE_W,
 )
 
 REG = str(config.FONT_DIR / "Carlito-Regular.ttf")
 
 
-def _pitch(pid, dev_buy=True):
-    # all products launch (include=True); cards are gated on dev_buy for now
-    tok = TokenAssets(name="Acme Co", symbol="ACME", description="d") if dev_buy else None
+def _pitch(pid, dev_buy=True, got_deal=False, include=True, with_token=True):
+    # all launched products (include=True) get a card; got_deal toggles the badge
+    tok = TokenAssets(name="Acme Co", symbol="ACME", description="d") if with_token else None
     return Pitch(id=pid, season=5, episode=9, pitch_number=1, company_name="AcmeCo",
-                 industry="Tech", got_deal=False, include=True, dev_buy=dev_buy, token=tok,
+                 industry="Tech", got_deal=got_deal, include=include,
+                 dev_buy=dev_buy, token=tok,
                  selection=Selection(selected=dev_buy, rank=1 if dev_buy else None))
 
 
@@ -76,16 +77,47 @@ def test_footer_clears_fin():
     assert footer_right < _fin_left_x(FOOTER_Y, 1000)
 
 
-def test_render_images_only_selected(tmp_path):
-    out = render_images([_pitch("a", True), _pitch("b", False)],
-                        out_dir=tmp_path, font_dir=config.FONT_DIR,
-                        size=config.IMAGE_SIZE, palette=config.IMAGE_PALETTE)
+def test_should_draw_no_deal_badge():
+    # no-deal -> badge; deal -> no badge (generic tribute, no "GOT A DEAL" badge)
+    assert _should_draw_no_deal_badge(_pitch("a", got_deal=False)) is True
+    assert _should_draw_no_deal_badge(_pitch("b", got_deal=True)) is False
+
+
+def test_render_images_all_launched(tmp_path):
+    # dev-buy no-deal, non-dev-buy no-deal, and a deal pitch all get cards
+    out = render_images(
+        [_pitch("a", dev_buy=True, got_deal=False),
+         _pitch("b", dev_buy=False, got_deal=False),
+         _pitch("d", dev_buy=False, got_deal=True)],
+        out_dir=tmp_path, font_dir=config.FONT_DIR,
+        size=config.IMAGE_SIZE, palette=config.IMAGE_PALETTE)
     by = {p.id: p for p in out}
-    assert (tmp_path / "a.png").exists() and not (tmp_path / "b.png").exists()
-    assert by["a"].image_url.endswith("a.png") and by["a"].image_source == "generated"
-    assert by["b"].image_source == "none"
+    for pid in ("a", "b", "d"):
+        assert (tmp_path / f"{pid}.png").exists()
+        assert by[pid].image_url.endswith(f"{pid}.png")
+        assert by[pid].image_source == "generated"
     im = Image.open(tmp_path / "a.png")
     assert im.size == (1000, 1000) and im.format == "PNG"
+
+
+def test_render_images_skips_unlaunched(tmp_path):
+    out = render_images(
+        [_pitch("a", include=True), _pitch("x", include=False, with_token=False)],
+        out_dir=tmp_path, font_dir=config.FONT_DIR,
+        size=config.IMAGE_SIZE, palette=config.IMAGE_PALETTE)
+    by = {p.id: p for p in out}
+    assert (tmp_path / "a.png").exists() and not (tmp_path / "x.png").exists()
+    assert by["x"].image_source == "none"
+
+
+def test_render_images_deal_pitch_renders_card(tmp_path):
+    out = render_images([_pitch("d", dev_buy=False, got_deal=True)],
+                        out_dir=tmp_path, font_dir=config.FONT_DIR,
+                        size=config.IMAGE_SIZE, palette=config.IMAGE_PALETTE)
+    p = out[0]
+    assert (tmp_path / "d.png").exists()
+    assert p.image_url.endswith("d.png") and p.image_source == "generated"
+    assert _should_draw_no_deal_badge(p) is False  # deal -> no-badge path taken
 
 
 def test_render_images_deterministic(tmp_path):

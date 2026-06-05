@@ -76,7 +76,24 @@ def _centered(draw, text, font, y, fill, width):
     draw.text(((width - w) // 2, y), text, font=font, fill=fill)
 
 
-def _draw_card(name, symbol, season, episode, industry, *, size, palette, font_dir):
+def _should_draw_no_deal_badge(pitch) -> bool:
+    """No-deal pitches get the vermilion 'NO DEAL' badge; deal pitches don't
+    (generic tribute, no 'GOT A DEAL' badge)."""
+    return not pitch.got_deal
+
+
+def _draw_no_deal_badge(d, size, palette):
+    pf = ImageFont.truetype(palette["_bold"], 34)
+    lab = "NO DEAL"
+    tw = d.textlength(lab, font=pf)
+    x2 = size - MARGIN
+    d.rounded_rectangle([x2 - tw - 44, 58, x2, 116], radius=28,
+                        outline=palette["accent"], width=3)
+    d.text((x2 - tw - 22, 64), lab, font=pf, fill=palette["accent"])
+
+
+def _draw_card(name, symbol, season, episode, industry, *, size, palette, font_dir,
+               no_deal_badge=True):
     font_dir = Path(font_dir)
     bold = str(font_dir / "Carlito-Bold.ttf")
     reg = str(font_dir / "Carlito-Regular.ttf")
@@ -85,13 +102,8 @@ def _draw_card(name, symbol, season, episode, industry, *, size, palette, font_d
     d.polygon(_fin_polygon(size), fill=palette["fin"])
     d.text((MARGIN, 64), "P U M P T A N K", font=ImageFont.truetype(bold, 40),
            fill=palette["accent"])
-    pf = ImageFont.truetype(bold, 34)
-    lab = "NO DEAL"
-    tw = d.textlength(lab, font=pf)
-    x2 = size - MARGIN
-    d.rounded_rectangle([x2 - tw - 44, 58, x2, 116], radius=28,
-                        outline=palette["accent"], width=3)
-    d.text((x2 - tw - 22, 64), lab, font=pf, fill=palette["accent"])
+    if no_deal_badge:
+        _draw_no_deal_badge(d, size, {**palette, "_bold": bold})
     lines, nf, lh = _fit_name(d, name, bold, size - 2 * 80, 300)
     y = 360 - (lh * len(lines)) // 2
     for ln in lines:
@@ -107,18 +119,20 @@ def _draw_card(name, symbol, season, episode, industry, *, size, palette, font_d
 
 
 def render_images(pitches, *, out_dir, font_dir, size, palette):
-    """Render + save a card PNG for each dev_buy==True pitch; set its image fields.
+    """Render + save a card PNG for every launched (include==True) pitch with a
+    token; set its image fields.
 
-    As of the all-products expansion only the dev-buy top-100 get a card here; a
-    later task extends rendering to every launched product.
+    No-deal pitches get the vermilion 'NO DEAL' badge; deal pitches get the same
+    card minus the badge (generic tribute) — see ``_should_draw_no_deal_badge``.
     """
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     for p in pitches:
-        if not (p.dev_buy and p.token):
+        if not (p.include and p.token):
             continue
         img = _draw_card(p.token.name, p.token.symbol, p.season, p.episode,
-                         p.industry or "", size=size, palette=palette, font_dir=font_dir)
+                         p.industry or "", size=size, palette=palette, font_dir=font_dir,
+                         no_deal_badge=_should_draw_no_deal_badge(p))
         img.save(out_dir / f"{p.id}.png")
         p.image_url = f"{out_dir.name}/{p.id}.png"
         p.image_source = "generated"

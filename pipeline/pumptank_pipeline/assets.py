@@ -1,6 +1,7 @@
 import re
 from typing import Optional
 
+from . import config
 from .models import Pitch, TokenAssets
 
 _CORP_SUFFIX = re.compile(r"\s+(?:Company|Co|Inc|LLC|Corp)\.?$", re.IGNORECASE)
@@ -41,7 +42,12 @@ def _compose_description(pitch: Pitch, clean_name: str, *,
         blurb = (pitch.description or f"A {industry} product.").strip()
     if not blurb.endswith((".", "!", "?")):
         blurb += "."
-    tail = f" Pitched on Shark Tank S{pitch.season}E{pitch.episode} — no deal. {disclaimer}"
+    # Deal products get a neutral tail (on the show, no "no deal" hook / terms);
+    # no-deal keeps the "— no deal" hook.
+    template = (config.DEAL_DESCRIPTION_TAIL if pitch.got_deal
+                else config.NO_DEAL_DESCRIPTION_TAIL)
+    tail = template.format(season=pitch.season, episode=pitch.episode,
+                           disclaimer=disclaimer)
     budget = max_len - len(tail)
     if len(blurb) > budget:
         if budget <= 1:
@@ -63,21 +69,27 @@ def _unique_symbol(base: str, taken: set, max_len: int) -> str:
         i += 1
 
 
+def _rank(p: Pitch) -> int:
+    if p.selection and p.selection.rank is not None:
+        return p.selection.rank
+    return 1_000_000
+
+
 def generate_assets(pitches: list[Pitch], *, max_ticker_len: int,
                     max_description_len: int, disclaimer: str,
                     name_overrides: dict) -> list[Pitch]:
-    """Set .token on every dev_buy==True pitch; return all pitches.
+    """Set .token on every launched (include==True) pitch; return all pitches.
 
-    Tickers are deduped deterministically in selection.rank order. As of the
-    all-products expansion only the dev-buy top-100 get tokens here; a later task
-    extends this to every launched product.
+    Symbols are deduped across the WHOLE launched set into one ``taken`` set, in
+    a deterministic order: the dev-buy top-100 first by selection.rank (so they
+    get the clean cashtags), then the remaining launched pitches by id. The
+    description branches on got_deal (see ``_compose_description``).
     """
-    def _rank(p):
-        return p.selection.rank if (p.selection and p.selection.rank is not None) else 1_000_000
-
-    selected = sorted((p for p in pitches if p.dev_buy), key=_rank)
+    launched = [p for p in pitches if p.include]
+    dev_buys = sorted((p for p in launched if p.dev_buy), key=_rank)
+    rest = sorted((p for p in launched if not p.dev_buy), key=lambda p: p.id)
     taken: set = set()
-    for p in selected:
+    for p in dev_buys + rest:
         name = _clean_name(p.company_name, name_overrides, p.id)
         base = _derive_symbol(name, max_ticker_len) or f"TKN{_rank(p)}"
         symbol = _unique_symbol(base, taken, max_ticker_len)

@@ -36,9 +36,11 @@ from pumptank_pipeline.assets import _is_junk_blurb, _compose_description
 DISC = "Not affiliated. Not financial advice."
 
 
-def _p(desc, name="Skyride", industry="Fitness/Sports/Outdoors", season=3, episode=13):
+def _p(desc, name="Skyride", industry="Fitness/Sports/Outdoors", season=3, episode=13,
+       got_deal=False):
     return Pitch(id="s3e13p1-x", season=season, episode=episode, pitch_number=1,
-                 company_name=name, industry=industry, description=desc, got_deal=False)
+                 company_name=name, industry=industry, description=desc,
+                 got_deal=got_deal)
 
 
 def test_is_junk_blurb():
@@ -54,6 +56,22 @@ def test_compose_description_keeps_real_blurb():
                              disclaimer=DISC, max_len=480)
     assert d.startswith("Premium refrigerated pie.")
     assert "Pitched on Shark Tank S3E13 — no deal." in d
+    assert d.endswith(DISC)
+
+
+def test_compose_description_no_deal_keeps_hook():
+    d = _compose_description(_p("Premium refrigerated pie", got_deal=False),
+                             "Joyebells", disclaimer=DISC, max_len=480)
+    assert "— no deal" in d
+    assert "Pitched on Shark Tank S3E13 — no deal." in d
+    assert d.endswith(DISC)
+
+
+def test_compose_description_deal_drops_hook():
+    d = _compose_description(_p("Premium refrigerated pie", got_deal=True),
+                             "Joyebells", disclaimer=DISC, max_len=480)
+    assert "no deal" not in d.lower()
+    assert "Pitched on Shark Tank S3E13." in d
     assert d.endswith(DISC)
 
 
@@ -75,22 +93,35 @@ from pumptank_pipeline.models import Selection
 from pumptank_pipeline.assets import generate_assets
 
 
-def _sel(pid, name, rank, dev_buy=True, desc="A gadget"):
-    # all products launch (include=True); tokens are gated on dev_buy for now
+def _sel(pid, name, rank, dev_buy=True, desc="A gadget", got_deal=False,
+         include=True):
+    # all launched products (include=True) get tokens; dev_buy drives dedup order
     return Pitch(id=pid, season=5, episode=1, pitch_number=1, company_name=name,
-                 industry="Tech", description=desc, got_deal=False,
-                 include=True, dev_buy=dev_buy,
+                 industry="Tech", description=desc, got_deal=got_deal,
+                 include=include, dev_buy=dev_buy,
                  selection=Selection(selected=dev_buy, rank=rank))
 
 
-def test_generate_assets_only_dev_buy_get_tokens():
+def test_generate_assets_all_launched_get_tokens():
     out = generate_assets(
         [_sel("a", "Acme", 1, dev_buy=True), _sel("b", "Beta", None, dev_buy=False)],
         max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
     by_id = {p.id: p for p in out}
     assert by_id["a"].token is not None
     assert by_id["a"].token.symbol == "ACME"
-    assert by_id["b"].token is None  # launched but no dev-buy -> no token (this task)
+    # launched non-dev-buy pitch now also gets a token
+    assert by_id["b"].token is not None
+    assert by_id["b"].token.symbol == "BETA"
+
+
+def test_generate_assets_skips_unlaunched():
+    out = generate_assets(
+        [_sel("a", "Acme", 1, dev_buy=True),
+         _sel("x", "NotLaunched", None, dev_buy=False, include=False)],
+        max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
+    by_id = {p.id: p for p in out}
+    assert by_id["a"].token is not None
+    assert by_id["x"].token is None  # include=False -> not launched -> no token
 
 
 def test_generate_assets_dedupes_tickers():
@@ -99,6 +130,32 @@ def test_generate_assets_dedupes_tickers():
         max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
     syms = sorted(p.token.symbol for p in out)
     assert syms == ["ACME", "ACME2"]
+
+
+def test_generate_assets_dedup_order_dev_buy_rank_then_id():
+    # Forced collision across a mixed deal+no-deal set: a dev-buy (rank 2) and two
+    # non-dev-buy launched pitches all derive "ACME". Dev-buy ranks first (clean
+    # cashtag), then the rest by id.
+    out = generate_assets(
+        [_sel("zzz", "Acme", None, dev_buy=False, got_deal=True),
+         _sel("aaa", "Acme", None, dev_buy=False, got_deal=False),
+         _sel("mid", "Acme", 2, dev_buy=True, got_deal=False)],
+        max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
+    by_id = {p.id: p for p in out}
+    assert by_id["mid"].token.symbol == "ACME"   # dev-buy wins the clean cashtag
+    assert by_id["aaa"].token.symbol == "ACME2"  # then non-dev-buy by id
+    assert by_id["zzz"].token.symbol == "ACME3"
+
+
+def test_generate_assets_deal_description_branch():
+    out = generate_assets(
+        [_sel("d", "DealCo", 1, dev_buy=True, got_deal=True),
+         _sel("n", "NoDealCo", None, dev_buy=False, got_deal=False)],
+        max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
+    by_id = {p.id: p for p in out}
+    assert "no deal" not in by_id["d"].token.description.lower()
+    assert "Pitched on Shark Tank S5E1." in by_id["d"].token.description
+    assert "— no deal" in by_id["n"].token.description
 
 
 def test_compose_description_drops_blurb_when_only_tail_fits():
