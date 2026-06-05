@@ -78,3 +78,69 @@ export function indexPreview(indexDevBuySol: number): { capSol: number; line: st
       `+ ~0.02 SOL create rent + priority fee`,
   };
 }
+
+export async function main(argv: string[], env: Record<string, string | undefined>): Promise<void> {
+  const cfg = buildConfig(argv, env); // reuses MAX_TOTAL_SPEND_SOL/RPC_URL/SLIPPAGE_BPS/PRIORITY_FEE/--confirm
+  const dataDir = join(process.cwd(), "..", "data");
+  const imagePath = flagOr(argv, "--image", join(dataDir, "index", "pumptanklogo.png"));
+  if (!existsSync(imagePath)) throw new Error(`index image not found: ${imagePath}`);
+  const indexDevBuySol = resolveIndexDevBuySol(env);
+  const item = buildIndexItem(imagePath);
+
+  const { line } = indexPreview(indexDevBuySol);
+  console.log(line);
+  if (!cfg.confirm) { console.log("DRY RUN -- no transactions broadcast. Re-run with --confirm to launch."); return; }
+
+  const wallet = loadWallet(env);
+  const conn = new Connection(cfg.rpcUrl, "confirmed");
+  const opts = indexLaunchOpts(cfg.slippageBps, indexDevBuySol, cfg.priorityFeeMicroLamports);
+  const required = indexDevBuySol * 1.08 + 0.02; // dev-buy (slippage buffer) + create rent
+  if (!(await hasSufficientBalance(conn, wallet.publicKey, required))) {
+    throw new Error(`wallet balance below required ~${required.toFixed(2)} SOL`);
+  }
+  // ESM/CJS: load the official SDK via createRequire (its ESM build's named anchor BN import breaks under Node ESM).
+  const { OnlinePumpSdk, PumpSdk } = createRequire(import.meta.url)("@pump-fun/pump-sdk") as typeof import("@pump-fun/pump-sdk");
+  const onlineSdk = new OnlinePumpSdk(conn);
+  const pumpSdk = new PumpSdk();
+  const global = await onlineSdk.fetchGlobal();
+
+  // The index is a dev-buy → build/reuse the ALT so create_v2+buy fits one legacy tx.
+  const staticAddrs = await computeStaticLutAddresses((m: Keypair) => pumpSdk.createV2AndBuyInstructions({
+    global, mint: m.publicKey, name: item.name, symbol: item.symbol, uri: "https://pump.fun",
+    creator: wallet.publicKey, user: wallet.publicKey,
+    amount: new BN(opts.devBuyTokens.toString()), solAmount: new BN(opts.solCapLamports.toString()), mayhemMode: false,
+  } as any), wallet.publicKey);
+  console.log(`lookup table: ${staticAddrs.length} static accounts`);
+  const lookupTable = await loadOrCreateLookupTable(conn, wallet, staticAddrs, join(dataDir, "launch-alt.json"));
+
+  const deps: LaunchDeps = {
+    global,
+    uploadMetadata: (it) => uploadTokenMetadata(it),
+    buildCreateAndBuy: (args) => pumpSdk.createV2AndBuyInstructions({ ...args, mint: args.mint.publicKey } as any),
+    buildCreate: async (args) => [await pumpSdk.createV2Instruction({ ...args, mint: args.mint.publicKey, mayhemMode: false } as any)],
+    connection: conn as unknown as LaunchDeps["connection"],
+    lookupTable,
+  };
+  const ledger = new Ledger(join(dataDir, "launch-ledger.json"));
+  const mintstore = new MintStore(join(dataDir, ".mint-keys"));
+  const result = await runBatch(
+    [item], ledger, mintstore,
+    (mint, it) => launchOne(deps, wallet, mint, it, opts),
+    (mintB58) => mintExistsOnChain(conn, new PublicKey(mintB58)),
+    indexBatchOpts(cfg, indexDevBuySol),
+  );
+  const entry = ledger.get(item.id);
+  console.log(`Done: ${result.succeeded} launched, ${result.failed} failed.`);
+  console.log(`$PUMPTANK mint: ${entry?.mint ?? "(see launch-ledger.json)"}  sig: ${entry?.signature ?? ""}`);
+}
+
+function isMainModule(): boolean {
+  const entry = processArgv[1];
+  if (!entry) return false;
+  try { return realpathSync(entry) === realpathSync(fileURLToPath(import.meta.url)); }
+  catch { return false; }
+}
+
+if (isMainModule()) {
+  main(process.argv.slice(2), process.env).catch((e) => { console.error(e); process.exit(1); });
+}
