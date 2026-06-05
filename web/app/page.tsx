@@ -32,17 +32,8 @@ export default function HubPage() {
           {/* Headline + lede */}
           <div className="md:col-span-8">
             <h1 className="reveal font-display text-[clamp(2.9rem,8.5vw,6.25rem)] uppercase leading-[0.9] tracking-[0.01em]">
-              They got{" "}
-              <span className="relative inline-block">
-                <span>no&nbsp;deal.</span>
-                <span
-                  className="absolute left-0 top-[0.52em] h-[5px] w-full -rotate-[1.2deg] bg-[var(--red)]"
-                  aria-hidden
-                />
-              </span>
-              <br />
-              We minted the{" "}
-              <span className="text-[var(--teal)]">legend.</span>
+              We mint the{" "}
+              <span className="text-[var(--teal)]">legends.</span>
             </h1>
 
             <p className="reveal dropcap mt-7 max-w-2xl font-body text-xl leading-[1.6] text-ink-soft">
@@ -123,7 +114,7 @@ export default function HubPage() {
           Transparent by design.
         </h2>
         <p className="mt-4 max-w-2xl font-body text-lg leading-relaxed text-ink-soft">
-          No hidden allocations. No team bags. No rug. Here is exactly how every $PUMPTANK token is
+          No BS. Here is exactly how every $PUMPTANK token is
           struck. It's all printed in full, for anyone who cares to read the fine print.
         </p>
 
@@ -132,7 +123,7 @@ export default function HubPage() {
             {
               n: "01",
               t: "A single 1.5% dev buy",
-              d: "Each token launches with one transparent 1.5% dev buy, fully disclosed, capped, and on-chain. That is the only insider position, ever.",
+              d: "Each token launches with one transparent 1.5% dev buy, fully disclosed, capped, and on-chain. These tokens are for the creator if/when they decide to opt in, not for the builders of PumpTank.",
             },
             {
               n: "02",
@@ -141,8 +132,8 @@ export default function HubPage() {
             },
             {
               n: "03",
-              t: "20% keeps the lights on",
-              d: "The remaining fifth funds marketing and growth for the index, so more rejected pitches get the spotlight they were denied on air.",
+              t: "20% helps others like them get the spotlight",
+              d: "The 20% funds marketing and growth for the index, so more rejected pitches get the spotlight they were denied on air in the future!",
             },
           ].map((step, i) => (
             <li key={step.n} className={i > 0 ? "md:col-rule md:pl-10" : ""}>
@@ -188,11 +179,11 @@ export default function HubPage() {
             <div className="max-w-xl">
               <div className="kicker">Notice to Founders</div>
               <h2 className="mt-3 font-display text-3xl uppercase leading-tight tracking-tight md:text-[2.6rem]">
-                Your pitch. Your token. <span className="text-[var(--teal)]">80% of the fees.</span>
+                Your pitch. Your token. <span className="text-[var(--teal)]">Fund your product with the fees.</span>
               </h2>
               <p className="mt-4 font-body text-lg leading-relaxed text-ink-soft">
-                If you founded one of these companies, the door is open. Opt in and the 80%
-                creator-fee share is yours. No strings, fully transparent, settled on-chain.
+                If you founded one of these companies, the door is open. Opt in and the majority of the
+                creator-fee share is yours. No strings, fully transparent, settled on-chain. FREE crouddfunding, no VC pitch required. It's your story, your upside.
               </p>
             </div>
             <a
