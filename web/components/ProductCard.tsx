@@ -19,9 +19,7 @@ export function ProductCard({ p }: { p: Product }) {
             No. {p.rank.toString().padStart(3, "0")}
           </span>
         )}
-        {!p.gotDeal && (
-          <span className="stamp absolute right-1.5 top-1.5 px-2 py-1 text-[0.55rem]">No Deal</span>
-        )}
+        {/* No "No Deal" overlay here: the plate image already bakes in the teal NO DEAL pill. */}
       </div>
       <div className="border-t border-[var(--line)] p-3">
         <div className="truncate font-body text-base font-bold leading-tight" title={p.name}>

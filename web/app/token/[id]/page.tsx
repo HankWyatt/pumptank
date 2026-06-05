@@ -106,9 +106,7 @@ export default function TokenPage({ params }: { params: { id: string } }) {
               alt={`${p.name} tribute-token plate`}
               className="glow w-full border border-[var(--line-strong)]"
             />
-            {!p.gotDeal && (
-              <span className="stamp stamp-lg absolute -bottom-3 -right-3 -rotate-6 bg-[#07141f]">No Deal</span>
-            )}
+            {/* No overlay stamp: the minted plate already carries the teal NO DEAL pill. */}
             <figcaption className="mt-4 font-mono text-[0.66rem] italic tracking-wide text-muted">
               Fig. 1 · The minted plate. 1000 × 1000, filed on-chain as ${p.symbol}.
             </figcaption>
