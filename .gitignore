@@ -31,6 +31,7 @@ web/public/token_images/
 web/next-env.d.ts
 web/*.tsbuildinfo
 
-# Local junk — not for the public repo
+# Local — not for the public repo
+/CLAUDE.md
 /pumptank.zip
 /ChatGPT Image*.png
