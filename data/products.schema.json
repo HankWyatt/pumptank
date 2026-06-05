@@ -57,6 +57,11 @@
       "pitch": {
         "$ref": "#/$defs/PitchDetail"
       },
+      "got_deal": {
+        "default": false,
+        "title": "Got Deal",
+        "type": "boolean"
+      },
       "outcome": {
         "$ref": "#/$defs/Outcome"
       },
@@ -89,6 +94,11 @@
       "include": {
         "default": true,
         "title": "Include",
+        "type": "boolean"
+      },
+      "dev_buy": {
+        "default": false,
+        "title": "Dev Buy",
         "type": "boolean"
       },
       "token": {
