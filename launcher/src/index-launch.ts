@@ -85,6 +85,9 @@ export async function main(argv: string[], env: Record<string, string | undefine
   const imagePath = flagOr(argv, "--image", join(dataDir, "index", "pumptanklogo.png"));
   if (!existsSync(imagePath)) throw new Error(`index image not found: ${imagePath}`);
   const indexDevBuySol = resolveIndexDevBuySol(env);
+  if (indexDevBuySol > cfg.maxTotalSpendSol) {
+    throw new Error(`INDEX_DEV_BUY_SOL (${indexDevBuySol}) exceeds MAX_TOTAL_SPEND_SOL (${cfg.maxTotalSpendSol}); raise MAX_TOTAL_SPEND_SOL`);
+  }
   const item = buildIndexItem(imagePath);
 
   const { line } = indexPreview(indexDevBuySol);

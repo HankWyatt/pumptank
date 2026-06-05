@@ -39,6 +39,11 @@ test("indexLaunchOpts: 1e14 tokens + a slippage-buffered lamport cap", () => {
   expect(opts.priorityFeeMicroLamports).toBe(200_000);
 });
 
+test("indexLaunchOpts rounds the lamport cap UP (ceil), not down", () => {
+  // 0.0000000005 * (1 + 150/10000) * 1e9 = 0.5075 lamports -> ceil = 1n
+  expect(indexLaunchOpts(150, 0.0000000005, 0).solCapLamports).toBe(1n);
+});
+
 test("indexBatchOpts: devBuySol is the INDEX figure (so the spend cap accounts for it)", () => {
   const cfg = { slippageBps: 150, priorityFeeMicroLamports: 200_000, pacingMs: 1500,
     maxTotalSpendSol: 5, maxRetriesPerToken: 2 } as any;
