@@ -31,6 +31,9 @@ web/public/token_images/
 web/next-env.d.ts
 web/*.tsbuildinfo
 
+# YouTube-link discovery working dir (transient agent I/O)
+data/yt-work/
+
 # Local — not for the public repo
 /CLAUDE.md
 /pumptank.zip
