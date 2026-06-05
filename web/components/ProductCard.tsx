@@ -2,7 +2,6 @@
 import type { Product } from "@/lib/products";
 
 export function ProductCard({ p }: { p: Product }) {
-  const no = p.rank != null ? p.rank.toString().padStart(3, "0") : "000";
   return (
     <a
       href={`/token/${p.id}/`}
@@ -15,10 +14,14 @@ export function ProductCard({ p }: { p: Product }) {
           loading="lazy"
           className="aspect-square w-full object-cover"
         />
-        <span className="absolute left-0 top-0 bg-[var(--navy)] px-2 py-0.5 font-mono text-[0.6rem] tracking-wider text-ink">
-          No. {no}
-        </span>
-        <span className="stamp absolute right-1.5 top-1.5 px-2 py-1 text-[0.55rem]">No Deal</span>
+        {p.rank != null && (
+          <span className="absolute left-0 top-0 bg-[var(--navy)] px-2 py-0.5 font-mono text-[0.6rem] tracking-wider text-ink">
+            No. {p.rank.toString().padStart(3, "0")}
+          </span>
+        )}
+        {!p.gotDeal && (
+          <span className="stamp absolute right-1.5 top-1.5 px-2 py-1 text-[0.55rem]">No Deal</span>
+        )}
       </div>
       <div className="border-t border-[var(--line)] p-3">
         <div className="truncate font-body text-base font-bold leading-tight" title={p.name}>

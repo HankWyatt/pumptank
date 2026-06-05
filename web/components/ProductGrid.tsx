@@ -146,8 +146,8 @@ function IndexList({ rows }: { rows: Product[] }) {
         <span className="max-[720px]:hidden">Reach</span>
       </div>
       {rows.map((p) => {
-        const no = p.rank != null ? p.rank.toString().padStart(3, "0") : "000";
-        const reach = Math.max(8, Math.round((p.reach ?? 0) * 100));
+        const no = p.rank != null ? p.rank.toString().padStart(3, "0") : "—";
+        const reach = p.reach != null ? Math.max(8, Math.round(p.reach * 100)) : null;
         return (
           <a
             key={p.id}
@@ -165,9 +165,13 @@ function IndexList({ rows }: { rows: Product[] }) {
             <span className="font-mono text-[0.64rem] uppercase tracking-wide text-muted max-[720px]:hidden">
               {p.industry}
             </span>
-            <span className="reach-meter max-[720px]:hidden" title={`Reach ${reach}%`}>
-              <i style={{ width: `${reach}%` }} />
-            </span>
+            {reach != null ? (
+              <span className="reach-meter max-[720px]:hidden" title={`Reach ${reach}%`}>
+                <i style={{ width: `${reach}%` }} />
+              </span>
+            ) : (
+              <span className="max-[720px]:hidden" />
+            )}
           </a>
         );
       })}
