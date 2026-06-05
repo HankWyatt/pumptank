@@ -10,8 +10,8 @@ export default function HubPage() {
   const stats = [
     { v: products.length.toString().padStart(3, "0"), l: "Tribute tokens" },
     { v: industries.toString(), l: "Sectors covered" },
-    { v: "1.5%", l: "Dev buy · capped" },
-    { v: "ONE", l: "Wallet · disclosed" },
+    { v: "0", l: "Insider buys" },
+    { v: products.filter((p) => !p.gotDeal).length.toString(), l: "No-deal pitches" },
   ];
 
   return (
@@ -25,7 +25,7 @@ export default function HubPage() {
         <div className="reveal kicker flex items-center gap-3">
           <span>Front Page</span>
           <span className="h-px w-10 bg-[var(--line-strong)]" aria-hidden />
-          <span className="text-muted">Rejected on air, redeemed on-chain</span>
+          <span className="text-muted">Pitched on air, tributed on-chain</span>
         </div>
 
         <div className="mt-6 grid gap-x-10 gap-y-10 md:grid-cols-12">
@@ -40,9 +40,9 @@ export default function HubPage() {
               <span className="font-mono text-base font-semibold tracking-tight text-[var(--teal-2)]">
                 $PUMPTANK
               </span>{" "}
-              is a fan-built archive of one hundred Shark&nbsp;Tank pitches that walked away
-              empty-handed. Each one now lives on as its own tribute token. No suits. No handshakes.
-              Just the ideas that deserved a second look, filed for the record.
+              is a fan-built archive of <strong>every</strong> Shark&nbsp;Tank pitch — deal or no
+              deal — each one reborn as its own tribute token. No suits. No handshakes required. Just
+              the ideas, filed for the record.
             </p>
 
             <p className="reveal mt-5 dateline">
@@ -70,7 +70,7 @@ export default function HubPage() {
           <aside className="reveal md:col-span-4 md:col-rule md:pl-8">
             <div className="relative border border-[var(--line-strong)] bg-[var(--paper-2)] p-6">
               <span className="stamp absolute -right-3 -top-3 rotate-[7deg] bg-[#07141f] px-2.5 py-1 text-[0.62rem]">
-                No Deal
+                Tribute
               </span>
               <div className="kicker">By the Numbers</div>
               <dl className="mt-4 divide-y divide-[var(--line)]">
@@ -100,7 +100,11 @@ export default function HubPage() {
             <span key={`${p.id}-${i}`} className="inline-flex items-center gap-2.5">
               <span className="font-semibold text-[var(--teal)]">${p.symbol}</span>
               <span className="text-[var(--ink)]/60">{p.name}</span>
-              <span className="text-[#ff7064]">▼ no deal</span>
+              {p.gotDeal ? (
+                <span className="text-[var(--teal)]">✓ deal</span>
+              ) : (
+                <span className="text-[#ff7064]">▼ no deal</span>
+              )}
               <span className="text-[var(--ink)]/25" aria-hidden>◆</span>
             </span>
           ))}
@@ -122,18 +126,18 @@ export default function HubPage() {
           {[
             {
               n: "01",
-              t: "A single 1.5% dev buy",
-              d: "Each token launches with one transparent 1.5% dev buy, fully disclosed, capped, and on-chain. These tokens are for the creator if/when they decide to opt in, not for the builders of PumpTank.",
+              t: "Create-only. Zero insider buys.",
+              d: "Every product launches create-only — no dev buy, no insider allocation. The builders of PumpTank take none of the supply; the coins exist for the creators to claim.",
             },
             {
               n: "02",
               t: "80% of fees → founders",
-              d: "Creator trading fees split 80 / 20. The lion's share is reserved for the original founders the moment they opt in. It is their story; it is their upside.",
+              d: "Creator trading fees route 80% to the original founder the moment they opt in. The lion's share is reserved for them — it is their story; it is their upside.",
             },
             {
               n: "03",
-              t: "20% helps others like them get the spotlight",
-              d: "The 20% funds marketing and growth for the index, so more rejected pitches get the spotlight they were denied on air in the future!",
+              t: "20% fuels the index",
+              d: "The remaining 20% funds marketing and growth for the index — and if someone helped onboard a founder, 10% of it is theirs as a thank-you. Onboarded a founder? Get in touch.",
             },
           ].map((step, i) => (
             <li key={step.n} className={i > 0 ? "md:col-rule md:pl-10" : ""}>
@@ -166,7 +170,7 @@ export default function HubPage() {
             </div>
           </div>
           <figcaption className="mt-3 font-mono text-[0.72rem] italic tracking-wide text-muted">
-            Fig. 1 · Creator-fee allocation per token, upon founder opt-in.
+            Fig. 1 · Creator-fee allocation per token, upon founder opt-in (80% founder · 20% index &amp; ecosystem).
           </figcaption>
         </figure>
       </section>
@@ -202,11 +206,11 @@ export default function HubPage() {
           <div className="pb-4">
             <div className="kicker">Section B · The Archive</div>
             <h2 className="mt-2 font-display text-4xl uppercase tracking-tight md:text-5xl">
-              100 rejected pitches, indexed.
+              {products.length} Shark Tank pitches, indexed.
             </h2>
           </div>
           <span className="pb-4 font-mono text-xs uppercase tracking-[0.18em] text-muted">
-            Ranked by reach · {products.length} entries
+            No-deal pitches ranked first · {products.length} entries
           </span>
         </div>
         <ProductGrid products={products} />
