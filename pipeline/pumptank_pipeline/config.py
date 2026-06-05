@@ -46,8 +46,12 @@ EXCLUDE_IDS: dict[str, str] = {
 }
 
 # --- Token text metadata (sub-project 2a) ---
-MAX_TICKER_LEN = 10            # conservative; confirm pump.fun's symbol limit in #3
-MAX_DESCRIPTION_LEN = 480      # conservative; confirm pump.fun's limit in #3
+# Name/symbol caps are Metaplex Token Metadata on-chain limits (bytes), which
+# pump.fun's `create` CPIs into: name=32 B, symbol=10 B. Exceeding them = failed
+# tx. Description lives off-chain (IPFS), so MAX_DESCRIPTION_LEN is our own cap.
+MAX_NAME_LEN = 32              # Metaplex MAX_NAME_LENGTH (bytes)
+MAX_TICKER_LEN = 10           # Metaplex MAX_SYMBOL_LENGTH (bytes)
+MAX_DESCRIPTION_LEN = 480     # off-chain only; our own conservative cap
 TOKEN_DISCLAIMER = (
     "Unofficial fan tribute & parody token. Not affiliated with or endorsed by "
     "the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; "
@@ -73,6 +77,9 @@ NAME_OVERRIDES: dict[str, str] = {
     "s16e16p1422-airtulip": "AirTulip",
     "s14e19p1262-burlap-barrel": "Burlap & Barrel",
     "s13e7p1118-love-pebble": "Love & Pebble",
+    # 2026-06-05: names over Metaplex's 32-byte on-chain cap (would fail create).
+    "s6e11p423-soapswashesandgroomingessentials": "Soaps Washes & Grooming",  # was 36 B
+    "s7e1p498-mcclarybrothersdrinkingvinegars": "McClary Brothers Vinegars",  # was 35 B; also de-smoosh fix
 }
 
 # --- Token images (sub-project 2b) ---

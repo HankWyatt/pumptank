@@ -39,7 +39,7 @@ def run(csv_path, out_path, schema_path) -> int:
     # Generate token text + card images for the full launched set, then write all.
     ordered = generate_assets(
         ordered, max_ticker_len=config.MAX_TICKER_LEN,
-        max_description_len=config.MAX_DESCRIPTION_LEN,
+        max_description_len=config.MAX_DESCRIPTION_LEN, max_name_len=config.MAX_NAME_LEN,
         disclaimer=config.TOKEN_DISCLAIMER, name_overrides=config.NAME_OVERRIDES,
     )
     ordered = render_images(

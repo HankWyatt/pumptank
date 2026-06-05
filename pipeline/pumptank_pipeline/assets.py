@@ -20,6 +20,18 @@ def _clean_name(company_name: str, overrides: dict[str, str], pitch_id: str) -> 
     return re.sub(r"\s+", " ", name).strip()
 
 
+def _cap_name(name: str, max_len: int) -> str:
+    """Byte-aware truncate to Metaplex's name cap (bytes, not chars).
+
+    Overrides should already be in-budget; this is a backstop so a long de-smooshed
+    name can never produce a create-failing tx. Slices on a UTF-8 byte boundary
+    (errors='ignore' drops any partial trailing multibyte char) and rstrips.
+    """
+    if len(name.encode("utf-8")) <= max_len:
+        return name
+    return name.encode("utf-8")[:max_len].decode("utf-8", "ignore").rstrip()
+
+
 def _derive_symbol(clean_name: str, max_len: int) -> str:
     """Compact uppercase cashtag: drop leading 'The' + corp suffixes, alnum-only, cap len."""
     base = re.sub(r"^The\s+", "", clean_name, flags=re.IGNORECASE)
@@ -77,7 +89,7 @@ def _rank(p: Pitch) -> int:
 
 def generate_assets(pitches: list[Pitch], *, max_ticker_len: int,
                     max_description_len: int, disclaimer: str,
-                    name_overrides: dict) -> list[Pitch]:
+                    name_overrides: dict, max_name_len: int) -> list[Pitch]:
     """Set .token on every launched (include==True) pitch; return all pitches.
 
     Symbols are deduped across the WHOLE launched set into one ``taken`` set, in
@@ -90,7 +102,8 @@ def generate_assets(pitches: list[Pitch], *, max_ticker_len: int,
     rest = sorted((p for p in launched if not p.dev_buy), key=lambda p: p.id)
     taken: set = set()
     for p in dev_buys + rest:
-        name = _clean_name(p.company_name, name_overrides, p.id)
+        name = _cap_name(_clean_name(p.company_name, name_overrides, p.id),
+                         max_name_len)
         base = _derive_symbol(name, max_ticker_len) or f"TKN{_rank(p)}"
         symbol = _unique_symbol(base, taken, max_ticker_len)
         taken.add(symbol)

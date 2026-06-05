@@ -105,7 +105,8 @@ def _sel(pid, name, rank, dev_buy=True, desc="A gadget", got_deal=False,
 def test_generate_assets_all_launched_get_tokens():
     out = generate_assets(
         [_sel("a", "Acme", 1, dev_buy=True), _sel("b", "Beta", None, dev_buy=False)],
-        max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
+        max_ticker_len=10, max_description_len=480, max_name_len=32,
+        disclaimer="D.", name_overrides={})
     by_id = {p.id: p for p in out}
     assert by_id["a"].token is not None
     assert by_id["a"].token.symbol == "ACME"
@@ -118,7 +119,8 @@ def test_generate_assets_skips_unlaunched():
     out = generate_assets(
         [_sel("a", "Acme", 1, dev_buy=True),
          _sel("x", "NotLaunched", None, dev_buy=False, include=False)],
-        max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
+        max_ticker_len=10, max_description_len=480, max_name_len=32,
+        disclaimer="D.", name_overrides={})
     by_id = {p.id: p for p in out}
     assert by_id["a"].token is not None
     assert by_id["x"].token is None  # include=False -> not launched -> no token
@@ -127,7 +129,8 @@ def test_generate_assets_skips_unlaunched():
 def test_generate_assets_dedupes_tickers():
     out = generate_assets(
         [_sel("r1", "Acme", 1), _sel("r2", "Acme", 2)],
-        max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
+        max_ticker_len=10, max_description_len=480, max_name_len=32,
+        disclaimer="D.", name_overrides={})
     syms = sorted(p.token.symbol for p in out)
     assert syms == ["ACME", "ACME2"]
 
@@ -140,7 +143,8 @@ def test_generate_assets_dedup_order_dev_buy_rank_then_id():
         [_sel("zzz", "Acme", None, dev_buy=False, got_deal=True),
          _sel("aaa", "Acme", None, dev_buy=False, got_deal=False),
          _sel("mid", "Acme", 2, dev_buy=True, got_deal=False)],
-        max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
+        max_ticker_len=10, max_description_len=480, max_name_len=32,
+        disclaimer="D.", name_overrides={})
     by_id = {p.id: p for p in out}
     assert by_id["mid"].token.symbol == "ACME"   # dev-buy wins the clean cashtag
     assert by_id["aaa"].token.symbol == "ACME2"  # then non-dev-buy by id
@@ -151,7 +155,8 @@ def test_generate_assets_deal_description_branch():
     out = generate_assets(
         [_sel("d", "DealCo", 1, dev_buy=True, got_deal=True),
          _sel("n", "NoDealCo", None, dev_buy=False, got_deal=False)],
-        max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
+        max_ticker_len=10, max_description_len=480, max_name_len=32,
+        disclaimer="D.", name_overrides={})
     by_id = {p.id: p for p in out}
     assert "no deal" not in by_id["d"].token.description.lower()
     assert "Pitched on Shark Tank S5E1." in by_id["d"].token.description
@@ -168,6 +173,20 @@ def test_compose_description_drops_blurb_when_only_tail_fits():
 
 def test_generate_assets_tkn_fallback_for_symbolless_name():
     out = generate_assets([_sel("z", "@#$%", 1)],
-                          max_ticker_len=10, max_description_len=480,
+                          max_ticker_len=10, max_description_len=480, max_name_len=32,
                           disclaimer="D.", name_overrides={})
     assert out[0].token.symbol == "TKN1"
+
+
+def test_generate_assets_caps_name_to_max_bytes():
+    # A name over the cap is byte-truncated so it can never produce a failing create tx.
+    long_name = "Soaps Washes And Grooming Essentials"  # 36 bytes
+    out = generate_assets([_sel("s", long_name, 1)],
+                          max_ticker_len=10, max_description_len=480, max_name_len=32,
+                          disclaimer="D.", name_overrides={})
+    assert len(out[0].token.name.encode("utf-8")) <= 32
+    # An override within budget passes through untouched.
+    out2 = generate_assets([_sel("s", long_name, 1)],
+                           max_ticker_len=10, max_description_len=480, max_name_len=32,
+                           disclaimer="D.", name_overrides={"s": "Soaps Washes & Grooming"})
+    assert out2[0].token.name == "Soaps Washes & Grooming"
