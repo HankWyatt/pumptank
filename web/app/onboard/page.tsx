@@ -41,9 +41,9 @@ export default function OnboardPage() {
             Claim your <span className="text-[var(--teal)]">80%.</span>
           </h1>
           <p className="mt-6 max-w-2xl font-body text-lg leading-relaxed text-ink-soft">
-            You pitched. You didn&apos;t get the deal. The internet remembered anyway. If you founded
-            one of the companies in the PUMPTANK archive, you can claim the majority share of your
-            tribute token&apos;s creator fees, openly and on-chain.
+            You pitched on the Tank. Deal or no deal, the internet remembered. If you founded one of
+            the companies in the PUMPTANK archive, you can claim the majority share of your tribute
+            token&apos;s creator fees, openly and on-chain.
           </p>
         </header>
 
@@ -67,10 +67,10 @@ export default function OnboardPage() {
             </div>
             <div className="border border-[var(--line-strong)] bg-[rgba(18,47,73,0.35)] p-7">
               <div className="font-display text-[clamp(3rem,9vw,5rem)] leading-[0.85] text-muted">20%</div>
-              <h3 className="mt-2 font-body text-xl font-bold">Funds the index</h3>
+              <h3 className="mt-2 font-body text-xl font-bold">Funds the index &amp; ecosystem</h3>
               <p className="mt-2 font-body leading-relaxed text-ink-soft">
                 The remaining fifth covers marketing and growth, keeping the archive alive so the
-                rest of the no-deal class gets discovered too.
+                rest of the archive gets discovered too.
               </p>
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function OnboardPage() {
                 80% · You
               </div>
               <div className="hatch-20 flex items-center justify-center border-l border-[var(--line-strong)] text-ink" style={{ width: "20%" }}>
-                20% · Growth
+                20% · Index
               </div>
             </div>
             <figcaption className="mt-3 font-mono text-[0.72rem] italic tracking-wide text-muted">
