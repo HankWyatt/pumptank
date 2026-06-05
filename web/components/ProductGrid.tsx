@@ -158,7 +158,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
           <p className="font-mono text-sm text-muted">No entries match your search.</p>
           <button
             type="button"
-            onClick={() => { setQ(""); setSector("All"); inputRef.current?.focus(); }}
+            onClick={() => { setQ(""); setSector("All"); setOutcome("all"); inputRef.current?.focus(); }}
             className="btn-stamp mt-5 inline-flex h-11 items-center px-5 font-mono text-xs font-semibold uppercase tracking-[0.14em]"
           >
             Reset the index
