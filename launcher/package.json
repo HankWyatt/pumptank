@@ -6,6 +6,7 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
     "launch": "tsx src/cli.ts",
+    "launch:index": "tsx src/index-launch.ts",
     "fees": "tsx src/feescli.ts",
     "backfill": "tsx src/backfill.ts"
   },
