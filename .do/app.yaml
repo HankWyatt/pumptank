@@ -1,18 +1,21 @@
 # DigitalOcean App Platform spec — PUMPTANK static site (Next.js `output: export`).
-# Deploy:  doctl apps create --spec .do/app.yaml
-# Update:  doctl apps update <app-id> --spec .do/app.yaml   (then create-deployment)
+# Deploy / update:  doctl apps update <app-id> --spec .do/app.yaml
 #
-# Uses a public-git source (no DO<->GitHub authorization needed). To enable
-# auto-deploy on every push, replace the `git:` block with:
-#   github: { repo: HankWyatt/pumptank, branch: master, deploy_on_push: true }
-# which requires authorizing the DigitalOcean GitHub app once (browser).
+# Uses a GitHub-connected source: every push to master auto-redeploys
+# (deploy_on_push), and it always builds the latest commit. This requires the
+# DigitalOcean GitHub app to be authorized on HankWyatt/pumptank (one-time, in
+# the browser). After that, deploys are webhook-driven and need no API token.
 name: pumptank
 region: nyc
+domains:
+  - domain: thepumptank.fun
+    type: PRIMARY
 static_sites:
   - name: web
-    git:
-      repo_clone_url: https://github.com/HankWyatt/pumptank.git
+    github:
+      repo: HankWyatt/pumptank
       branch: master
+      deploy_on_push: true
     source_dir: web
     build_command: npm run build
     output_dir: out
