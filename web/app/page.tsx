@@ -187,7 +187,7 @@ export default function HubPage() {
               </h2>
               <p className="mt-4 font-body text-lg leading-relaxed text-ink-soft">
                 If you founded one of these companies, the door is open. Opt in and the majority of the
-                creator-fee share is yours. No strings, fully transparent, settled on-chain. FREE crouddfunding, no VC pitch required. It's your story, your upside.
+                creator-fee share is yours. No strings, fully transparent, settled on-chain. FREE crowdfunding, no VC pitch required. It's your story, your upside.
               </p>
             </div>
             <a
