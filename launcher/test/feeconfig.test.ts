@@ -6,6 +6,7 @@ import { loadFeeConfig, saveFeeConfig, markOptin, markShared, markDistributed } 
 
 const FOUNDER = "So11111111111111111111111111111111111111112"; // a valid base58 pubkey
 const MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"; // a valid base58 pubkey
+const REFERRER = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T"; // a valid base58 pubkey
 const SIGS = { sharingConfigSig: "sig-share", setSharesSig: "sig-set" };
 const path = () => join(mkdtempSync(join(tmpdir(), "fee-")), "fee-config.json");
 
@@ -19,8 +20,23 @@ test("markOptin sets optedIn + founderWallet + mint, stays 100% house", () => {
   expect(cfg.a.pool).toBeNull();
 });
 
+test("markOptin defaults referrerWallet to null when omitted", () => {
+  const cfg = markOptin({}, "a", FOUNDER, MINT);
+  expect(cfg.a.referrerWallet).toBeNull();
+});
+
+test("markOptin stores a referrer wallet when provided", () => {
+  const cfg = markOptin({}, "a", FOUNDER, MINT, REFERRER);
+  expect(cfg.a.founderWallet).toBe(FOUNDER);
+  expect(cfg.a.referrerWallet).toBe(REFERRER);
+});
+
 test("markOptin rejects an invalid founder wallet", () => {
-  expect(() => markOptin({}, "a", "not-a-pubkey", MINT)).toThrow(/wallet/i);
+  expect(() => markOptin({}, "a", "not-a-pubkey", MINT)).toThrow(/founder wallet/i);
+});
+
+test("markOptin rejects an invalid referrer wallet", () => {
+  expect(() => markOptin({}, "a", FOUNDER, MINT, "not-a-pubkey")).toThrow(/referrer wallet/i);
 });
 
 test("markShared moves to 80/20, locks, and records the sigs", () => {

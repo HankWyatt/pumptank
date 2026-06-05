@@ -19,6 +19,8 @@ import type { FeeConfig } from "../src/feeconfig.js";
 
 const FOUNDER = "So11111111111111111111111111111111111111112";
 const MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+const MAIN_TOKEN = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T";
+const REFERRER = "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9D";
 
 // ---- pure helpers ----
 
@@ -39,16 +41,42 @@ test("shouldCollect respects the min threshold", () => {
   expect(shouldCollect(1_000_000_000n, 0.005)).toBe(true);
 });
 
-test("buildShareholders is founder 8000 / house 2000 (sum 10000)", () => {
+test("buildShareholders with a referrer is founder 8000 / main-token 1000 / referrer 1000 (sum 10000)", () => {
   const founder = new PublicKey(FOUNDER);
-  const house = Keypair.generate().publicKey;
-  const sh = buildShareholders(founder, house);
+  const mainToken = new PublicKey(MAIN_TOKEN);
+  const referrer = new PublicKey(REFERRER);
+  const sh = buildShareholders(founder, mainToken, referrer);
+  expect(sh).toHaveLength(3);
+  expect(sh[0].address.equals(founder)).toBe(true);
+  expect(sh[0].shareBps).toBe(8000);
+  expect(sh[1].address.equals(mainToken)).toBe(true);
+  expect(sh[1].shareBps).toBe(1000);
+  expect(sh[2].address.equals(referrer)).toBe(true);
+  expect(sh[2].shareBps).toBe(1000);
+  expect(sh.reduce((a, s) => a + s.shareBps, 0)).toBe(10000);
+});
+
+test("buildShareholders without a referrer is founder 8000 / main-token 2000 (sum 10000)", () => {
+  const founder = new PublicKey(FOUNDER);
+  const mainToken = new PublicKey(MAIN_TOKEN);
+  const sh = buildShareholders(founder, mainToken, null);
   expect(sh).toHaveLength(2);
   expect(sh[0].address.equals(founder)).toBe(true);
   expect(sh[0].shareBps).toBe(8000);
-  expect(sh[1].address.equals(house)).toBe(true);
+  expect(sh[1].address.equals(mainToken)).toBe(true);
   expect(sh[1].shareBps).toBe(2000);
   expect(sh[0].shareBps + sh[1].shareBps).toBe(10000);
+});
+
+test("buildShareholders throws when shareholder addresses collide (referrer == main-token)", () => {
+  const founder = new PublicKey(FOUNDER);
+  const mainToken = new PublicKey(MAIN_TOKEN);
+  expect(() => buildShareholders(founder, mainToken, mainToken)).toThrow(/duplicate|distinct/i);
+});
+
+test("buildShareholders throws when the founder collides with the main-token", () => {
+  const mainToken = new PublicKey(MAIN_TOKEN);
+  expect(() => buildShareholders(mainToken, mainToken, null)).toThrow(/duplicate|distinct/i);
 });
 
 // ---- verb tests via injected deps (no RPC, no real SDK) ----
@@ -88,7 +116,7 @@ beforeEach(() => {
 });
 
 test("status lists tracked entries (pure; no SDK/RPC)", async () => {
-  store = { a: { optedIn: true, founderWallet: FOUNDER, mint: MINT, pool: null, split: "split_80_20", changeUsed: true, changedAt: "t" } };
+  store = { a: { optedIn: true, founderWallet: FOUNDER, referrerWallet: null, mint: MINT, pool: null, split: "split_80_20", changeUsed: true, changedAt: "t" } };
   const noSdk = makeDeps({
     loadWallet: () => {
       throw new Error("status must not load wallet");
@@ -110,14 +138,14 @@ test("optin errors when the coin is not in the launch ledger", async () => {
   await expect(main(["optin", "zzz", FOUNDER], {}, deps)).rejects.toThrow(/ledger|launched/i);
 });
 
-test("set-shares builds createFeeSharingConfig + updateFeeSharesV2 with [founder 8000, house 2000]", async () => {
+test("set-shares without a referrer builds updateFeeSharesV2 with [founder 8000, main-token 2000]", async () => {
   store = markOptinLocal();
   const createFeeSharingConfig = vi.fn().mockResolvedValue(ix());
   const updateFeeSharesV2 = vi.fn().mockResolvedValue(ix());
   const sendTx = vi.fn().mockResolvedValue("set-sig");
   const d = makeDeps({ getPumpSdk: () => ({ createFeeSharingConfig, updateFeeSharesV2 }), sendTx });
 
-  await main(["set-shares", "a", "--confirm"], {}, d);
+  await main(["set-shares", "a", "--confirm"], { MAIN_TOKEN_WALLET: MAIN_TOKEN }, d);
 
   // createFeeSharingConfig: creator=house, mint, pool=null
   const cfgArg = createFeeSharingConfig.mock.calls[0][0];
@@ -130,11 +158,12 @@ test("set-shares builds createFeeSharingConfig + updateFeeSharesV2 with [founder
   expect(upArg.authority.equals(HOUSE.publicKey)).toBe(true);
   expect(upArg.currentShareholders).toHaveLength(1);
   expect(upArg.currentShareholders[0].equals(HOUSE.publicKey)).toBe(true);
+  expect(upArg.newShareholders).toHaveLength(2);
   expect(upArg.newShareholders[0].shareBps).toBe(8000);
   expect(upArg.newShareholders[0].address.equals(new PublicKey(FOUNDER))).toBe(true);
   expect(upArg.newShareholders[1].shareBps).toBe(2000);
-  expect(upArg.newShareholders[1].address.equals(HOUSE.publicKey)).toBe(true);
-  expect(upArg.newShareholders[0].shareBps + upArg.newShareholders[1].shareBps).toBe(10000);
+  expect(upArg.newShareholders[1].address.equals(new PublicKey(MAIN_TOKEN))).toBe(true);
+  expect(upArg.newShareholders.reduce((a: number, s: { shareBps: number }) => a + s.shareBps, 0)).toBe(10000);
   expect(upArg.quoteMint.equals(NATIVE_MINT)).toBe(true);
   expect(upArg.quoteTokenProgram.equals(TOKEN_PROGRAM_ID)).toBe(true);
 
@@ -145,6 +174,32 @@ test("set-shares builds createFeeSharingConfig + updateFeeSharesV2 with [founder
   expect(store.a.setSharesSig).toBe("set-sig");
 });
 
+test("set-shares with a referrer builds updateFeeSharesV2 with [founder 8000, main-token 1000, referrer 1000]", async () => {
+  store = markOptinLocal(REFERRER);
+  const updateFeeSharesV2 = vi.fn().mockResolvedValue(ix());
+  const d = makeDeps({
+    getPumpSdk: () => ({ createFeeSharingConfig: vi.fn().mockResolvedValue(ix()), updateFeeSharesV2 }),
+    sendTx: vi.fn().mockResolvedValue("set-sig"),
+  });
+
+  await main(["set-shares", "a", "--confirm"], { MAIN_TOKEN_WALLET: MAIN_TOKEN }, d);
+
+  const sh = updateFeeSharesV2.mock.calls[0][0].newShareholders;
+  expect(sh).toHaveLength(3);
+  expect(sh[0].address.equals(new PublicKey(FOUNDER))).toBe(true);
+  expect(sh[0].shareBps).toBe(8000);
+  expect(sh[1].address.equals(new PublicKey(MAIN_TOKEN))).toBe(true);
+  expect(sh[1].shareBps).toBe(1000);
+  expect(sh[2].address.equals(new PublicKey(REFERRER))).toBe(true);
+  expect(sh[2].shareBps).toBe(1000);
+  expect(sh.reduce((a: number, s: { shareBps: number }) => a + s.shareBps, 0)).toBe(10000);
+});
+
+test("set-shares throws when MAIN_TOKEN_WALLET env is missing", async () => {
+  store = markOptinLocal();
+  await expect(main(["set-shares", "a", "--confirm"], {}, deps)).rejects.toThrow(/MAIN_TOKEN_WALLET/);
+});
+
 test("set-shares dry-run builds but does not broadcast or mutate state", async () => {
   store = markOptinLocal();
   const sendTx = vi.fn();
@@ -152,7 +207,7 @@ test("set-shares dry-run builds but does not broadcast or mutate state", async (
     getPumpSdk: () => ({ createFeeSharingConfig: vi.fn().mockResolvedValue(ix()), updateFeeSharesV2: vi.fn().mockResolvedValue(ix()) }),
     sendTx,
   });
-  await main(["set-shares", "a"], {}, d);
+  await main(["set-shares", "a"], { MAIN_TOKEN_WALLET: MAIN_TOKEN }, d);
   expect(sendTx).not.toHaveBeenCalled();
   expect(store.a.changeUsed).toBe(false);
   expect(logs.join("\n")).toMatch(/dry run/i);
@@ -165,11 +220,11 @@ test("set-shares refuses a coin that already changed (one-time lock)", async () 
       throw new Error("must not build instructions when locked");
     },
   });
-  await expect(main(["set-shares", "a"], {}, d)).rejects.toThrow(/locked|used|already/i);
+  await expect(main(["set-shares", "a"], { MAIN_TOKEN_WALLET: MAIN_TOKEN }, d)).rejects.toThrow(/locked|used|already/i);
 });
 
 test("set-shares refuses an un-opted coin", async () => {
-  await expect(main(["set-shares", "a"], {}, deps)).rejects.toThrow(/opt/i);
+  await expect(main(["set-shares", "a"], { MAIN_TOKEN_WALLET: MAIN_TOKEN }, deps)).rejects.toThrow(/opt/i);
 });
 
 test("distribute wires buildDistributeCreatorFeesInstructions and records the sig", async () => {
@@ -222,6 +277,17 @@ test("collect --confirm above threshold sweeps the house vault", async () => {
 function ix(): TransactionInstruction {
   return new TransactionInstruction({ keys: [], programId: new PublicKey(MINT), data: Buffer.from([1]) });
 }
-function markOptinLocal(): FeeConfig {
-  return { a: { optedIn: true, founderWallet: FOUNDER, mint: MINT, pool: null, split: "house_100", changeUsed: false, changedAt: null } };
+function markOptinLocal(referrerWallet: string | null = null): FeeConfig {
+  return {
+    a: {
+      optedIn: true,
+      founderWallet: FOUNDER,
+      referrerWallet,
+      mint: MINT,
+      pool: null,
+      split: "house_100",
+      changeUsed: false,
+      changedAt: null,
+    },
+  };
 }

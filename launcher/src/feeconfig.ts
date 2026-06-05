@@ -6,6 +6,7 @@ export type Split = "house_100" | "split_80_20";
 export interface FeeEntry {
   optedIn: boolean;
   founderWallet: string | null;
+  referrerWallet: string | null;
   mint: string | null;
   pool: string | null;
   split: Split;
@@ -28,6 +29,7 @@ function entry(cfg: FeeConfig, id: string): FeeEntry {
     cfg[id] ?? {
       optedIn: false,
       founderWallet: null,
+      referrerWallet: null,
       mint: null,
       pool: null,
       split: "house_100",
@@ -37,14 +39,33 @@ function entry(cfg: FeeConfig, id: string): FeeEntry {
   );
 }
 
-/** Record a founder opt-in: validate the founder wallet, store it + the coin's mint. Still 100% house. */
-export function markOptin(cfg: FeeConfig, id: string, founderWallet: string, mint: string): FeeConfig {
+/**
+ * Record a founder opt-in: validate the founder wallet (and referrer wallet, if given),
+ * store them + the coin's mint. Referrer is null when omitted. Still 100% house.
+ */
+export function markOptin(
+  cfg: FeeConfig,
+  id: string,
+  founderWallet: string,
+  mint: string,
+  referrerWallet?: string,
+): FeeConfig {
   try {
     new PublicKey(founderWallet);
   } catch {
     throw new Error(`invalid founder wallet: ${founderWallet}`);
   }
-  return { ...cfg, [id]: { ...entry(cfg, id), optedIn: true, founderWallet, mint } };
+  if (referrerWallet != null) {
+    try {
+      new PublicKey(referrerWallet);
+    } catch {
+      throw new Error(`invalid referrer wallet: ${referrerWallet}`);
+    }
+  }
+  return {
+    ...cfg,
+    [id]: { ...entry(cfg, id), optedIn: true, founderWallet, referrerWallet: referrerWallet ?? null, mint },
+  };
 }
 
 /**

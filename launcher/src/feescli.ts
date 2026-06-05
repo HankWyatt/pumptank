@@ -29,9 +29,15 @@ const DATA_DIR = process.env.DATA_DIR ?? join(process.cwd(), "..", "data");
 const CONFIG_PATH = process.env.CONFIG_PATH ?? join(DATA_DIR, "fee-config.json");
 const LEDGER_PATH = join(DATA_DIR, "launch-ledger.json");
 
-/** The founder's share of creator fees, in basis points (80%). The house keeps the remaining 20%. */
+/**
+ * Referral fee split, in basis points. The founder (creator) is ALWAYS 80%.
+ * - WITH a referrer: founder 8000 / main-token ($PUMPTANK) 1000 / referrer 1000.
+ * - WITHOUT a referrer: founder 8000 / main-token 2000.
+ */
 export const FOUNDER_SHARE_BPS = 8000;
-export const HOUSE_SHARE_BPS = 2000;
+export const MAIN_TOKEN_SHARE_WITH_REFERRER_BPS = 1000;
+export const REFERRER_SHARE_BPS = 1000;
+export const MAIN_TOKEN_SHARE_NO_REFERRER_BPS = 2000;
 
 export function previewCollect(claimableLamports: bigint): string {
   return `Shared house creator-fee vault (all un-opted coins): ${(Number(claimableLamports) / LAMPORTS_PER_SOL).toFixed(4)} SOL`;
@@ -46,17 +52,43 @@ export function assertCanBroadcast(confirm: boolean): void {
 }
 
 /**
- * The one-time 80/20 split: founder 8000 bps, house 2000 bps (sum = 10000).
- * Pure so the share math is unit-testable.
+ * The one-time referral split. Founder is ALWAYS 80%.
+ * - referrer present: founder 8000 / main-token 1000 / referrer 1000.
+ * - referrer null:    founder 8000 / main-token 2000.
+ *
+ * Validates that all shareholder addresses are distinct (Pump Fees V2 rejects duplicate
+ * shareholders) and that the shareBps sum to exactly 10000. Pure so it's unit-testable.
  */
 export function buildShareholders(
   founder: PublicKey,
-  house: PublicKey,
+  mainToken: PublicKey,
+  referrer: PublicKey | null,
 ): { address: PublicKey; shareBps: number }[] {
-  return [
-    { address: founder, shareBps: FOUNDER_SHARE_BPS },
-    { address: house, shareBps: HOUSE_SHARE_BPS },
-  ];
+  const shareholders = referrer
+    ? [
+        { address: founder, shareBps: FOUNDER_SHARE_BPS },
+        { address: mainToken, shareBps: MAIN_TOKEN_SHARE_WITH_REFERRER_BPS },
+        { address: referrer, shareBps: REFERRER_SHARE_BPS },
+      ]
+    : [
+        { address: founder, shareBps: FOUNDER_SHARE_BPS },
+        { address: mainToken, shareBps: MAIN_TOKEN_SHARE_NO_REFERRER_BPS },
+      ];
+
+  // Pump Fees V2 rejects duplicate shareholders -- all addresses must be distinct.
+  const seen = new Set<string>();
+  for (const { address } of shareholders) {
+    const key = address.toBase58();
+    if (seen.has(key)) {
+      throw new Error(`duplicate shareholder address: ${key} (founder, main-token, and referrer must all be distinct)`);
+    }
+    seen.add(key);
+  }
+
+  const sum = shareholders.reduce((acc, s) => acc + s.shareBps, 0);
+  if (sum !== 10000) throw new Error(`shareholder bps must sum to 10000, got ${sum}`);
+
+  return shareholders;
 }
 
 /** The Pump SDK surface this CLI uses. Injected so verbs are unit-testable without the real (CJS) SDK. */
@@ -146,18 +178,21 @@ export async function main(
     const shared = all.filter(([, e]) => e.split === "split_80_20").length;
     log(`fee-config: ${all.length} tracked, ${shared} at 80/20, ${all.length - shared} at 100% house`);
     for (const [id, e] of all) {
-      log(`  ${id}: optedIn=${e.optedIn} split=${e.split} changeUsed=${e.changeUsed} mint=${e.mint ?? "-"}`);
+      const ref = e.referrerWallet ? ` referrer=${e.referrerWallet}` : "";
+      log(`  ${id}: optedIn=${e.optedIn} split=${e.split} changeUsed=${e.changeUsed} mint=${e.mint ?? "-"}${ref}`);
     }
     return;
   }
 
   if (cmd === "optin") {
-    const [id, founderWallet] = positional;
-    if (!id || !founderWallet) throw new Error("usage: fees optin <id> <founderWallet>");
+    const [id, founderWallet, referrerWallet] = positional;
+    if (!id || !founderWallet) throw new Error("usage: fees optin <id> <founderWallet> [referrerWallet]");
     const mint = deps.getLedgerMint(id);
     if (!mint) throw new Error(`no launched mint for ${id} (not in the launch ledger)`);
-    deps.saveFeeConfig(CONFIG_PATH, markOptin(deps.loadFeeConfig(CONFIG_PATH), id, founderWallet, mint));
-    log(`opted in: ${id} -> founder ${founderWallet} (mint ${mint}); still 100% house until set-shares`);
+    deps.saveFeeConfig(CONFIG_PATH, markOptin(deps.loadFeeConfig(CONFIG_PATH), id, founderWallet, mint, referrerWallet));
+    log(
+      `opted in: ${id} -> founder ${founderWallet}${referrerWallet ? ` referrer ${referrerWallet}` : ""} (mint ${mint}); still 100% house until set-shares`,
+    );
     return;
   }
 
@@ -193,6 +228,7 @@ export async function main(
   if (cmd === "set-shares") {
     const [id] = positional;
     if (!id) throw new Error("usage: fees set-shares <id> [--confirm]");
+    if (!env.MAIN_TOKEN_WALLET) throw new Error("MAIN_TOKEN_WALLET env required for set-shares");
     const cfg = deps.loadFeeConfig(CONFIG_PATH);
     const e = cfg[id];
     if (!e || !e.optedIn || !e.founderWallet) throw new Error(`cannot set shares for ${id}: not opted in`);
@@ -200,7 +236,9 @@ export async function main(
     if (!e.mint) throw new Error(`cannot set shares for ${id}: no mint recorded`);
     const mintPk = new PublicKey(e.mint);
     const founderPk = new PublicKey(e.founderWallet);
-    const newShareholders = buildShareholders(founderPk, house);
+    const mainTokenPk = new PublicKey(env.MAIN_TOKEN_WALLET);
+    const referrerPk = e.referrerWallet ? new PublicKey(e.referrerWallet) : null;
+    const newShareholders = buildShareholders(founderPk, mainTokenPk, referrerPk);
 
     const sdk = deps.getPumpSdk();
     const sharingIx = await sdk.createFeeSharingConfig({ creator: house, mint: mintPk, pool: null });
@@ -214,7 +252,7 @@ export async function main(
     });
 
     log(
-      `set-shares ${id}: founder ${founderPk.toBase58()} ${FOUNDER_SHARE_BPS}bps / house ${house.toBase58()} ${HOUSE_SHARE_BPS}bps (one-time, locks)`,
+      `set-shares ${id}: ${newShareholders.map((s) => `${s.address.toBase58()} ${s.shareBps}bps`).join(" / ")} (one-time, locks)`,
     );
     if (!confirm) {
       log("DRY RUN -- not broadcasting. Re-run with --confirm.");
@@ -223,7 +261,7 @@ export async function main(
     // Both instructions fit in one VersionedTransaction (createFeeSharingConfig + updateFeeSharesV2).
     const sig = await deps.sendTx(conn, wallet, [sharingIx, sharesIx]);
     deps.saveFeeConfig(CONFIG_PATH, markShared(cfg, id, { sharingConfigSig: sig, setSharesSig: sig }));
-    log(`set 80/20 + locked: ${id} -> https://solscan.io/tx/${sig}`);
+    log(`set shares + locked: ${id} -> https://solscan.io/tx/${sig}`);
     return;
   }
 
