@@ -17,33 +17,57 @@ def test_run_end_to_end(sample_csv, tmp_path):
     schema = tmp_path / "products.schema.json"
     n = run(csv_path=sample_csv, out_path=out, schema_path=schema)
 
-    assert n == 1  # only DoorBot (no deal); Acme Co got a deal -> excluded
+    assert n == 1  # run() returns the dev-buy count: only DoorBot (no deal) qualifies
     data = json.loads(out.read_text())
-    assert [r["company_name"] for r in data] == ["DoorBot"]
+    # all-products: BOTH the no-deal and the got-deal product launch (are written)
+    assert {r["company_name"] for r in data} == {"DoorBot", "Acme Co"}
+    by_name = {r["company_name"]: r for r in data}
+    assert all(r["include"] is True for r in data)  # everything launches
+    assert by_name["DoorBot"]["dev_buy"] is True    # no-deal top-100 -> dev-buy
+    assert by_name["DoorBot"]["got_deal"] is False
+    assert by_name["Acme Co"]["dev_buy"] is False   # got a deal -> create-only
+    assert by_name["Acme Co"]["got_deal"] is True
 
 
 def test_run_annotates_selection(csv_factory, base_row, tmp_path):
     rows = [
-        dict(base_row),  # DoorBot S5 no-deal, findable -> selected
+        dict(base_row),  # DoorBot S5 no-deal, findable -> dev-buy
         dict(base_row, **{"Pitch Number": 2, "Startup Name": "OldCo",
-                          "Season Number": 17}),                       # S17 -> excluded
+                          "Season Number": 17}),                       # S17 -> no dev-buy
         dict(base_row, **{"Pitch Number": 3, "Startup Name": "GhostCo",
                           "Entrepreneur Names": "", "Company Website": ""}),  # unfindable
         dict(base_row, **{"Pitch Number": 4, "Startup Name": "Acme",
-                          "Got Deal": 1}),                             # deal -> filtered
+                          "Got Deal": 1}),                             # deal -> create-only
     ]
     out = tmp_path / "p.json"
     schema = tmp_path / "s.json"
     run(csv_path=csv_factory(rows), out_path=out, schema_path=schema)
     data = {r["company_name"]: r for r in json.loads(out.read_text())}
-    assert "Acme" not in data  # got a deal -> removed before ranking
-    assert data["DoorBot"]["include"] is True
+    # all-products: every product launches (is written + include=True)
+    assert set(data) == {"DoorBot", "OldCo", "GhostCo", "Acme"}
+    assert all(r["include"] is True for r in data.values())
+
+    assert data["DoorBot"]["dev_buy"] is True
     assert data["DoorBot"]["selection"]["selected"] is True
     assert data["DoorBot"]["selection"]["rank"] == 1
+    assert data["DoorBot"]["got_deal"] is False
+
+    # no-deal but out of the dev-buy pool: launched, no dev-buy, reason annotated
+    assert data["OldCo"]["dev_buy"] is False
     assert data["OldCo"]["selection"]["excluded_reason"] == "out_of_scope_season"
+    assert data["GhostCo"]["dev_buy"] is False
     assert data["GhostCo"]["selection"]["excluded_reason"] == "unfindable"
-    # spec invariant: include must mirror selection.selected on generated output
-    assert all(r["include"] == r["selection"]["selected"] for r in data.values())
+
+    # got a deal: launched (create-only), real got_deal=True, no dev-buy.
+    # never ranked, so no selection annotation at all.
+    assert data["Acme"]["got_deal"] is True
+    assert data["Acme"]["dev_buy"] is False
+    assert data["Acme"]["selection"] is None
+
+    # new invariant: among ranked (no-deal) records, dev_buy mirrors
+    # selection.selected (include is always True for everything).
+    ranked = [r for r in data.values() if r["selection"] is not None]
+    assert all(r["dev_buy"] == bool(r["selection"]["selected"]) for r in ranked)
 
 
 def test_run_generates_token_assets(csv_factory, base_row, tmp_path):

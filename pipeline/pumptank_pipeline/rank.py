@@ -32,14 +32,20 @@ def rank_and_select(
     pitches: list[Pitch], *, weights: dict, n: int, max_season: int,
     exclude_ids: dict | None = None,
 ) -> list[Pitch]:
-    """Annotate every pitch with a Selection and set `include` for the top N.
+    """Annotate every (no-deal) pitch with a Selection and set `dev_buy` for the top N.
 
-    Returns all pitches: the ranked pool first (rank order), excluded pitches
-    after (id order). Pure function aside from mutating the passed Pitches.
+    Governs ONLY `dev_buy` and `selection` — NOT `include`. Every product
+    launches (`include`) regardless; this just picks the top-N no-deal that get
+    the 1.5% dev-buy. The caller (cli) owns `include`.
+
+    Returns all passed pitches: the ranked pool first (rank order), excluded
+    pitches after (id order). Pure function aside from mutating the passed
+    Pitches.
 
     `exclude_ids` is an optional {id: reason} map of no-deal pitches to drop
-    editorially (e.g. too-big-to-engage); they never enter the ranked pool, so
-    the next-ranked candidate fills the freed slot.
+    from the dev-buy pool (e.g. too-big-to-engage); they never enter the ranked
+    pool (so the next-ranked candidate fills the freed slot) and get
+    `dev_buy=False`, but they still launch.
     """
     if abs(sum(weights.values()) - 1.0) > 1e-9:
         raise ValueError(f"weights must sum to 1.0, got {weights}")
@@ -50,15 +56,15 @@ def rank_and_select(
     for p in pitches:
         if p.id in exclude_ids:
             p.selection = Selection(excluded_reason=exclude_ids[p.id])
-            p.include = False
+            p.dev_buy = False
             excluded.append(p)
         elif p.season > max_season:
             p.selection = Selection(excluded_reason="out_of_scope_season")
-            p.include = False
+            p.dev_buy = False
             excluded.append(p)
         elif not p.founders and not p.company_website:
             p.selection = Selection(excluded_reason="unfindable")
-            p.include = False
+            p.dev_buy = False
             excluded.append(p)
         else:
             pool.append(p)
@@ -94,7 +100,7 @@ def rank_and_select(
     for rank, p in enumerate(pool, start=1):
         p.selection.rank = rank
         p.selection.selected = rank <= n
-        p.include = rank <= n
+        p.dev_buy = rank <= n
 
     if len(pool) < n:
         warnings.warn(f"candidate pool ({len(pool)}) < N ({n}); selecting all")

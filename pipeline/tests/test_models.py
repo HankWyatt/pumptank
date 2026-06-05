@@ -12,8 +12,10 @@ def test_product_is_nested_and_defaults():
     prod = Product(id="s5e9p1-doorbot", season=5, episode=9, pitch_number=1,
                    company_name="DoorBot", pitch={"ask_amount": 700000})
     assert prod.outcome.got_deal is False
+    assert prod.got_deal is False
     assert prod.media.image_source == "none"
     assert prod.include is True
+    assert prod.dev_buy is False
     assert prod.token is None
 
 
@@ -50,6 +52,23 @@ def test_token_assets_defaults():
     from pumptank_pipeline.models import TokenAssets
     t = TokenAssets(name="Smart Tire Company", symbol="SMARTTIRE", description="x")
     assert t.mint is None
+
+
+def test_to_product_fields_carries_got_deal_and_dev_buy():
+    # got_deal flows to BOTH the top-level field and Outcome; dev_buy threads through.
+    deal = Pitch(id="d", season=5, episode=1, pitch_number=1, company_name="Deal Co",
+                 got_deal=True, dev_buy=False)
+    prod = Product(**to_product_fields(deal))
+    assert prod.got_deal is True
+    assert prod.outcome.got_deal is True
+    assert prod.dev_buy is False
+
+    nodeal = Pitch(id="n", season=5, episode=1, pitch_number=1, company_name="No Deal Co",
+                   got_deal=False, dev_buy=True)
+    prod = Product(**to_product_fields(nodeal))
+    assert prod.got_deal is False
+    assert prod.outcome.got_deal is False
+    assert prod.dev_buy is True
 
 
 def test_to_product_fields_passes_token():

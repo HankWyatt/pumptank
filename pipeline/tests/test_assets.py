@@ -75,20 +75,22 @@ from pumptank_pipeline.models import Selection
 from pumptank_pipeline.assets import generate_assets
 
 
-def _sel(pid, name, rank, include=True, desc="A gadget"):
+def _sel(pid, name, rank, dev_buy=True, desc="A gadget"):
+    # all products launch (include=True); tokens are gated on dev_buy for now
     return Pitch(id=pid, season=5, episode=1, pitch_number=1, company_name=name,
                  industry="Tech", description=desc, got_deal=False,
-                 include=include, selection=Selection(selected=include, rank=rank))
+                 include=True, dev_buy=dev_buy,
+                 selection=Selection(selected=dev_buy, rank=rank))
 
 
-def test_generate_assets_only_selected_get_tokens():
+def test_generate_assets_only_dev_buy_get_tokens():
     out = generate_assets(
-        [_sel("a", "Acme", 1, include=True), _sel("b", "Beta", None, include=False)],
+        [_sel("a", "Acme", 1, dev_buy=True), _sel("b", "Beta", None, dev_buy=False)],
         max_ticker_len=10, max_description_len=480, disclaimer="D.", name_overrides={})
     by_id = {p.id: p for p in out}
     assert by_id["a"].token is not None
     assert by_id["a"].token.symbol == "ACME"
-    assert by_id["b"].token is None
+    assert by_id["b"].token is None  # launched but no dev-buy -> no token (this task)
 
 
 def test_generate_assets_dedupes_tickers():

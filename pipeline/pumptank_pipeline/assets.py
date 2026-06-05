@@ -66,14 +66,16 @@ def _unique_symbol(base: str, taken: set, max_len: int) -> str:
 def generate_assets(pitches: list[Pitch], *, max_ticker_len: int,
                     max_description_len: int, disclaimer: str,
                     name_overrides: dict) -> list[Pitch]:
-    """Set .token on every include==True pitch; return all pitches.
+    """Set .token on every dev_buy==True pitch; return all pitches.
 
-    Tickers are deduped deterministically in selection.rank order.
+    Tickers are deduped deterministically in selection.rank order. As of the
+    all-products expansion only the dev-buy top-100 get tokens here; a later task
+    extends this to every launched product.
     """
     def _rank(p):
         return p.selection.rank if (p.selection and p.selection.rank is not None) else 1_000_000
 
-    selected = sorted((p for p in pitches if p.include), key=_rank)
+    selected = sorted((p for p in pitches if p.dev_buy), key=_rank)
     taken: set = set()
     for p in selected:
         name = _clean_name(p.company_name, name_overrides, p.id)

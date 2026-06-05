@@ -45,11 +45,12 @@ from pumptank_pipeline.images import (
 REG = str(config.FONT_DIR / "Carlito-Regular.ttf")
 
 
-def _pitch(pid, include=True):
-    tok = TokenAssets(name="Acme Co", symbol="ACME", description="d") if include else None
+def _pitch(pid, dev_buy=True):
+    # all products launch (include=True); cards are gated on dev_buy for now
+    tok = TokenAssets(name="Acme Co", symbol="ACME", description="d") if dev_buy else None
     return Pitch(id=pid, season=5, episode=9, pitch_number=1, company_name="AcmeCo",
-                 industry="Tech", got_deal=False, include=include, token=tok,
-                 selection=Selection(selected=include, rank=1 if include else None))
+                 industry="Tech", got_deal=False, include=True, dev_buy=dev_buy, token=tok,
+                 selection=Selection(selected=dev_buy, rank=1 if dev_buy else None))
 
 
 def test_draw_card_dimensions():

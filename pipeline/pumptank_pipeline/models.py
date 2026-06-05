@@ -37,7 +37,8 @@ class Pitch(BaseModel):
     us_viewership: Optional[float] = None
     company_website: Optional[str] = None
     selection: Optional[Selection] = None
-    include: bool = True
+    include: bool = True       # "launched" — true for every product we mint
+    dev_buy: bool = False      # "gets the 1.5% dev-buy" — the top-100 no-deal
     token: Optional[TokenAssets] = None
     image_url: Optional[str] = None
     image_source: str = "none"
@@ -51,7 +52,7 @@ class PitchDetail(BaseModel):
 
 
 class Outcome(BaseModel):
-    got_deal: bool = False  # always False by construction; kept for schema stability
+    got_deal: bool = False  # real on-air outcome; kept for schema stability
 
 
 class Media(BaseModel):
@@ -71,11 +72,13 @@ class Product(BaseModel):
     founders: list[str] = Field(default_factory=list)
     industry: Optional[str] = None
     pitch: PitchDetail = Field(default_factory=PitchDetail)
+    got_deal: bool = False     # real on-air outcome (top-level; the website reads this)
     outcome: Outcome = Field(default_factory=Outcome)
     media: Media = Field(default_factory=Media)
     us_viewership: Optional[float] = None
     selection: Optional[Selection] = None
-    include: bool = True
+    include: bool = True       # "launched" — true for every product we mint
+    dev_buy: bool = False      # "gets the 1.5% dev-buy" — the top-100 no-deal
     token: Optional[TokenAssets] = None
 
 
@@ -91,6 +94,8 @@ def to_product_fields(pitch: Pitch) -> dict:
             valuation_requested=pitch.valuation_requested,
             description=pitch.description,
         ),
+        got_deal=pitch.got_deal,
+        outcome=Outcome(got_deal=pitch.got_deal),
         media=Media(
             former_website=pitch.company_website,
             image_url=pitch.image_url, image_source=pitch.image_source,
@@ -98,5 +103,6 @@ def to_product_fields(pitch: Pitch) -> dict:
         us_viewership=pitch.us_viewership,
         selection=pitch.selection,
         include=pitch.include,
+        dev_buy=pitch.dev_buy,
         token=pitch.token,
     )

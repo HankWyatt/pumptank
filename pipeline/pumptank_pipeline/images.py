@@ -107,11 +107,15 @@ def _draw_card(name, symbol, season, episode, industry, *, size, palette, font_d
 
 
 def render_images(pitches, *, out_dir, font_dir, size, palette):
-    """Render + save a card PNG for each include==True pitch; set its image fields."""
+    """Render + save a card PNG for each dev_buy==True pitch; set its image fields.
+
+    As of the all-products expansion only the dev-buy top-100 get a card here; a
+    later task extends rendering to every launched product.
+    """
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     for p in pitches:
-        if not (p.include and p.token):
+        if not (p.dev_buy and p.token):
             continue
         img = _draw_card(p.token.name, p.token.symbol, p.season, p.episode,
                          p.industry or "", size=size, palette=palette, font_dir=font_dir)
