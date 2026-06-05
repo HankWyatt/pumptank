@@ -53,10 +53,10 @@ TOKEN_DISCLAIMER = (
     "the company, its founders, or Shark Tank / ABC / Sony. Not financial advice; "
     "no promise of value."
 )
-# Description tails appended after the product blurb. No-deal keeps the "— no
-# deal" hook; deal products get a neutral tail (on the show, no claim about
-# terms). "{disclaimer}" is filled at compose time.
-NO_DEAL_DESCRIPTION_TAIL = " Pitched on Shark Tank S{season}E{episode} — no deal. {disclaimer}"
+# Description tails appended after the product blurb. No-deal keeps the "No deal."
+# hook as its own short sentence; deal products get a neutral tail (on the show,
+# no claim about terms). "{disclaimer}" is filled at compose time.
+NO_DEAL_DESCRIPTION_TAIL = " Pitched on Shark Tank S{season}E{episode}. No deal. {disclaimer}"
 DEAL_DESCRIPTION_TAIL = " Pitched on Shark Tank S{season}E{episode}. {disclaimer}"
 # product id -> hand-fixed display name, for names the de-smoosh regex mangles
 # (letter<->digit boundaries it doesn't split).

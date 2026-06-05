@@ -55,15 +55,15 @@ def test_compose_description_keeps_real_blurb():
     d = _compose_description(_p("Premium refrigerated pie"), "Joyebells",
                              disclaimer=DISC, max_len=480)
     assert d.startswith("Premium refrigerated pie.")
-    assert "Pitched on Shark Tank S3E13 — no deal." in d
+    assert "Pitched on Shark Tank S3E13. No deal." in d
     assert d.endswith(DISC)
 
 
 def test_compose_description_no_deal_keeps_hook():
     d = _compose_description(_p("Premium refrigerated pie", got_deal=False),
                              "Joyebells", disclaimer=DISC, max_len=480)
-    assert "— no deal" in d
-    assert "Pitched on Shark Tank S3E13 — no deal." in d
+    assert "No deal." in d
+    assert "Pitched on Shark Tank S3E13. No deal." in d
     assert d.endswith(DISC)
 
 
@@ -155,11 +155,11 @@ def test_generate_assets_deal_description_branch():
     by_id = {p.id: p for p in out}
     assert "no deal" not in by_id["d"].token.description.lower()
     assert "Pitched on Shark Tank S5E1." in by_id["d"].token.description
-    assert "— no deal" in by_id["n"].token.description
+    assert "No deal." in by_id["n"].token.description
 
 
 def test_compose_description_drops_blurb_when_only_tail_fits():
-    tail = " Pitched on Shark Tank S3E13 — no deal. " + DISC
+    tail = " Pitched on Shark Tank S3E13. No deal. " + DISC
     d = _compose_description(_p("x" * 600), "Name", disclaimer=DISC, max_len=len(tail))
     assert d == tail.strip()      # blurb dropped, mandatory content kept
     assert "…" not in d
