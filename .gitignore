@@ -40,3 +40,6 @@ data/logo-work/
 /CLAUDE.md
 /pumptank.zip
 /ChatGPT Image*.png
+
+# Fee auto-collect cron log
+launcher/fee-collect.log
