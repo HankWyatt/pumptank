@@ -3,6 +3,6 @@ export function formatMarketCap(n: number | null | undefined): string {
   if (n == null || !isFinite(n) || n <= 0) return "—";
   if (n >= 1e9) return `$${(n / 1e9).toFixed(n >= 1e10 ? 0 : 1)}B`;
   if (n >= 1e6) return `$${(n / 1e6).toFixed(n >= 1e7 ? 0 : 1)}M`;
-  if (n >= 1e3) return `$${Math.round(n / 1e3)}K`;
+  if (n >= 1e3) return `$${(n / 1e3).toFixed(n < 1e4 ? 1 : 0)}K`; // $1.8K under 10k, $12K above
   return `$${Math.round(n)}`;
 }
