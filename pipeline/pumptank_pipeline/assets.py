@@ -89,7 +89,8 @@ def _rank(p: Pitch) -> int:
 
 def generate_assets(pitches: list[Pitch], *, max_ticker_len: int,
                     max_description_len: int, disclaimer: str,
-                    name_overrides: dict, max_name_len: int) -> list[Pitch]:
+                    name_overrides: dict, max_name_len: int,
+                    symbol_overrides: dict | None = None) -> list[Pitch]:
     """Set .token on every launched (include==True) pitch; return all pitches.
 
     Symbols are deduped across the WHOLE launched set into one ``taken`` set, in
@@ -97,15 +98,21 @@ def generate_assets(pitches: list[Pitch], *, max_ticker_len: int,
     get the clean cashtags), then the remaining launched pitches by id. The
     description branches on got_deal (see ``_compose_description``).
     """
+    overrides = symbol_overrides or {}
     launched = [p for p in pitches if p.include]
     dev_buys = sorted((p for p in launched if p.dev_buy), key=_rank)
     rest = sorted((p for p in launched if not p.dev_buy), key=lambda p: p.id)
-    taken: set = set()
+    # Reserve every override symbol up front so the normally-derived shorts can't grab
+    # one; overrides are pre-deduped + collision-safe vs the derived set (see config).
+    taken: set = set(overrides.values())
     for p in dev_buys + rest:
         name = _cap_name(_clean_name(p.company_name, name_overrides, p.id),
                          max_name_len)
-        base = _derive_symbol(name, max_ticker_len) or f"TKN{_rank(p)}"
-        symbol = _unique_symbol(base, taken, max_ticker_len)
+        if p.id in overrides:
+            symbol = overrides[p.id]
+        else:
+            base = _derive_symbol(name, max_ticker_len) or f"TKN{_rank(p)}"
+            symbol = _unique_symbol(base, taken, max_ticker_len)
         taken.add(symbol)
         p.token = TokenAssets(
             name=name, symbol=symbol,

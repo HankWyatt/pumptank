@@ -190,3 +190,25 @@ def test_generate_assets_caps_name_to_max_bytes():
                            max_ticker_len=10, max_description_len=480, max_name_len=32,
                            disclaimer="D.", name_overrides={"s": "Soaps Washes & Grooming"})
     assert out2[0].token.name == "Soaps Washes & Grooming"
+
+
+def test_generate_assets_symbol_override_wins_over_derivation():
+    out = generate_assets(
+        [_sel("a", "Adventure Hunt", 1), _sel("b", "Acme", 2)],
+        max_ticker_len=10, max_description_len=480, max_name_len=32,
+        disclaimer="D.", name_overrides={}, symbol_overrides={"a": "ADVHUNT"})
+    by = {p.id: p for p in out}
+    assert by["a"].token.symbol == "ADVHUNT"   # override applied verbatim, not derived
+    assert by["b"].token.symbol == "ACME"      # no override -> derived normally
+
+
+def test_generate_assets_override_is_reserved_against_derived_collision():
+    # 'nat' would derive "ACME"; an override claims "ACME" for another pitch, so the
+    # derived one must be bumped to ACME2 (overrides are reserved up front).
+    out = generate_assets(
+        [_sel("ov", "Whatever", 1), _sel("nat", "Acme", 2)],
+        max_ticker_len=10, max_description_len=480, max_name_len=32,
+        disclaimer="D.", name_overrides={}, symbol_overrides={"ov": "ACME"})
+    by = {p.id: p for p in out}
+    assert by["ov"].token.symbol == "ACME"
+    assert by["nat"].token.symbol == "ACME2"

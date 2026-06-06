@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -81,6 +82,18 @@ NAME_OVERRIDES: dict[str, str] = {
     "s6e11p423-soapswashesandgroomingessentials": "Soaps Washes & Grooming",  # was 36 B
     "s7e1p498-mcclarybrothersdrinkingvinegars": "McClary Brothers Vinegars",  # was 35 B; also de-smoosh fix
 }
+
+# Per-id ticker overrides (id -> <=8-char symbol). Generated 2026-06-05 to fit the
+# 8-char display cap many third-party screeners/wallets enforce (pump.fun's own cap is
+# 10). See docs/symbol-display-review.md + docs/symbol-overrides-review.md. Loaded from
+# data/symbol-overrides.json (953 entries); applied verbatim in generate_assets with
+# priority over _derive_symbol. Pre-deduped + globally unique, and collision-safe vs the
+# short symbols that are still derived normally.
+_SYMBOL_OVERRIDES_PATH = DATA_DIR / "symbol-overrides.json"
+SYMBOL_OVERRIDES: dict[str, str] = (
+    json.loads(_SYMBOL_OVERRIDES_PATH.read_text(encoding="utf-8"))
+    if _SYMBOL_OVERRIDES_PATH.exists() else {}
+)
 
 # --- Token images (sub-project 2b) ---
 IMAGE_DIR = DATA_DIR / "token_images"

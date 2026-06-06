@@ -41,6 +41,7 @@ def run(csv_path, out_path, schema_path) -> int:
         ordered, max_ticker_len=config.MAX_TICKER_LEN,
         max_description_len=config.MAX_DESCRIPTION_LEN, max_name_len=config.MAX_NAME_LEN,
         disclaimer=config.TOKEN_DISCLAIMER, name_overrides=config.NAME_OVERRIDES,
+        symbol_overrides=config.SYMBOL_OVERRIDES,
     )
     ordered = render_images(
         ordered, out_dir=config.IMAGE_DIR, font_dir=config.FONT_DIR,
