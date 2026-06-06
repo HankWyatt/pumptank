@@ -4,6 +4,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "@/lib/products";
 import { ProductCard } from "./ProductCard";
+import { useMarketCaps } from "@/lib/useMarketCaps";
+import { formatMarketCap } from "@/lib/format";
 
 // Page size fills whole rows at every breakpoint (2 / 3 / 4 columns).
 const PAGE_SIZE = 48;
@@ -57,6 +59,8 @@ export function ProductGrid({ products }: { products: Product[] }) {
   const safePage = Math.min(page, totalPages);
   const start = (safePage - 1) * PAGE_SIZE;
   const pageItems = shown.slice(start, start + PAGE_SIZE);
+  // Live market caps for just the visible page's launched tokens (mint != null).
+  const mcaps = useMarketCaps(pageItems.map((p) => p.mint).filter(Boolean) as string[]);
   function goTo(p: number) {
     setPage(Math.min(totalPages, Math.max(1, p)));
     topRef.current?.scrollIntoView({ block: "start" });
@@ -167,11 +171,11 @@ export function ProductGrid({ products }: { products: Product[] }) {
       ) : view === "plates" ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {pageItems.map((p) => (
-            <ProductCard key={p.id} p={p} />
+            <ProductCard key={p.id} p={p} marketCap={p.mint ? mcaps[p.mint] : undefined} />
           ))}
         </div>
       ) : (
-        <IndexList rows={pageItems} />
+        <IndexList rows={pageItems} mcaps={mcaps} />
       )}
 
       {shown.length > 0 && totalPages > 1 && (
@@ -235,13 +239,14 @@ function pageWindow(current: number, total: number): (number | "…")[] {
   return out;
 }
 
-function IndexList({ rows }: { rows: Product[] }) {
+function IndexList({ rows, mcaps }: { rows: Product[]; mcaps: Record<string, number | null> }) {
   return (
     <div className="border border-[var(--line-strong)]">
-      <div className="grid grid-cols-[3.4rem_1fr_8.5rem_9rem_4.2rem] gap-3 bg-[var(--navy)] px-4 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-ink max-[720px]:grid-cols-[2.6rem_1fr_5.5rem]">
+      <div className="grid grid-cols-[3.4rem_1fr_8.5rem_7rem_8rem_4.2rem] gap-3 bg-[var(--navy)] px-4 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-ink max-[720px]:grid-cols-[2.6rem_1fr_5.5rem]">
         <span>No.</span>
         <span>Company / Filing</span>
         <span>Ticker</span>
+        <span className="max-[720px]:hidden">Mkt Cap</span>
         <span className="max-[720px]:hidden">Sector</span>
         <span className="max-[720px]:hidden">Reach</span>
       </div>
@@ -252,7 +257,7 @@ function IndexList({ rows }: { rows: Product[] }) {
           <a
             key={p.id}
             href={`/token/${p.id}/`}
-            className="grid grid-cols-[3.4rem_1fr_8.5rem_9rem_4.2rem] items-center gap-3 border-b border-[var(--line)] bg-[var(--paper-2)] px-4 py-3 text-ink transition-colors last:border-b-0 hover:bg-[var(--navy-2)] focus-visible:bg-[var(--navy-2)] max-[720px]:grid-cols-[2.6rem_1fr_5.5rem]"
+            className="grid grid-cols-[3.4rem_1fr_8.5rem_7rem_8rem_4.2rem] items-center gap-3 border-b border-[var(--line)] bg-[var(--paper-2)] px-4 py-3 text-ink transition-colors last:border-b-0 hover:bg-[var(--navy-2)] focus-visible:bg-[var(--navy-2)] max-[720px]:grid-cols-[2.6rem_1fr_5.5rem]"
           >
             <span className="font-mono text-sm text-muted tabular">{no}</span>
             <span className="font-body text-base font-bold leading-tight">
@@ -262,6 +267,12 @@ function IndexList({ rows }: { rows: Product[] }) {
               </span>
             </span>
             <span className="font-mono text-sm font-semibold text-[var(--teal)]">${p.symbol}</span>
+            <span
+              className="font-mono text-[0.78rem] text-ink tabular max-[720px]:hidden"
+              title={p.mint ? "Market cap" : "Not launched yet"}
+            >
+              {p.mint ? formatMarketCap(mcaps[p.mint]) : "—"}
+            </span>
             <span className="font-mono text-[0.64rem] uppercase tracking-wide text-muted max-[720px]:hidden">
               {p.industry}
             </span>

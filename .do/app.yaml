@@ -1,27 +1,36 @@
-# DigitalOcean App Platform spec — PUMPTANK static site (Next.js `output: export`).
-# Deploy / update:  doctl apps update <app-id> --spec .do/app.yaml
+# DigitalOcean App Platform spec — PUMPTANK site (Next.js dynamic service).
+# Was a static_site (output: export); switched to a service so /api/mcaps can
+# serve live market caps. Token pages are still SSG (generateStaticParams) and
+# served by the Next server; only /api/* is dynamic.
 #
-# Uses a GitHub-connected source: every push to master auto-redeploys
-# (deploy_on_push), and it always builds the latest commit. This requires the
-# DigitalOcean GitHub app to be authorized on HankWyatt/pumptank (one-time, in
-# the browser). After that, deploys are webhook-driven and need no API token.
+# Apply a spec change (static_site -> service is NOT picked up by deploy_on_push;
+# it must be applied explicitly):  doctl apps update <app-id> --spec .do/app.yaml
+# After that, every push to master auto-redeploys (deploy_on_push) and builds the
+# latest commit. App id: 1718af41-941d-4a0c-af0d-0aaf27f3a6cc.
 name: pumptank
 region: nyc
 domains:
   - domain: thepumptank.fun
     type: PRIMARY
-static_sites:
+services:
   - name: web
     github:
       repo: HankWyatt/pumptank
       branch: master
       deploy_on_push: true
     source_dir: web
+    environment_slug: node-js
     build_command: npm run build
-    output_dir: out
-    index_document: index.html
-    error_document: 404.html
+    run_command: npm run start
+    instance_size_slug: apps-s-1vcpu-1gb
+    instance_count: 1
+    http_port: 8080
+    health_check:
+      http_path: /
     envs:
       - key: SITE_URL
         value: https://thepumptank.fun
-        scope: BUILD_TIME
+        scope: RUN_AND_BUILD_TIME
+      - key: NODE_ENV
+        value: production
+        scope: RUN_AND_BUILD_TIME

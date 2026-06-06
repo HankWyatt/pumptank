@@ -1,8 +1,10 @@
 /* web/components/ProductCard.tsx · classifieds "plate" card. */
 import type { Product } from "@/lib/products";
 import { CopyableCA } from "@/components/CopyableCA";
+import { formatMarketCap } from "@/lib/format";
 
-export function ProductCard({ p }: { p: Product }) {
+// marketCap: number = live cap, null = launched but no data yet, undefined = not launched.
+export function ProductCard({ p, marketCap }: { p: Product; marketCap?: number | null }) {
   return (
     <div className="group block border border-[var(--line)] bg-[var(--paper-2)] text-ink transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1 hover:border-[var(--line-strong)] hover:shadow-[0_16px_32px_-18px_rgba(0,0,0,0.85)] focus-within:-translate-y-1 focus-within:border-[var(--line-strong)] focus-within:shadow-[0_16px_32px_-18px_rgba(0,0,0,0.85)]">
       {/* Link wraps the plate + headings; the CA copy button below sits OUTSIDE the anchor. */}
@@ -25,7 +27,14 @@ export function ProductCard({ p }: { p: Product }) {
           <div className="truncate font-body text-base font-bold leading-tight" title={p.name}>
             {p.name}
           </div>
-          <div className="font-mono text-sm font-medium text-[var(--teal)]">${p.symbol}</div>
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="font-mono text-sm font-medium text-[var(--teal)]">${p.symbol}</span>
+            {p.mint && (
+              <span className="shrink-0 font-mono text-[0.72rem] text-muted tabular" title="Market cap">
+                {formatMarketCap(marketCap)}
+              </span>
+            )}
+          </div>
           <div className="mt-1.5 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted">
             S{p.season}E{p.episode} · {p.industry}
           </div>
