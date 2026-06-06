@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getAllProducts, getProduct } from "@/lib/products";
 import { DISCLAIMER } from "@/lib/disclaimer";
 import { MintLink } from "@/components/MintLink";
+import { CopyableCA } from "@/components/CopyableCA";
 import { EpisodeEmbed } from "@/components/EpisodeEmbed";
 import { RunningHead } from "@/components/RunningHead";
 import { OgPlate } from "@/components/OgPlate";
@@ -92,6 +93,7 @@ export default function TokenPage({ params }: { params: { id: string } }) {
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-4 font-mono text-sm">
               <MintLink mint={p.mint} />
+              {p.mint && <CopyableCA mint={p.mint} label="CA" truncate />}
               <span className="inline-flex items-center gap-2 text-xs text-muted">
                 <span className="signal-dot inline-block h-1.5 w-1.5 rounded-full bg-[var(--red)]" aria-hidden />
                 Filed on Solana
