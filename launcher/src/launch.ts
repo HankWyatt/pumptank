@@ -78,7 +78,7 @@ export async function launchOne(
       solAmount: new BN(opts.solCapLamports.toString()),
       mayhemMode: false,
     });
-    computeUnitLimit = 350_000; // create_v2 (~98k measured) + buy + margin
+    computeUnitLimit = 350_000; // create_v2 (~128k live) + buy (~30-50k) + margin (~2x)
     lookupTables = deps.lookupTable ? [deps.lookupTable] : [];
   } else {
     // create_v2 only (no dev-buy): ~16 accounts, fits one legacy tx WITHOUT an ALT.
