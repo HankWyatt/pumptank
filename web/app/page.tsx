@@ -1,9 +1,7 @@
 import { getAllProducts } from "@/lib/products";
 import { DISCLAIMER } from "@/lib/disclaimer";
 import { ProductGrid } from "@/components/ProductGrid";
-import { CopyableCA } from "@/components/CopyableCA";
-import { IndexMarketCap } from "@/components/IndexMarketCap";
-import { INDEX_TOKEN } from "@/lib/index-token";
+import { IndexTokenCard } from "@/components/IndexTokenCard";
 
 export default function HubPage() {
   const products = getAllProducts();
@@ -52,23 +50,6 @@ export default function HubPage() {
               By the PUMPTANK Desk · Filed from Solana · Est. MMXXVI
             </p>
 
-            {/* The index token — flagship $PUMPTANK contract address */}
-            <div className="reveal mt-7 flex flex-col gap-2">
-              <span className="kicker text-muted">The index token · $PUMPTANK</span>
-              <div className="flex flex-wrap items-center gap-3">
-                <CopyableCA mint={INDEX_TOKEN.mint} label="CA" />
-                <a
-                  href={`https://pump.fun/${INDEX_TOKEN.mint}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-mono text-sm text-accent underline"
-                >
-                  Trade $PUMPTANK ↗
-                </a>
-              </div>
-              <IndexMarketCap />
-            </div>
-
             <div className="reveal mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
               <a
                 href="#archive"
@@ -105,6 +86,11 @@ export default function HubPage() {
                   </div>
                 ))}
               </dl>
+            </div>
+
+            {/* Flagship index token — moved here, in its own container */}
+            <div className="mt-6">
+              <IndexTokenCard />
             </div>
           </aside>
         </div>

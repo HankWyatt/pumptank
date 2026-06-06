@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "@/lib/products";
 import { ProductCard } from "./ProductCard";
-import { useMarketCaps } from "@/lib/useMarketCaps";
+import { useMarketCaps, useAllMarketCaps } from "@/lib/useMarketCaps";
 import { formatMarketCap } from "@/lib/format";
 
 // Page size fills whole rows at every breakpoint (2 / 3 / 4 columns).
@@ -15,6 +15,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
   const [sector, setSector] = useState("All");
   const [view, setView] = useState<"plates" | "index">("plates");
   const [outcome, setOutcome] = useState<"all" | "nodeal" | "deal">("all");
+  const [sort, setSort] = useState<"default" | "mcap">("default");
   const [page, setPage] = useState(1);
   const inputRef = useRef<HTMLInputElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -49,18 +50,27 @@ export function ProductGrid({ products }: { products: Product[] }) {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Whenever the filtered set changes, jump back to the first page.
-  useEffect(() => { setPage(1); }, [needle, sector, outcome]);
+  // Whenever the filtered set or sort changes, jump back to the first page.
+  useEffect(() => { setPage(1); }, [needle, sector, outcome, sort]);
 
   const filtering = needle !== "" || sector !== "All" || outcome !== "all";
 
-  // Pagination: slice the filtered set into pages and clamp the active page.
-  const totalPages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
+  // Market-cap sort ranks the WHOLE archive, so it needs the bulk caps map (only
+  // fetched when this sort is active). Until it's warm, fall back to default order.
+  const { map: allCaps, ready: capsReady } = useAllMarketCaps(sort === "mcap");
+  const sortingByCap = sort === "mcap" && capsReady;
+  const ordered = sortingByCap
+    ? [...shown].sort((a, b) => capOf(b, allCaps) - capOf(a, allCaps))
+    : shown;
+
+  // Pagination: slice the (ordered) filtered set into pages and clamp the active page.
+  const totalPages = Math.max(1, Math.ceil(ordered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
   const start = (safePage - 1) * PAGE_SIZE;
-  const pageItems = shown.slice(start, start + PAGE_SIZE);
-  // Live market caps for just the visible page's launched tokens (mint != null).
-  const mcaps = useMarketCaps(pageItems.map((p) => p.mint).filter(Boolean) as string[]);
+  const pageItems = ordered.slice(start, start + PAGE_SIZE);
+  // Caps for display: reuse the bulk map when sorting by cap; else fetch the visible page.
+  const pageCaps = useMarketCaps(pageItems.map((p) => p.mint).filter(Boolean) as string[]);
+  const mcaps = sortingByCap ? allCaps : pageCaps;
   function goTo(p: number) {
     setPage(Math.min(totalPages, Math.max(1, p)));
     topRef.current?.scrollIntoView({ block: "start" });
@@ -127,6 +137,20 @@ export function ProductGrid({ products }: { products: Product[] }) {
               </button>
             ))}
           </div>
+          <div className="inline-flex border border-[var(--line-strong)]" role="group" aria-label="Sort by">
+            {([["default", "Default"], ["mcap", "Mkt Cap"]] as const).map(([v, label], i) => (
+              <button
+                key={v}
+                aria-pressed={sort === v}
+                onClick={() => setSort(v)}
+                className={`h-11 px-4 font-mono text-[0.66rem] uppercase tracking-[0.14em] transition-colors ${
+                  i > 0 ? "border-l border-[var(--line-strong)]" : ""
+                } ${sort === v ? "bg-[var(--blue)] text-[var(--on-accent)]" : "bg-[var(--paper-2)] text-muted hover:text-ink"}`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -155,6 +179,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
         )}
         {shown.length} {shown.length === 1 ? "entry" : "entries"}
         {filtering && <> · <button type="button" onClick={() => { setQ(""); setSector("All"); setOutcome("all"); }} className="editorial-link text-[var(--teal-2)]">clear filters</button></>}
+        {sort === "mcap" && (capsReady ? <> · by market cap</> : <> · <span className="text-[var(--teal-2)]">ranking by market cap…</span></>)}
       </p>
 
       {shown.length === 0 ? (
@@ -224,6 +249,12 @@ export function ProductGrid({ products }: { products: Product[] }) {
       )}
     </div>
   );
+}
+
+// Market cap for sorting: the number when known, -1 for no-mint/no-data (sorts last desc).
+function capOf(p: Product, caps: Record<string, number | null>): number {
+  const c = p.mint ? caps[p.mint] : null;
+  return typeof c === "number" ? c : -1;
 }
 
 // Compact page list with ellipses: 1 … p-1 p p+1 … last.
