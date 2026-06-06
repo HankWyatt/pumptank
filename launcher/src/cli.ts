@@ -13,7 +13,7 @@ import { MintStore } from "./mintstore.js";
 import { loadWallet, hasSufficientBalance } from "./wallet.js";
 import { launchOne } from "./launch.js";
 import type { LaunchDeps } from "./launch.js";
-import { uploadTokenMetadata } from "./metadata.js";
+import { loadMetadataUris, metadataUriFor } from "./metadata.js";
 import { mintExistsOnChain } from "./recover.js";
 import { runBatch } from "./orchestrate.js";
 import { computeStaticLutAddresses, loadOrCreateLookupTable } from "./alt.js";
@@ -40,6 +40,11 @@ export async function main(argv: string[], env: Record<string, string | undefine
   let items = loadLaunchItems(dataDir);
   if (cfg.only) items = items.filter((i) => i.id === cfg.only);
   if (cfg.limit !== undefined) items = items.slice(0, cfg.limit);
+
+  // Preflight (runs in dry-run too): every item must resolve to a valid, staged
+  // self-hosted metadata uri BEFORE we ever broadcast. Fails fast on launch day.
+  const metadataUris = loadMetadataUris(dataDir);
+  for (const it of items) metadataUriFor(it, metadataUris);
 
   const { line } = preview(items, cfg);
   console.log(line);
@@ -83,7 +88,7 @@ export async function main(argv: string[], env: Record<string, string | undefine
   }
   const deps: LaunchDeps = {
     global,
-    uploadMetadata: (item) => uploadTokenMetadata(item),
+    uploadMetadata: (item) => Promise.resolve(metadataUriFor(item, metadataUris)),
     buildCreateAndBuy: (args) =>
       pumpSdk.createV2AndBuyInstructions({ ...args, mint: args.mint.publicKey } as any),
     // create_v2-only (no dev-buy). The SDK returns a single ix; wrap it in an array.

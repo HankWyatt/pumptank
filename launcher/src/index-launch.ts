@@ -12,7 +12,7 @@ import type { LaunchDeps, LaunchOpts } from "./launch.js";
 import { buildConfig } from "./config.js";
 import { loadWallet, hasSufficientBalance } from "./wallet.js";
 import { launchOne } from "./launch.js";
-import { uploadTokenMetadata } from "./metadata.js";
+import { loadMetadataUris, metadataUriFor } from "./metadata.js";
 import { mintExistsOnChain } from "./recover.js";
 import { runBatch } from "./orchestrate.js";
 import { computeStaticLutAddresses, loadOrCreateLookupTable } from "./alt.js";
@@ -90,6 +90,10 @@ export async function main(argv: string[], env: Record<string, string | undefine
   }
   const item = buildIndexItem(imagePath);
 
+  // Preflight (dry-run too): the index token's self-hosted metadata must be staged.
+  const metadataUris = loadMetadataUris(dataDir);
+  metadataUriFor(item, metadataUris);
+
   const { line } = indexPreview(indexDevBuySol);
   console.log(line);
   if (!cfg.confirm) { console.log("DRY RUN -- no transactions broadcast. Re-run with --confirm to launch."); return; }
@@ -118,7 +122,7 @@ export async function main(argv: string[], env: Record<string, string | undefine
 
   const deps: LaunchDeps = {
     global,
-    uploadMetadata: (it) => uploadTokenMetadata(it),
+    uploadMetadata: (it) => Promise.resolve(metadataUriFor(it, metadataUris)),
     buildCreateAndBuy: (args) => pumpSdk.createV2AndBuyInstructions({ ...args, mint: args.mint.publicKey } as any),
     buildCreate: async (args) => [await pumpSdk.createV2Instruction({ ...args, mint: args.mint.publicKey, mayhemMode: false } as any)],
     connection: conn as unknown as LaunchDeps["connection"],

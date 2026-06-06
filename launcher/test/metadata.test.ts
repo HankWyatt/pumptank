@@ -1,7 +1,44 @@
 import { expect, test, vi } from "vitest";
-import { uploadTokenMetadata } from "../src/metadata.js";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { uploadTokenMetadata, metadataUriFor, loadMetadataUris } from "../src/metadata.js";
 
 const item = { id: "a", name: "Acme", symbol: "ACME", description: "no deal", imagePath: __filename, devBuy: true };
+
+// --- self-hosted metadata URI lookup (replaces the pump.fun IPFS upload) ---
+
+test("metadataUriFor returns the pre-built uri for the item id", () => {
+  const uris = { a: "https://meta.thepumptank.fun/m/a.json" };
+  expect(metadataUriFor({ id: "a" }, uris)).toBe("https://meta.thepumptank.fun/m/a.json");
+});
+
+test("metadataUriFor throws when the id is missing from the map", () => {
+  expect(() => metadataUriFor({ id: "nope" }, {})).toThrow(/no metadata uri/i);
+});
+
+test("metadataUriFor throws on a non-https uri", () => {
+  expect(() => metadataUriFor({ id: "a" }, { a: "http://x/m/a.json" })).toThrow(/https/i);
+});
+
+test("metadataUriFor throws when the uri exceeds 200 chars", () => {
+  const long = "https://meta.thepumptank.fun/m/" + "x".repeat(200) + ".json";
+  expect(() => metadataUriFor({ id: "a" }, { a: long })).toThrow(/too long/i);
+});
+
+test("loadMetadataUris reads data/metadata/uris.json under the data dir", () => {
+  const dir = mkdtempSync(join(tmpdir(), "md-"));
+  mkdirSync(join(dir, "metadata"), { recursive: true });
+  writeFileSync(join(dir, "metadata", "uris.json"), JSON.stringify({ a: "https://meta.thepumptank.fun/m/a.json" }));
+  expect(loadMetadataUris(dir)).toEqual({ a: "https://meta.thepumptank.fun/m/a.json" });
+  rmSync(dir, { recursive: true, force: true });
+});
+
+test("loadMetadataUris throws a build-the-map hint when the file is missing", () => {
+  const dir = mkdtempSync(join(tmpdir(), "md-"));
+  expect(() => loadMetadataUris(dir)).toThrow(/build-token-metadata/i);
+  rmSync(dir, { recursive: true, force: true });
+});
 
 test("posts multipart to the pump.fun IPFS endpoint and returns metadataUri", async () => {
   const fetchImpl = vi.fn().mockResolvedValue({
