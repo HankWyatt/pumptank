@@ -25,7 +25,8 @@ export interface Config {
   devBuyTokens: bigint;   // token base units to buy per coin (1.5% of supply)
   slippageBps: number;
   priorityFeeMicroLamports: number;
-  pacingMs: number;
+  pacingMs: number;     // sleep between waves (and between retries)
+  batchSize: number;    // create-only tributes launched per concurrent wave (dev-buys stay sequential)
   maxTotalSpendSol: number;
   maxRetriesPerToken: number;
   confirm: boolean;     // false => dry-run, never broadcast

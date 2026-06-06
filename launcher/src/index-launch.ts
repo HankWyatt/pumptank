@@ -65,6 +65,7 @@ export function indexBatchOpts(
     slippageBps: cfg.slippageBps,
     priorityFeeMicroLamports: cfg.priorityFeeMicroLamports,
     pacingMs: cfg.pacingMs,
+    batchSize: 1, // index is a single dev-buy -> always sequential (cap-safe)
     maxTotalSpendSol: cfg.maxTotalSpendSol,
     maxRetriesPerToken: cfg.maxRetriesPerToken,
   };
@@ -134,7 +135,7 @@ export async function main(argv: string[], env: Record<string, string | undefine
     [item], ledger, mintstore,
     (mint, it) => launchOne(deps, wallet, mint, it, opts),
     (mintB58) => mintExistsOnChain(conn, new PublicKey(mintB58)),
-    indexBatchOpts(cfg, indexDevBuySol),
+    { ...indexBatchOpts(cfg, indexDevBuySol), log: (s) => console.log(s) },
   );
   const entry = ledger.get(item.id);
   console.log(`Done: ${result.succeeded} launched, ${result.failed} failed.`);

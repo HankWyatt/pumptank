@@ -57,7 +57,8 @@ export async function main(argv: string[], env: Record<string, string | undefine
   // coin (dev-buy and create-only) locks ~0.02 SOL rent + priority fees.
   const devBuyCount = items.filter((i) => i.devBuy).length;
   const totalCount = items.length;
-  console.log(`launching ${totalCount} coins (${devBuyCount} dev-buy, ${totalCount - devBuyCount} create-only)`);
+  console.log(`launching ${totalCount} coins (${devBuyCount} dev-buy, ${totalCount - devBuyCount} create-only) ` +
+    `in waves of ${cfg.batchSize}, ${cfg.pacingMs}ms between waves`);
   const required = devBuyCount * cfg.devBuySol * 1.08 + totalCount * 0.02; // dev-buys + per-coin rent/fee buffer
   if (!(await hasSufficientBalance(conn, wallet.publicKey, required))) {
     throw new Error(`wallet balance below required ~${required.toFixed(2)} SOL`);
@@ -107,9 +108,13 @@ export async function main(argv: string[], env: Record<string, string | undefine
       priorityFeeMicroLamports: cfg.priorityFeeMicroLamports,
     }),
     (mintB58) => mintExistsOnChain(conn, new PublicKey(mintB58)),
-    cfg,
+    { ...cfg, log: (s) => console.log(s) },
   );
   console.log(`Done: ${result.succeeded} launched, ${result.failed} failed, ${result.skipped} skipped`);
+  if (result.failedIds.length > 0) {
+    console.log(`Failed (${result.failedIds.length}): ${result.failedIds.join(", ")}`);
+    console.log("Re-run the same command to retry ONLY the failures (successes are skipped via the ledger).");
+  }
 }
 
 // entrypoint: only run when invoked directly (not when imported by tests)

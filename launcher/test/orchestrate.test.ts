@@ -92,3 +92,69 @@ test("trips the cap on the second dev-buy, create-only items between are free", 
   expect(led.statusOf("b")).toBe("success");
   expect(launchFn).toHaveBeenCalledTimes(2);
 });
+
+// A launchFn that tracks peak concurrency, so we can assert wave behavior.
+function trackingLaunchFn() {
+  let inFlight = 0, peak = 0;
+  const fn = vi.fn(async (_m: any, it: LaunchItem) => {
+    inFlight++; peak = Math.max(peak, inFlight);
+    await new Promise((r) => setTimeout(r, 5));
+    inFlight--;
+    return { mint: `MINT_${it.id}`, signature: "S" };
+  });
+  return { fn, peak: () => peak };
+}
+
+test("create-only tributes launch concurrently in waves of batchSize", async () => {
+  const led = fakeLedger();
+  const { fn, peak } = trackingLaunchFn();
+  const items = ["a", "b", "c", "d", "e"].map((id) => item(id, id.toUpperCase(), false));
+  await runBatch(items, led as any, mintstore, fn, async () => false, { ...opts, batchSize: 2 });
+  expect(fn).toHaveBeenCalledTimes(5);
+  expect(peak()).toBe(2); // never more than batchSize in flight at once
+  expect(items.every((it) => led.statusOf(it.id) === "success")).toBe(true);
+});
+
+test("dev-buys stay sequential even when batchSize > 1", async () => {
+  const led = fakeLedger();
+  const { fn, peak } = trackingLaunchFn();
+  await runBatch(
+    [item("a", "A", true), item("b", "B", true), item("c", "C", true)],
+    led as any, mintstore, fn, async () => false, { ...opts, batchSize: 5 },
+  );
+  expect(peak()).toBe(1); // dev-buys never overlap (cap-safe), regardless of batchSize
+  expect(["a", "b", "c"].every((id) => led.statusOf(id) === "success")).toBe(true);
+});
+
+test("a failed coin inside a concurrent wave doesn't sink its siblings", async () => {
+  const led = fakeLedger();
+  const launchFn = vi.fn(async (_m: any, it: LaunchItem) => {
+    if (it.id === "b") throw new Error("boom");
+    return { mint: `MINT_${it.id}`, signature: "S" };
+  });
+  const res = await runBatch(
+    [item("a", "A", false), item("b", "B", false), item("c", "C", false)],
+    led as any, mintstore, launchFn, async () => false, { ...opts, batchSize: 3, maxRetriesPerToken: 1 },
+  );
+  expect(led.statusOf("a")).toBe("success");
+  expect(led.statusOf("b")).toBe("failed");
+  expect(led.statusOf("c")).toBe("success");
+  expect(res).toMatchObject({ succeeded: 2, failed: 1 });
+});
+
+test("logs a per-coin line and returns failedIds for retry", async () => {
+  const led = fakeLedger();
+  const lines: string[] = [];
+  const launchFn = vi.fn(async (_m: any, it: LaunchItem) => {
+    if (it.id === "b") throw new Error("boom");
+    return { mint: `MINT_${it.id}`, signature: "S" };
+  });
+  const res = await runBatch(
+    [item("a", "A", false), item("b", "B", false)],
+    led as any, mintstore, launchFn, async () => false,
+    { ...opts, batchSize: 2, maxRetriesPerToken: 1, log: (s) => lines.push(s) },
+  );
+  expect(res.failedIds).toEqual(["b"]);
+  expect(lines.some((l) => l.includes("✓ $A"))).toBe(true);
+  expect(lines.some((l) => l.includes("✗ $B") && l.includes("boom"))).toBe(true);
+});
