@@ -2,6 +2,7 @@ import { getAllProducts } from "@/lib/products";
 import { DISCLAIMER } from "@/lib/disclaimer";
 import { ProductGrid } from "@/components/ProductGrid";
 import { CopyableCA } from "@/components/CopyableCA";
+import { IndexMarketCap } from "@/components/IndexMarketCap";
 import { INDEX_TOKEN } from "@/lib/index-token";
 
 export default function HubPage() {
@@ -65,6 +66,7 @@ export default function HubPage() {
                   Trade $PUMPTANK ↗
                 </a>
               </div>
+              <IndexMarketCap />
             </div>
 
             <div className="reveal mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
