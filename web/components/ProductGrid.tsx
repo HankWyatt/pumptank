@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "@/lib/products";
 import { ProductCard } from "./ProductCard";
-import { useMarketCaps, useAllMarketCaps } from "@/lib/useMarketCaps";
+import { useAllMarketCaps } from "@/lib/useMarketCaps";
 import { formatMarketCap } from "@/lib/format";
 
 // Page size fills whole rows at every breakpoint (2 / 3 / 4 columns).
@@ -55,12 +55,12 @@ export function ProductGrid({ products }: { products: Product[] }) {
 
   const filtering = needle !== "" || sector !== "All" || outcome !== "all";
 
-  // Market-cap sort ranks the WHOLE archive, so it needs the bulk caps map (only
-  // fetched when this sort is active). Until it's warm, fall back to default order.
-  const { map: allCaps, ready: capsReady } = useAllMarketCaps(sort === "mcap");
+  // One always-warm bulk map (Helius, refreshed server-side every 5 min) drives BOTH
+  // the per-card cap display and the market-cap sort — no per-page pump.fun fetching.
+  const { map: mcaps, ready: capsReady } = useAllMarketCaps(true);
   const sortingByCap = sort === "mcap" && capsReady;
   const ordered = sortingByCap
-    ? [...shown].sort((a, b) => capOf(b, allCaps) - capOf(a, allCaps))
+    ? [...shown].sort((a, b) => capOf(b, mcaps) - capOf(a, mcaps))
     : shown;
 
   // Pagination: slice the (ordered) filtered set into pages and clamp the active page.
@@ -68,9 +68,6 @@ export function ProductGrid({ products }: { products: Product[] }) {
   const safePage = Math.min(page, totalPages);
   const start = (safePage - 1) * PAGE_SIZE;
   const pageItems = ordered.slice(start, start + PAGE_SIZE);
-  // Caps for display: reuse the bulk map when sorting by cap; else fetch the visible page.
-  const pageCaps = useMarketCaps(pageItems.map((p) => p.mint).filter(Boolean) as string[]);
-  const mcaps = sortingByCap ? allCaps : pageCaps;
   function goTo(p: number) {
     setPage(Math.min(totalPages, Math.max(1, p)));
     topRef.current?.scrollIntoView({ block: "start" });
