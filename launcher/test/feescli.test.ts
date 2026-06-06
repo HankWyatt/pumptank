@@ -24,10 +24,11 @@ const REFERRER = "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9D";
 
 // ---- pure helpers ----
 
-test("previewCollect formats the claimable vault balance", () => {
-  const line = previewCollect(2_500_000_000n);
-  expect(line).toMatch(/2\.5/);
-  expect(line).toMatch(/SOL/);
+test("previewCollect shows both fee buckets and the total", () => {
+  const line = previewCollect(2_500_000_000n, 1_500_000_000n);
+  expect(line).toMatch(/4\.0000 SOL/); // total of both buckets
+  expect(line).toMatch(/creator-vault 2\.5000/);
+  expect(line).toMatch(/coin-creator reward coins 1\.5000/);
 });
 
 test("assertCanBroadcast gates on --confirm", () => {
@@ -103,6 +104,8 @@ function makeDeps(over: Partial<FeesDeps> = {}): FeesDeps {
     },
     getCreatorVaultClaimable: async () => 0n,
     collectHouseFees: async () => "collect-sig",
+    getCoinCreatorClaimable: async () => 0n,
+    collectCoinCreatorFees: async () => "coin-sig",
     sendTx: async () => "tx-sig",
     log: (m) => logs.push(m),
     ...over,
@@ -263,6 +266,32 @@ test("collect says nothing-to-collect below the threshold", async () => {
   await main(["collect", "--confirm"], { MIN_COLLECT_SOL: "0.005" }, d);
   expect(collectHouseFees).not.toHaveBeenCalled();
   expect(logs.join("\n")).toMatch(/nothing to collect/i);
+});
+
+test("collect --confirm sweeps the coin-creator reward-coin bucket even when the vault is empty", async () => {
+  const collectHouseFees = vi.fn();
+  const collectCoinCreatorFees = vi.fn().mockResolvedValue("coin-sig");
+  const d = makeDeps({
+    getCreatorVaultClaimable: async () => 0n,             // vault below threshold
+    getCoinCreatorClaimable: async () => 17_000_000_000n, // 17 SOL in reward coins
+    collectHouseFees, collectCoinCreatorFees,
+  });
+  await main(["collect", "--confirm"], { MIN_COLLECT_SOL: "0.005" }, d);
+  expect(collectHouseFees).not.toHaveBeenCalled();
+  expect(collectCoinCreatorFees).toHaveBeenCalledOnce();
+});
+
+test("collect --confirm claims BOTH buckets when both are above threshold", async () => {
+  const collectHouseFees = vi.fn().mockResolvedValue("v");
+  const collectCoinCreatorFees = vi.fn().mockResolvedValue("c");
+  const d = makeDeps({
+    getCreatorVaultClaimable: async () => 1_000_000_000n,
+    getCoinCreatorClaimable: async () => 17_000_000_000n,
+    collectHouseFees, collectCoinCreatorFees,
+  });
+  await main(["collect", "--confirm"], { MIN_COLLECT_SOL: "0.005" }, d);
+  expect(collectHouseFees).toHaveBeenCalledOnce();
+  expect(collectCoinCreatorFees).toHaveBeenCalledOnce();
 });
 
 test("collect --confirm above threshold sweeps the house vault", async () => {

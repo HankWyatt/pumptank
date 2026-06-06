@@ -102,3 +102,68 @@ export async function collectHouseFees(
   await conn.confirmTransaction({ signature, blockhash, lastValidBlockHeight }, "confirmed");
   return signature;
 }
+
+// --- Coin-creator-fee bucket (pump.fun's "reward coins" / the UI "Claim all") ---
+// SEPARATE from the creator-vault above: every coin also accrues a "coin creator fee" that
+// pump.fun claims in BULK per creator (one tx, ~4 ixs). This is where the bulk of fees land
+// (the creator-vault is the smaller bucket). OnlinePumpSdk builds it from just the creator.
+
+export interface CoinCreatorDeps {
+  /** Bulk coin-creator-fee claim instructions for `creator` (defaults to OnlinePumpSdk). */
+  getInstructions(conn: Connection, creator: PublicKey): Promise<TransactionInstruction[]>;
+  /** Total claimable across BOTH fee programs (creator-vault + coin-creator), in lamports. */
+  getBothProgramsBalance(conn: Connection, creator: PublicKey): Promise<bigint>;
+}
+
+function defaultCoinCreatorDeps(): CoinCreatorDeps {
+  const sdk = (conn: Connection) => {
+    const { OnlinePumpSdk } = createRequire(import.meta.url)("@pump-fun/pump-sdk") as typeof import("@pump-fun/pump-sdk");
+    return new OnlinePumpSdk(conn);
+  };
+  return {
+    getInstructions: (conn, creator) =>
+      sdk(conn).collectCoinCreatorFeeInstructions(creator) as Promise<TransactionInstruction[]>,
+    getBothProgramsBalance: async (conn, creator) =>
+      BigInt((await sdk(conn).getCreatorVaultBalanceBothPrograms(creator)).toString()),
+  };
+}
+
+/**
+ * Claimable lamports in the coin-creator-fee bucket (the "reward coins" pump.fun lists under
+ * "Claim all") = the both-programs total minus the bonding-curve creator-vault balance.
+ */
+export async function getCoinCreatorFeeClaimable(
+  conn: Connection, creator: PublicKey, deps: CoinCreatorDeps = defaultCoinCreatorDeps(),
+): Promise<bigint> {
+  const both = await deps.getBothProgramsBalance(conn, creator);
+  const vault = await getCreatorVaultClaimable(conn, creator);
+  const diff = both - vault;
+  return diff > 0n ? diff : 0n;
+}
+
+export async function buildCollectCoinCreatorFeesInstructions(
+  conn: Connection, house: PublicKey, deps: CoinCreatorDeps = defaultCoinCreatorDeps(),
+): Promise<TransactionInstruction[]> {
+  return deps.getInstructions(conn, house);
+}
+
+/**
+ * Build, sign (house only), and send ONE tx that bulk-claims the coin-creator fees to the
+ * house wallet (SDK returns ~4 ixs, ~55k CU measured; fits one legacy tx). Returns the sig.
+ */
+export async function collectCoinCreatorFees(
+  conn: Connection, wallet: Keypair, deps: CoinCreatorDeps = defaultCoinCreatorDeps(),
+): Promise<string> {
+  const ixs = await buildCollectCoinCreatorFeesInstructions(conn, wallet.publicKey, deps);
+  const { blockhash, lastValidBlockHeight } = await conn.getLatestBlockhash("confirmed");
+  const message = new TransactionMessage({
+    payerKey: wallet.publicKey,
+    recentBlockhash: blockhash,
+    instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 120_000 }), ...ixs],
+  }).compileToV0Message();
+  const tx = new VersionedTransaction(message);
+  tx.sign([wallet]);
+  const signature = await conn.sendRawTransaction(tx.serialize());
+  await conn.confirmTransaction({ signature, blockhash, lastValidBlockHeight }, "confirmed");
+  return signature;
+}

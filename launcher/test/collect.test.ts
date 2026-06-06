@@ -5,6 +5,8 @@ import {
   creatorVaultPda,
   getCreatorVaultClaimable,
   buildCollectHouseFeesInstructions,
+  getCoinCreatorFeeClaimable,
+  buildCollectCoinCreatorFeesInstructions,
   PUMP_PROGRAM_ID,
 } from "../src/collect.js";
 
@@ -29,6 +31,35 @@ test("creatorVaultPda derives a deterministic [creator-vault, creator] PDA under
 test("getCreatorVaultClaimable returns the vault lamport balance as bigint", async () => {
   const conn = { getBalance: async () => 12345 } as any;
   expect(await getCreatorVaultClaimable(conn, Keypair.generate().publicKey)).toBe(12345n);
+});
+
+test("getCoinCreatorFeeClaimable = both-programs total minus the creator-vault", async () => {
+  const conn = { getBalance: async () => 53_000_000 } as any; // creator-vault = 0.053 SOL
+  const got = await getCoinCreatorFeeClaimable(conn, Keypair.generate().publicKey, {
+    getBothProgramsBalance: async () => 17_068_000_000n,
+    getInstructions: async () => [],
+  });
+  expect(got).toBe(17_068_000_000n - 53_000_000n);
+});
+
+test("getCoinCreatorFeeClaimable floors at 0 when total <= vault", async () => {
+  const conn = { getBalance: async () => 1_000_000 } as any;
+  const got = await getCoinCreatorFeeClaimable(conn, Keypair.generate().publicKey, {
+    getBothProgramsBalance: async () => 0n,
+    getInstructions: async () => [],
+  });
+  expect(got).toBe(0n);
+});
+
+test("buildCollectCoinCreatorFeesInstructions delegates to the SDK bulk-claim builder", async () => {
+  const fakeIx = new TransactionInstruction({ keys: [], programId: PUMP_PROGRAM_ID, data: Buffer.from([2]) });
+  const getInstructions = vi.fn().mockResolvedValue([fakeIx, fakeIx]);
+  const ixs = await buildCollectCoinCreatorFeesInstructions({} as any, Keypair.generate().publicKey, {
+    getInstructions,
+    getBothProgramsBalance: async () => 0n,
+  });
+  expect(ixs).toEqual([fakeIx, fakeIx]);
+  expect(getInstructions).toHaveBeenCalledOnce();
 });
 
 test("buildCollectHouseFeesInstructions builds collect_creator_fee_v2 for the house creator vault", async () => {

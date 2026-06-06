@@ -22,7 +22,10 @@ import {
   markDistributed,
   type FeeConfig,
 } from "./feeconfig.js";
-import { getCreatorVaultClaimable, collectHouseFees } from "./collect.js";
+import {
+  getCreatorVaultClaimable, collectHouseFees,
+  getCoinCreatorFeeClaimable, collectCoinCreatorFees,
+} from "./collect.js";
 import { Ledger } from "./ledger.js";
 
 const DATA_DIR = process.env.DATA_DIR ?? join(process.cwd(), "..", "data");
@@ -39,8 +42,11 @@ export const MAIN_TOKEN_SHARE_WITH_REFERRER_BPS = 1000;
 export const REFERRER_SHARE_BPS = 1000;
 export const MAIN_TOKEN_SHARE_NO_REFERRER_BPS = 2000;
 
-export function previewCollect(claimableLamports: bigint): string {
-  return `Shared house creator-fee vault (all un-opted coins): ${(Number(claimableLamports) / LAMPORTS_PER_SOL).toFixed(4)} SOL`;
+export function previewCollect(vaultLamports: bigint, coinCreatorLamports: bigint = 0n): string {
+  const v = Number(vaultLamports) / LAMPORTS_PER_SOL;
+  const c = Number(coinCreatorLamports) / LAMPORTS_PER_SOL;
+  return `Claimable house fees: ${(v + c).toFixed(4)} SOL `
+    + `(creator-vault ${v.toFixed(4)} + coin-creator reward coins ${c.toFixed(4)})`;
 }
 
 export function shouldCollect(claimableLamports: bigint, minSol: number): boolean {
@@ -117,6 +123,9 @@ export interface FeesDeps {
   getOnlineSdk: (conn: Connection) => OnlineFeesSdk;
   getCreatorVaultClaimable: (conn: Connection, creator: PublicKey) => Promise<bigint>;
   collectHouseFees: (conn: Connection, wallet: Keypair) => Promise<string>;
+  /** Coin-creator-fee bucket (the "reward coins" pump.fun claims in bulk). */
+  getCoinCreatorClaimable: (conn: Connection, creator: PublicKey) => Promise<bigint>;
+  collectCoinCreatorFees: (conn: Connection, wallet: Keypair) => Promise<string>;
   /** Sign + send + confirm a single tx of `ixs` paid/signed by `wallet`. Returns the signature. */
   sendTx: (conn: Connection, wallet: Keypair, ixs: TransactionInstruction[]) => Promise<string>;
   log: (msg: string) => void;
@@ -154,6 +163,8 @@ export function defaultDeps(): FeesDeps {
     getOnlineSdk: (conn) => new (requireSdk().OnlinePumpSdk)(conn) as unknown as OnlineFeesSdk,
     getCreatorVaultClaimable,
     collectHouseFees,
+    getCoinCreatorClaimable: getCoinCreatorFeeClaimable,
+    collectCoinCreatorFees,
     sendTx: defaultSendTx,
     log: (msg) => console.log(msg),
   };
@@ -202,17 +213,21 @@ export async function main(
   const house = wallet.publicKey;
 
   if (cmd === "verify") {
-    const claimable = await deps.getCreatorVaultClaimable(conn, house);
+    const vault = await deps.getCreatorVaultClaimable(conn, house);
+    const coin = await deps.getCoinCreatorClaimable(conn, house);
     log(`house (deployer): ${house.toBase58()}`);
-    log(previewCollect(claimable));
+    log(previewCollect(vault, coin));
     return;
   }
 
   if (cmd === "collect") {
     const minSol = Number(env.MIN_COLLECT_SOL ?? "0.005");
-    const claimable = await deps.getCreatorVaultClaimable(conn, house);
-    log(previewCollect(claimable));
-    if (!shouldCollect(claimable, minSol)) {
+    const vault = await deps.getCreatorVaultClaimable(conn, house);
+    const coin = await deps.getCoinCreatorClaimable(conn, house);
+    log(previewCollect(vault, coin));
+    const doVault = shouldCollect(vault, minSol);
+    const doCoin = shouldCollect(coin, minSol);
+    if (!doVault && !doCoin) {
       log(`below MIN_COLLECT_SOL (${minSol}) -- nothing to collect.`);
       return;
     }
@@ -220,8 +235,14 @@ export async function main(
       log("DRY RUN -- not collecting. Re-run with --confirm.");
       return;
     }
-    const sig = await deps.collectHouseFees(conn, wallet);
-    log(`collected: https://solscan.io/tx/${sig}`);
+    if (doVault) {
+      const sig = await deps.collectHouseFees(conn, wallet);
+      log(`collected creator-vault: https://solscan.io/tx/${sig}`);
+    }
+    if (doCoin) {
+      const sig = await deps.collectCoinCreatorFees(conn, wallet);
+      log(`collected coin-creator reward coins: https://solscan.io/tx/${sig}`);
+    }
     return;
   }
 
