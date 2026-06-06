@@ -31,6 +31,10 @@ services:
       - key: SITE_URL
         value: https://thepumptank.fun
         scope: RUN_AND_BUILD_TIME
+      - key: HELIUS_RPC_URL
+        value: EV[1:CZS7EwhrBOX8wZ/2tvW0JwvPdXfn36D5:r8wBbyMGcAiGFpj8R9fkkRKMhvhjTASS6a96Kg8vlOszTBUwGY8h3zClDT4hwxevBdursql/oiJlMHNbRIHDUZuxrKipnM9k/KD46DX45W6LJhx/+wMHr0rev78=]
+        scope: RUN_TIME
+        type: SECRET
       # Do NOT set NODE_ENV=production at build time: it makes npm skip
       # devDependencies (tailwindcss/postcss/typescript), which next build needs.
       # DO sets NODE_ENV=production for the running service automatically.
