@@ -31,6 +31,6 @@ services:
       - key: SITE_URL
         value: https://thepumptank.fun
         scope: RUN_AND_BUILD_TIME
-      - key: NODE_ENV
-        value: production
-        scope: RUN_AND_BUILD_TIME
+      # Do NOT set NODE_ENV=production at build time: it makes npm skip
+      # devDependencies (tailwindcss/postcss/typescript), which next build needs.
+      # DO sets NODE_ENV=production for the running service automatically.
