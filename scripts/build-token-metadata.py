@@ -16,6 +16,7 @@ storage backend behind it stays swappable.
 Usage:  python3 scripts/build-token-metadata.py
 """
 import json
+import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -23,7 +24,11 @@ PRODUCTS = ROOT / "data" / "products.json"
 OUT_DIR = ROOT / "data" / "metadata"
 M_DIR = OUT_DIR / "m"
 
-BASE = "https://meta.thepumptank.fun"   # custom domain -> Spaces CDN (portable forever)
+# Host for the on-chain metadata + image URLs. Defaults to the DO Spaces built-in
+# CDN endpoint for the `pumptankmeta` Space (nyc3) -- no Cloudflare/custom domain
+# needed. This is baked into immutable on-chain URIs, so it commits us to keeping
+# this Space/bucket name on DO. Override with META_BASE to use a custom domain.
+BASE = os.environ.get("META_BASE", "https://pumptankmeta.nyc3.cdn.digitaloceanspaces.com")
 SITE = "https://thepumptank.fun"
 CREATED_ON = "https://pump.fun"
 MAX_URI = 200  # pump.fun create_v2 hard limit on the on-chain uri string

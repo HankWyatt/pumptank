@@ -34,7 +34,7 @@ ROOT = Path(__file__).resolve().parent.parent
 META = ROOT / "data" / "metadata"
 
 REGION = os.environ.get("SPACES_REGION", "nyc3")
-BUCKET = os.environ.get("SPACES_BUCKET", "pumptank-meta")
+BUCKET = os.environ.get("SPACES_BUCKET", "pumptankmeta")
 KEY = os.environ.get("SPACES_KEY") or os.environ.get("AWS_ACCESS_KEY_ID")
 SECRET = os.environ.get("SPACES_SECRET") or os.environ.get("AWS_SECRET_ACCESS_KEY")
 ENDPOINT = f"https://{REGION}.digitaloceanspaces.com"
@@ -111,6 +111,25 @@ def main():
     images = json.loads((META / "images.json").read_text())
     ids = sorted(uris)
     print(f"endpoint={ENDPOINT} bucket={BUCKET} ids={len(ids)} confirm={CONFIRM}")
+
+    # Local preflight (no credentials needed): every object must have a source file.
+    src_missing = []
+    for tid in ids:
+        if not (META / "m" / f"{tid}.json").exists():
+            src_missing.append(f"m/{tid}.json")
+        if not (ROOT / images.get(tid, "")).exists():
+            src_missing.append(f"img/{tid}.png <- {images.get(tid)}")
+    print(f"objects to upload: {len(ids)} json + {len(ids)} png = {2 * len(ids)}")
+    print("all source files present" if not src_missing
+          else f"MISSING {len(src_missing)} source files (first 10): {src_missing[:10]}")
+
+    if not CONFIRM:
+        print("\nDRY RUN -- nothing uploaded (no credentials needed). "
+              "Re-run with --confirm and SPACES_KEY/SPACES_SECRET set to upload.")
+        return
+    if src_missing:
+        sys.exit(f"refusing to upload: {len(src_missing)} source files missing -- fix and re-run")
+
     s3 = client()
     ensure_bucket(s3)
 
