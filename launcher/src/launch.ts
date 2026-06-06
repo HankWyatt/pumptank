@@ -78,7 +78,7 @@ export async function launchOne(
       solAmount: new BN(opts.solCapLamports.toString()),
       mayhemMode: false,
     });
-    computeUnitLimit = 300_000;
+    computeUnitLimit = 350_000; // create_v2 (~98k measured) + buy + margin
     lookupTables = deps.lookupTable ? [deps.lookupTable] : [];
   } else {
     // create_v2 only (no dev-buy): ~16 accounts, fits one legacy tx WITHOUT an ALT.
@@ -91,7 +91,9 @@ export async function launchOne(
       creator: wallet.publicKey,
       user: wallet.publicKey,
     });
-    computeUnitLimit = 120_000; // create_v2 alone needs far less than the dev-buy path
+    // create_v2 (Token-2022: mint + metadata extension + ATA + MintTo/SetAuthority) consumed
+    // 128,451 CU on the first live mainnet launch (tx 42kkjDJ…); the old 120k cap failed. 250k = ~2x margin.
+    computeUnitLimit = 250_000;
     lookupTables = []; // NO ALT for create-only
   }
 

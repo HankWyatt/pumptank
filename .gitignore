@@ -14,6 +14,7 @@ launcher/dist/
 data/.mint-keys/
 data/fee-config.json
 data/launch-alt.json
+data/launch-ledger.json
 
 # Secrets — never commit (belt-and-suspenders)
 *.key
